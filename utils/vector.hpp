@@ -38,7 +38,7 @@ namespace Utils {
         // Move operator
         Vector<T, SIZE> &operator=(Vector<T, SIZE> &&other);
 
-        virtual ~Vector() noexcept;
+        virtual ~Vector();
 
         // Get vector size
         constexpr inline size_t Size() const {
@@ -95,6 +95,9 @@ namespace Utils {
 
         Vector<T, SIZE> &operator/=(Vector<T, SIZE> const &a) {
             for (size_t i = 0; i < SIZE; i++) {
+#ifdef DEBUG
+                assert(a.elements[i] != T(0));
+#endif
                 elements[i] /= a.elements[i];
             }
 
@@ -226,6 +229,9 @@ namespace Utils {
     Vector<T, SIZE> operator/(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
         Vector<T, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
+#ifdef DEBUG
+            assert(b[i] != T(0));
+#endif
             c[i] = a[i] / b[i];
         }
         return c;
