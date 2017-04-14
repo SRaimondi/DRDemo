@@ -8,7 +8,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DDEBUG")
 
 # Include directories
-include_directories(autodiff)
+include_directories(autodiff utils)
 
-set(SOURCE_FILES main.cpp autodiff/rad.hpp autodiff/fad.hpp)
+set(SOURCE_FILES main.cpp autodiff/rad.hpp autodiff/fad.hpp utils/vector.hpp)
 add_executable(DRDemo ${SOURCE_FILES})

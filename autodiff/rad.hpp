@@ -15,7 +15,7 @@
 #include <cmath>
 #include <map>
 
-namespace RAD {
+namespace rad {
 
     /**
      * The TapeNode struct stores the information used in the construction of the Tape that is the used for the reverse
@@ -531,6 +531,6 @@ namespace RAD {
         }
     }
 
-} // RAD namespace
+} // rad namespace
 
 #endif //DRDEMO_RAD_HPP
