@@ -282,6 +282,18 @@ namespace utils {
         return cross;
     }
 
+    // Length² of the vector
+    template<typename T, size_t SIZE>
+    T Length2(Vector<T, SIZE> const &a) {
+        return Dot(a, a);
+    }
+
+    // Length of the vector
+    template<typename SQRT_F, typename T, size_t SIZE>
+    T Length(Vector<T, SIZE> const &a) {
+        return SQRT_F(Length2(a));
+    }
+
 } // utils namespace
 
 #endif //DRDEMO_VECTOR_HPP

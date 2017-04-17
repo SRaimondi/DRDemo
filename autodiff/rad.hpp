@@ -545,6 +545,7 @@ namespace rad {
         // Check if we computed the derivatives for the given out variable
         auto it = var_derivatives_map.find(var_out);
         if (it == var_derivatives_map.end()) {
+            std::cout << "Could not find given output variable!" << std::endl;
             return T(0);
         } else {
             return it->second[var_in.NodeIndex()];
