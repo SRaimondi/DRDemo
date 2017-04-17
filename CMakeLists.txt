@@ -10,5 +10,11 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DD
 # Include directories
 include_directories(autodiff utils)
 
-set(SOURCE_FILES main.cpp autodiff/rad.hpp autodiff/fad.hpp utils/vector.hpp)
+set(SOURCE_FILES
+        main.cpp
+        autodiff/rad.hpp
+        autodiff/fad.hpp
+        utils/vector.hpp
+        # utils/common.hpp
+        utils/common.hpp)
 add_executable(DRDemo ${SOURCE_FILES})

@@ -14,6 +14,7 @@
 #include <cassert>
 #include <cmath>
 #include <map>
+#include "common.hpp"
 
 namespace rad {
 
@@ -312,6 +313,13 @@ namespace rad {
         return a.Value() != b.Value();
     }
 
+    // Sign of Variable<T>
+    template<typename T>
+    inline int
+    Sign(Variable<T> const &var) {
+        return static_cast<int>((T(0) < var.Value()) - (var.Value() < T(0)));
+    }
+
     // Sin of Variable<T>
     template<typename T>
     inline Variable<T>
@@ -361,6 +369,18 @@ namespace rad {
                            std::log(var.Value()));
     }
 
+    // Pow of Variable<T>
+    template<typename T>
+    inline Variable<T>
+    Pow(Variable<T> const &var, float k) {
+#ifdef DEBUG
+        assert(var.AssociatedTape() != nullptr);
+#endif
+        return Variable<T>(var.AssociatedTape(),
+                           var.AssociatedTape()->PushSingleNode(k * std::pow(var.Value(), k - 1.f), var.NodeIndex()),
+                           std::pow(var.Value(), k));
+    }
+
     // Sqrt of Variable<T>
     template<typename T>
     inline Variable<T>
@@ -374,16 +394,16 @@ namespace rad {
                            std::sqrt(var.Value()));
     }
 
-    // Pow of Variable<T>
+    // Abs of Variable<T>
     template<typename T>
     inline Variable<T>
-    Pow(Variable<T> const &var, float k) {
+    Abs(Variable<T> const &var) {
 #ifdef DEBUG
-        assert(var.AssociatedTape() != nullptr);
+        assert(var != T(0));
 #endif
         return Variable<T>(var.AssociatedTape(),
-                           var.AssociatedTape()->PushSingleNode(k * std::pow(var.Value(), k - 1.f), var.NodeIndex()),
-                           std::pow(var.Value(), k));
+                           var.AssociatedTape()->PushSingleNode(utils::Sign(var.Value()), var.NodeIndex()),
+                           std::abs(var.Value()));
     }
 
     /**

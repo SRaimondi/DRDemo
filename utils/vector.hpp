@@ -13,7 +13,7 @@
 #include <cassert>
 #include <algorithm>
 
-namespace Utils {
+namespace utils {
 
     template<typename T, size_t SIZE>
     class Vector {
@@ -250,6 +250,38 @@ namespace Utils {
         return c;
     }
 
-} // Utils namespace
+    /**
+     * Define Vector mathematical functions
+     */
+
+    // Dot product
+    template<typename T, size_t SIZE>
+    T Dot(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
+        T dot = T(0);
+        for (size_t i = 0; i < SIZE; i++) {
+            dot += a[i] * b[i];
+        }
+        return dot;
+    }
+
+    // Absolute value of dot function, the abs function we want to use must be passed as argument
+    template<typename ABS_F, typename T, size_t SIZE>
+    T AbsDot(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
+        return ABS_F(Dot(a, b));
+    }
+
+    // Cross product for vector of SIZE = 3
+    template<typename T>
+    Vector<T, 3> Cross(Vector<T, 3> const &a, Vector<T, 3> const &b) {
+        Vector<T, 3> cross;
+
+        cross[0] = a[1] * b[2] - a[2] * b[1];
+        cross[1] = a[2] * b[0] - a[0] * b[2];
+        cross[2] = a[0] * b[1] - a[1] * b[0];
+
+        return cross;
+    }
+
+} // utils namespace
 
 #endif //DRDEMO_VECTOR_HPP

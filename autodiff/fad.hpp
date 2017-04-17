@@ -11,6 +11,7 @@
 
 #include <cassert>
 #include <cmath>
+#include "common.hpp"
 
 namespace FAD {
 
@@ -227,6 +228,13 @@ namespace FAD {
         return a.Real() != b.Real();
     }
 
+    // Sign of Variable<T>
+    template<typename T>
+    inline int
+    Sign(Variable<T> const &var) {
+        return static_cast<int>((T(0) < var.Real()) - (var.Real() < T(0)));
+    }
+
     // Sin of Variable<T>
     template<typename T>
     inline Variable<T>
@@ -284,6 +292,16 @@ namespace FAD {
 #endif
         T sq = std::sqrt(a.Real());
         return Variable<T>(sq, a.Dual() * T(0.5) / sq);
+    }
+
+    // Absolute value of Variable<T>
+    template<typename T>
+    inline Variable<T>
+    Abs(Variable<T> const &a) {
+#ifdef DEBUG
+        assert(a.Real() != T(0));
+#endif
+        return Variable<T>(std::abs(a.Real()), a.Dual() * utils::Sign(a.Real()));
     }
 
 } // FAD namespace
