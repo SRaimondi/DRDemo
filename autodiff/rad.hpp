@@ -417,10 +417,10 @@ namespace rad {
 
     public:
         // Create Tape, optional argument is an already given size of the tape
-        Tape(size_t size = 1) noexcept;
+        Tape(size_t size = 10) noexcept;
 
         // Request a new Variable from the Tape, optional argument is the value of it, otherwise it is set to zero
-        Variable<T> NewVariable(T v) noexcept;
+        Variable<T> NewVariable(T v = T(0)) noexcept;
 
         // Access tape node at given index
         inline TapeNode<T> const &At(size_t i) const noexcept {

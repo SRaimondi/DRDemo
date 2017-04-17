@@ -2,7 +2,7 @@
 #include "rad.hpp"
 #include "vector.hpp"
 
-int main(int argc, char *argv[]) {
+int main(/* int argc, char *argv[] */) {
     // Define custom float type
     using Float = rad::Variable<float>;
 
@@ -15,9 +15,7 @@ int main(int argc, char *argv[]) {
 
     // Compute result
     Float z = rad::Exp(x) * rad::Sin(y);
-
     Float t = tape.NewVariable(5.f);
-
     Float f = z * t * t;
 
     // Compute derivatives

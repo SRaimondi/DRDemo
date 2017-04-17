@@ -13,7 +13,7 @@
 #include <cmath>
 #include "common.hpp"
 
-namespace FAD {
+namespace fad {
 
     /**
      * The Variable class implements DualNumber math to compute first order derivatives from expressions
@@ -304,6 +304,6 @@ namespace FAD {
         return Variable<T>(std::abs(a.Real()), a.Dual() * utils::Sign(a.Real()));
     }
 
-} // FAD namespace
+} // fad namespace
 
 #endif //DRDEMO_FAD_HPP
