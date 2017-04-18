@@ -1,10 +1,18 @@
 #include <iostream>
-#include "rad.hpp"
+// #include "rad.hpp"
 #include "vector.hpp"
 
 int main(/* int argc, char *argv[] */) {
     // Define custom float type
     using Float = rad::Variable<float>;
+    using FVector = utils::Vector<float, 10>;
+
+    FVector v1, v2;
+
+    for (size_t i = 0; i < 10; i++) {
+        v1[i] = i;
+        v2[i] = i * i;
+    }
 
     // Create tape
     rad::Tape<float> tape;
@@ -29,6 +37,13 @@ int main(/* int argc, char *argv[] */) {
     std::cout << "df/dx: " << derivatives.D_Wrt(f, x) << std::endl;
     std::cout << "df/dy: " << derivatives.D_Wrt(f, y) << std::endl;
     std::cout << "df/dt: " << derivatives.D_Wrt(f, t) << std::endl;
+    std::cout << std::endl;
+
+    FVector v3 = v1 * v1;
+    for (size_t i = 0; i < 10; i++) {
+        std::cout << v3[i] << std::endl;
+    }
+    std::cout << utils::Dot(v1, v1) << std::endl;
 
     return 0;
 }

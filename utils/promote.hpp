@@ -20,8 +20,7 @@ namespace traits {
     class Promote {
     public:
         // In general, return the "biggest" type
-        typedef
-        typename IfThenElse<(sizeof(Ta) > sizeof(Tb)), Ta, Tb> TResult;
+        typedef typename IfThenElse<(sizeof(Ta) > sizeof(Tb)), Ta, Tb>::TResult TResult;
     };
 
     // Specialization for the same type

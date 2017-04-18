@@ -12,25 +12,29 @@
 #include <cstddef>
 #include <cassert>
 #include <algorithm>
+#include "promote.hpp"
 
 namespace utils {
 
     template<typename T, size_t SIZE>
     class Vector {
     protected:
-        // Stack allocated vector content
+        // Heap allocated vector content
         T *elements;
 
     public:
         Vector();
 
-        explicit Vector(T const &v);
+        template<typename E>
+        explicit Vector(E const &v);
 
         // Copy constructor
-        Vector(Vector<T, SIZE> const &other);
+        template<typename E>
+        Vector(Vector<E, SIZE> const &other);
 
         // Assignment operator
-        Vector<T, SIZE> &operator=(Vector<T, SIZE> const &other);
+        template<typename E>
+        Vector<T, SIZE> &operator=(Vector<E, SIZE> const &other);
 
         // Move constructor
         Vector(Vector<T, SIZE> &&other);
@@ -61,7 +65,8 @@ namespace utils {
         }
 
         // Math operators on itself
-        Vector<T, SIZE> &operator+=(Vector<T, SIZE> const &a) {
+        template<typename E>
+        Vector<T, SIZE> &operator+=(Vector<E, SIZE> const &a) {
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] += a.elements[i];
             }
@@ -69,7 +74,8 @@ namespace utils {
             return *this;
         }
 
-        Vector<T, SIZE> &operator-=(Vector<T, SIZE> const &a) {
+        template<typename E>
+        Vector<T, SIZE> &operator-=(Vector<E, SIZE> const &a) {
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] -= a.elements[i];
             }
@@ -77,7 +83,8 @@ namespace utils {
             return *this;
         }
 
-        Vector<T, SIZE> &operator*=(Vector<T, SIZE> const &a) {
+        template<typename E>
+        Vector<T, SIZE> &operator*=(Vector<E, SIZE> const &a) {
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] *= a.elements[i];
             }
@@ -85,7 +92,8 @@ namespace utils {
             return *this;
         }
 
-        Vector<T, SIZE> &operator*=(T const &a) noexcept {
+        template<typename E>
+        Vector<T, SIZE> &operator*=(E const &a) noexcept {
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] *= a;
             }
@@ -93,10 +101,11 @@ namespace utils {
             return *this;
         }
 
-        Vector<T, SIZE> &operator/=(Vector<T, SIZE> const &a) {
+        template<typename E>
+        Vector<T, SIZE> &operator/=(Vector<E, SIZE> const &a) {
             for (size_t i = 0; i < SIZE; i++) {
 #ifdef DEBUG
-                assert(a.elements[i] != T(0));
+                assert(a.elements[i] != E(0));
 #endif
                 elements[i] /= a.elements[i];
             }
@@ -104,9 +113,10 @@ namespace utils {
             return *this;
         }
 
-        Vector<T, SIZE> &operator/=(T const &a) {
+        template<typename E>
+        Vector<T, SIZE> &operator/=(E const &a) {
 #ifdef DEBUG
-            assert(a != T(0));
+            assert(a != E(0));
 #endif
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] /= a;
@@ -121,7 +131,8 @@ namespace utils {
             : elements(new T[SIZE]) {}
 
     template<typename T, size_t SIZE>
-    Vector<T, SIZE>::Vector(T const &v)
+    template<typename E>
+    Vector<T, SIZE>::Vector(E const &v)
             : elements(new T[SIZE]) {
         for (size_t i = 0; i < SIZE; i++) {
             elements[i] = v;
@@ -129,13 +140,15 @@ namespace utils {
     }
 
     template<typename T, size_t SIZE>
-    Vector<T, SIZE>::Vector(Vector<T, SIZE> const &other)
+    template<typename E>
+    Vector<T, SIZE>::Vector(Vector<E, SIZE> const &other)
             : elements(new T[SIZE]) {
         std::copy(other.elements, other.elements + SIZE, elements);
     }
 
     template<typename T, size_t SIZE>
-    Vector<T, SIZE> &Vector<T, SIZE>::operator=(Vector<T, SIZE> const &other) {
+    template<typename E>
+    Vector<T, SIZE> &Vector<T, SIZE>::operator=(Vector<E, SIZE> const &other) {
         if (this != &other) {
             for (size_t i = 0; i < SIZE; ++i) {
                 elements[i] = other.elements[i];
@@ -174,76 +187,83 @@ namespace utils {
      * Vector<T> / T
      */
 
-    // Sum of Vector<T> and Vector<T>
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator+(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
-        Vector<T, SIZE> c;
+    // Sum of Vector<T> and Vector<E>
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
+    operator+(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
             c[i] = a[i] + b[i];
         }
         return c;
     }
 
-    // Subtraction of Vector<T> and Vector<T>
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator-(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
-        Vector<T, SIZE> c;
+    // Subtraction of Vector<T> and Vector<E>
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
+    operator-(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
             c[i] = a[i] - b[i];
         }
         return c;
     }
 
-    // Multiplication of Vector<T> and Vector<T>
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator*(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
-        Vector<T, SIZE> c;
+    // Multiplication of Vector<T> and Vector<E>
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
+    operator*(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
             c[i] = a[i] * b[i];
         }
         return c;
     }
 
-    // Multiplication of Vector<T> and T
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator*(Vector<T, SIZE> const &a, T const &b) {
-        Vector<T, SIZE> c;
+    // Multiplication of Vector<T> and E
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>, SIZE>
+    operator*(Vector<T, SIZE> const &a, E const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
             c[i] = a[i] * b;
         }
         return c;
     }
 
-    // Multiplication of T and Vector<T>
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator*(T const &a, Vector<T, SIZE> const &b) {
-        Vector<T, SIZE> c;
+    // Multiplication of T and Vector<E>
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
+    operator*(T const &a, Vector<E, SIZE> const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
             c[i] = a * b[i];
         }
         return c;
     }
 
-    // Division of Vector<T> and Vector<T>
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator/(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
-        Vector<T, SIZE> c;
+    // Division of Vector<T> and Vector<E>
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
+    operator/(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
 #ifdef DEBUG
-            assert(b[i] != T(0));
+            assert(b[i] != E(0));
 #endif
             c[i] = a[i] / b[i];
         }
         return c;
     }
 
-    // Division of Vector<T> and T
-    template<typename T, size_t SIZE>
-    Vector<T, SIZE> operator/(Vector<T, SIZE> const &a, T const &b) {
+    // Division of Vector<T> and E
+    template<typename T, typename E, size_t SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
+    operator/(Vector<T, SIZE> const &a, E const &b) {
 #ifdef DEBUG
-        assert(b != T(0));
+        assert(b != E(0));
 #endif
-        Vector<T, SIZE> c;
+        Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
             c[i] = a[i] / b;
         }
@@ -255,9 +275,10 @@ namespace utils {
      */
 
     // Dot product
-    template<typename T, size_t SIZE>
-    T Dot(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
-        T dot = T(0);
+    template<typename T, typename E, size_t SIZE>
+    typename traits::Promote<T, E>::TResult
+    Dot(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
+        typename traits::Promote<T, E>::TResult dot = typename traits::Promote<T, E>::TResult(0);
         for (size_t i = 0; i < SIZE; i++) {
             dot += a[i] * b[i];
         }
@@ -271,9 +292,10 @@ namespace utils {
     }
 
     // Cross product for vector of SIZE = 3
-    template<typename T>
-    Vector<T, 3> Cross(Vector<T, 3> const &a, Vector<T, 3> const &b) {
-        Vector<T, 3> cross;
+    template<typename T, typename E>
+    Vector<typename traits::Promote<T, E>::TResult, 3>
+    Cross(Vector<T, 3> const &a, Vector<E, 3> const &b) {
+        Vector<typename traits::Promote<T, E>::TResult, 3> cross;
 
         cross[0] = a[1] * b[2] - a[2] * b[1];
         cross[1] = a[2] * b[0] - a[0] * b[2];
@@ -282,13 +304,13 @@ namespace utils {
         return cross;
     }
 
-    // Length² of the vector
+    // Length² of vector
     template<typename T, size_t SIZE>
     T Length2(Vector<T, SIZE> const &a) {
         return Dot(a, a);
     }
 
-    // Length of the vector
+    // Length of vector
     template<typename SQRT_F, typename T, size_t SIZE>
     T Length(Vector<T, SIZE> const &a) {
         return SQRT_F(Length2(a));
