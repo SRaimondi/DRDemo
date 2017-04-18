@@ -32,6 +32,18 @@ namespace traits {
 
     // Specialization for some common types
     template<>
+    class Promote<float, int> {
+    public:
+        typedef float TResult;
+    };
+
+    template<>
+    class Promote<int, float> {
+    public:
+        typedef float TResult;
+    };
+
+    template<>
     class Promote<float, double> {
     public:
         typedef double TResult;
