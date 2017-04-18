@@ -277,7 +277,7 @@ namespace rad {
         // If f(a,b) = a/b then df/da = 1/b and df/db = -a/(b*b)
         return Variable<T>(tape,
                            tape->PushTwoNode(T(1) / b.Value(), a.NodeIndex(),
-                                                           -a.Value() / (b.Value() * b.Value()), b.NodeIndex()),
+                                             -a.Value() / (b.Value() * b.Value()), b.NodeIndex()),
                            a.Value() / b.Value());
     }
 

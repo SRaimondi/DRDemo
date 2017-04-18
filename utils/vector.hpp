@@ -29,12 +29,10 @@ namespace utils {
         explicit Vector(E const &v);
 
         // Copy constructor
-        template<typename E>
-        Vector(Vector<E, SIZE> const &other);
+        Vector(Vector<T, SIZE> const &other);
 
         // Assignment operator
-        template<typename E>
-        Vector<T, SIZE> &operator=(Vector<E, SIZE> const &other);
+        Vector<T, SIZE> &operator=(Vector<T, SIZE> const &other);
 
         // Move constructor
         Vector(Vector<T, SIZE> &&other);
@@ -140,15 +138,13 @@ namespace utils {
     }
 
     template<typename T, size_t SIZE>
-    template<typename E>
-    Vector<T, SIZE>::Vector(Vector<E, SIZE> const &other)
+    Vector<T, SIZE>::Vector(Vector<T, SIZE> const &other)
             : elements(new T[SIZE]) {
         std::copy(other.elements, other.elements + SIZE, elements);
     }
 
     template<typename T, size_t SIZE>
-    template<typename E>
-    Vector<T, SIZE> &Vector<T, SIZE>::operator=(Vector<E, SIZE> const &other) {
+    Vector<T, SIZE> &Vector<T, SIZE>::operator=(Vector<T, SIZE> const &other) {
         if (this != &other) {
             for (size_t i = 0; i < SIZE; ++i) {
                 elements[i] = other.elements[i];
@@ -316,40 +312,63 @@ namespace utils {
         return SQRT_F(Length2(a));
     }
 
-    /**
-     * Create subclass of Vector<T, 3> as Vector3 for practice
-     */
-    template<typename T>
-    class Vector3 : public Vector<T, 3> {
-    public:
-        Vector3();
-
-        Vector3(T x, T y, T z);
-
-        template<typename E>
-        Vector3(E const &v);
-    };
-
-    template<typename T>
-    Vector3<T>::Vector3()
-            : Vector<T, 3>() {
-        this->elements[0] = T(0);
-        this->elements[1] = T(0);
-        this->elements[2] = T(0);
-    }
-
-    template<typename T>
-    Vector3<T>::Vector3(T x, T y, T z)
-            : Vector<T, 3>() {
-        this->elements[0] = x;
-        this->elements[1] = y;
-        this->elements[2] = z;
-    }
-
-    template<typename T>
-    template<typename E>
-    Vector3<T>::Vector3(E const &v)
-            : Vector<T, 3>(v) {}
+//    /**
+//     * Create subclass of Vector<T, 3> as Vector3 for practice
+//     */
+//    template<typename T>
+//    class Vector3 : public Vector<T, 3> {
+//    public:
+//        Vector3();
+//
+//        // Three value constructor
+//        template<typename E>
+//        Vector3(E const &x, E const &y, E const &z);
+//
+//        // Single value constructor
+//        template<typename E>
+//        Vector3(E const &v);
+//
+//        // Copy
+//        template<typename E>
+//        Vector3(Vector3<E> const& other);
+//
+//        // Assignment operator
+//        template<typename E>
+//        Vector3<T> &operator=(Vector3<E> const& other);
+//    };
+//
+//    template<typename T>
+//    Vector3<T>::Vector3()
+//            : Vector<T, 3>() {
+//        this->elements[0] = T(0);
+//        this->elements[1] = T(0);
+//        this->elements[2] = T(0);
+//    }
+//
+//    template<typename T>
+//    template<typename E>
+//    Vector3<T>::Vector3(E const &x, E const &y, E const &z)
+//            : Vector<T, 3>() {
+//        this->elements[0] = x;
+//        this->elements[1] = y;
+//        this->elements[2] = z;
+//    }
+//
+//    template<typename T>
+//    template<typename E>
+//    Vector3<T>::Vector3(E const &v)
+//            : Vector<T, 3>(v) {}
+//
+//    template<typename T>
+//    template<typename E>
+//    Vector3<T>::Vector3(Vector3<E> const &other)
+//            : Vector<T, 3>(other) {}
+//
+//    template<typename T>
+//    template<typename E>
+//    Vector3<T>& Vector3<T>::operator=(Vector3<E> const &other) {
+//        Vector<T, 3>::operator=(other);
+//    }
 
 } // utils namespace
 

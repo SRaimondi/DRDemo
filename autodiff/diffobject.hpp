@@ -12,7 +12,7 @@
  * and they must be initialized thorough a tape in case of reverse automatic differentiation
  */
 
-#include "rad.hpp"
+#include "vector.hpp"
 
 namespace ad {
 
@@ -25,6 +25,20 @@ namespace ad {
         // Return a std::vector with all the variables that can be used to compute a derivative
         virtual std::vector<rad::Variable<T> > GetDifferentiableVariables() const = 0;
     };
+
+    /**
+     * Define custom Float and Double
+     */
+    using Float = rad::Variable<float>;
+    using Double = rad::Variable<double>;
+
+    /**
+     * Define custom Vector3 types
+     */
+    using Vec3F = utils::Vector<Float, 3>;
+    using Vec3f = utils::Vector<float, 3>;
+    using Vec3D = utils::Vector<Double, 3>;
+    using Vec3d = utils::Vector<double, 3>;
 
 } // ad namespace
 
