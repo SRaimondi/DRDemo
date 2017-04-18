@@ -2,7 +2,7 @@
 // #include "rad.hpp"
 #include "vector.hpp"
 
-#define N 2
+#define N 10
 
 // Define spherical n-dimensional function
 template<typename T, size_t SIZE>
@@ -55,10 +55,16 @@ int main(/* int argc, char *argv[] */) {
 //    }
 //    std::cout << utils::Dot(v1, v1) << std::endl;
 
+    // Create initial guess
     utils::Vector<rad::Variable<float>, N> x;
     for (size_t i = 0; i < N; i++) {
         x[i] = tape.NewVariable(i);
     }
+    std::cout << "X:" << std::endl;
+    for (size_t i = 0; i < N; i++) {
+        std::cout << x[i].Value() << std::endl;
+    }
+    std::cout << std::endl;
 
     // Evaluate function
     rad::Variable<float> out = SphericalFunction(x);
@@ -76,6 +82,14 @@ int main(/* int argc, char *argv[] */) {
     // Print gradient
     for (size_t i = 0; i < N; i++) {
         std::cout << gradient[i] << std::endl;
+    }
+    std::cout << std::endl;
+
+    x = x - 0.01f * gradient;
+
+    std::cout << "X after update" << std::endl;
+    for (size_t i = 0; i < N; i++) {
+        std::cout << x[i].Value() << std::endl;
     }
 
     return 0;

@@ -278,8 +278,8 @@ namespace utils {
     template<typename T, typename E, size_t SIZE>
     typename traits::Promote<T, E>::TResult
     Dot(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
-        typename traits::Promote<T, E>::TResult dot = typename traits::Promote<T, E>::TResult(0);
-        for (size_t i = 0; i < SIZE; i++) {
+        typename traits::Promote<T, E>::TResult dot = a[0] * b[0];
+        for (size_t i = 1; i < SIZE; i++) {
             dot += a[i] * b[i];
         }
         return dot;
