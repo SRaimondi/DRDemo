@@ -1,5 +1,4 @@
 #include <iostream>
-// #include "rad.hpp"
 #include "vector.hpp"
 
 #define N 10
@@ -7,9 +6,7 @@
 // Define spherical n-dimensional function
 template<typename T, size_t SIZE>
 T SphericalFunction(utils::Vector<T, SIZE> const &args) {
-    // T res = args[0] * args[0] + args[1] * args[1];
-    // return res;
-    return utils::Dot(args, args);
+    return utils::Length2(args);
 }
 
 int main(/* int argc, char *argv[] */) {
@@ -85,7 +82,7 @@ int main(/* int argc, char *argv[] */) {
     }
     std::cout << std::endl;
 
-    x = x - 0.01f * gradient;
+    x = x - gradient;
 
     std::cout << "X after update" << std::endl;
     for (size_t i = 0; i < N; i++) {

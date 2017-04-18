@@ -16,5 +16,5 @@ set(SOURCE_FILES
         autodiff/fad.hpp
         utils/vector.hpp
         # utils/common.hpp
-        utils/common.hpp utils/ifthenelse.hpp utils/promote.hpp)
+        utils/common.hpp utils/ifthenelse.hpp utils/promote.hpp autodiff/diffobject.hpp)
 add_executable(DRDemo ${SOURCE_FILES})

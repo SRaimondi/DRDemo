@@ -6,7 +6,7 @@
 #define DRDEMO_IFTHENELSE_HPP
 
 /**
- * Utility template to do compute time if then else conditional statements
+ * Utility template to do compile time if then else conditional statements
  */
 
 namespace traits {

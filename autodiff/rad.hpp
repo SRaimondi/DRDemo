@@ -451,7 +451,7 @@ namespace rad {
         Variable<T> NewVariable(T v = T(0)) noexcept;
 
         // Access tape node at given index
-        inline TapeNode<T> const &At(size_t i) const noexcept {
+        inline TapeNode<T> const &At(size_t i) const {
 #ifdef DEBUG
             return nodes.at(i);
 #else
@@ -561,10 +561,9 @@ namespace rad {
         for (size_t i = 0; i < size; i++) {
             size_t const rev_index = size - 1 - i;
             TapeNode<T> const &node = var.AssociatedTape()->At(rev_index);
-            T deriv = derivs[rev_index];
             // Add children contribution
-            derivs[node.parent_i[0]] += node.weights[0] * deriv;
-            derivs[node.parent_i[1]] += node.weights[1] * deriv;
+            derivs[node.parent_i[0]] += node.weights[0] * derivs[rev_index];
+            derivs[node.parent_i[1]] += node.weights[1] * derivs[rev_index];
         }
     }
 

@@ -93,7 +93,7 @@ namespace utils {
         }
 
         template<typename E>
-        Vector<T, SIZE> &operator*=(E const &a) noexcept {
+        Vector<T, SIZE> &operator*=(E const &a) {
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] *= a;
             }
@@ -183,8 +183,8 @@ namespace utils {
     }
 
     /**
-     * Declare the mathematical operators and function that allow to write expression using Vector<T>/Vector<T> and
-     * Vector<T> / T
+     * Declare the mathematical operators and function that allow to write expression using Vector<T> and Vector<E> and
+     * Vector<T> / E
      */
 
     // Sum of Vector<T> and Vector<E>
@@ -286,8 +286,8 @@ namespace utils {
     }
 
     // Absolute value of dot function, the abs function we want to use must be passed as argument
-    template<typename ABS_F, typename T, size_t SIZE>
-    T AbsDot(Vector<T, SIZE> const &a, Vector<T, SIZE> const &b) {
+    template<typename ABS_F, typename T, typename E, size_t SIZE>
+    T AbsDot(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
         return ABS_F(Dot(a, b));
     }
 
@@ -315,6 +315,41 @@ namespace utils {
     T Length(Vector<T, SIZE> const &a) {
         return SQRT_F(Length2(a));
     }
+
+    /**
+     * Create subclass of Vector<T, 3> as Vector3 for practice
+     */
+    template<typename T>
+    class Vector3 : public Vector<T, 3> {
+    public:
+        Vector3();
+
+        Vector3(T x, T y, T z);
+
+        template<typename E>
+        Vector3(E const &v);
+    };
+
+    template<typename T>
+    Vector3<T>::Vector3()
+            : Vector<T, 3>() {
+        this->elements[0] = T(0);
+        this->elements[1] = T(0);
+        this->elements[2] = T(0);
+    }
+
+    template<typename T>
+    Vector3<T>::Vector3(T x, T y, T z)
+            : Vector<T, 3>() {
+        this->elements[0] = x;
+        this->elements[1] = y;
+        this->elements[2] = z;
+    }
+
+    template<typename T>
+    template<typename E>
+    Vector3<T>::Vector3(E const &v)
+            : Vector<T, 3>(v) {}
 
 } // utils namespace
 
