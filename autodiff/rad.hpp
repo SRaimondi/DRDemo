@@ -42,7 +42,7 @@ namespace rad {
         parent_i[1] = p2;
     }
 
-    // Forward declare the Tape class, it's used in the Variable struct
+    // Forward declare the Tape class, it's used in the Variable class
     template<typename T>
     class Tape;
 

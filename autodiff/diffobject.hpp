@@ -35,10 +35,10 @@ namespace ad {
     /**
      * Define custom Vector3 types
      */
-    using Vec3F = utils::Vector<Float, 3>;
-    using Vec3f = utils::Vector<float, 3>;
-    using Vec3D = utils::Vector<Double, 3>;
-    using Vec3d = utils::Vector<double, 3>;
+    using Vec3F = utils::Vector3<Float>;
+    using Vec3f = utils::Vector3<float>;
+    using Vec3D = utils::Vector3<Double>;
+    using Vec3d = utils::Vector3<double>;
 
 } // ad namespace
 
