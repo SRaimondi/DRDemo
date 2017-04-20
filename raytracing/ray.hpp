@@ -19,16 +19,14 @@ namespace rt {
         ad::Vec3F origin;
         ad::Vec3F direction;
 
-        Ray(ad::Vec3F const &o, ad::Vec3F const &d);
+        inline Ray(ad::Vec3F const &o, ad::Vec3F const &d)
+                : origin(o), direction(d) {}
 
         // Compute ray point at given parameter
         inline ad::Vec3F operator()(float t) const {
             return origin + t * direction;
         }
     };
-
-    Ray::Ray(ad::Vec3F const &o, ad::Vec3F const &d)
-            : origin(o), direction(d) {}
 
 } // rt namespace
 

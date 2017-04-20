@@ -1,14 +1,21 @@
 #include <iostream>
 #include "vector.hpp"
 
-#define N 10
+#include "sphere.hpp"
+#include "image.hpp"
+
+//#define N 10
+
+// Define width and height of the image
+#define WIDTH 500
+#define HEIGHT 500
 
 
-// Define spherical n-dimensional function
-template<typename T, size_t SIZE>
-T SphericalFunction(utils::Vector<T, SIZE> const &args) {
-    return utils::Length2(args);
-}
+//// Define spherical n-dimensional function
+//template<typename T, size_t SIZE>
+//T SphericalFunction(utils::Vector<T, SIZE> const &args) {
+//    return utils::Length2(args);
+//}
 
 int main(/* int argc, char *argv[] */) {
 //    // Define custom float type
@@ -92,6 +99,41 @@ int main(/* int argc, char *argv[] */) {
 //
 //    rt::Image<600, 400> image;
 //    image.CreatePPM(std::string("test.ppm"));
+
+    // Create tape
+    rad::Tape<float> tape(10000);
+    // Create image
+    rt::Image<WIDTH, HEIGHT> image;
+
+    // Create sphere at the center of the screen
+    rt::Shape *sphere = new rt::Sphere(150.f, 250.f, -200.f, 100.f, tape);
+
+    ad::Vec3F direction(tape.NewVariable(0.f), tape.NewVariable(0.f), tape.NewVariable(-1.f));
+    ad::Vec3F origin;
+    for (size_t i = 0; i < WIDTH; i++) {
+        for (size_t j = 0; j < HEIGHT; j++) {
+            // Create ray direction
+            origin[0] = tape.NewVariable(i + 0.5f);
+            origin[1] = tape.NewVariable(j + 0.5f);
+            origin[2] = tape.NewVariable(0.f);
+
+            rt::Ray ray(origin, direction);
+            // Create intersection
+            rt::Intersection intersection;
+            // Check if we hit the sphere
+            if (sphere->Intersect(ray, &intersection)) {
+                image(i, j) = ad::Vec3F(tape.NewVariable(1.f), tape.NewVariable(1.f), tape.NewVariable(1.f));
+            } else {
+                image(i, j) = ad::Vec3F(tape.NewVariable(0.f), tape.NewVariable(0.f), tape.NewVariable(0.f));
+            }
+        }
+    }
+
+    // Create image
+    image.CreatePPM(std::string("test.ppm"));
+
+    std::cout << tape.Size() << std::endl;
+
 
     return 0;
 }

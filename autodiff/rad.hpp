@@ -175,6 +175,19 @@ namespace rad {
      * Variable<T> / T
      */
 
+    // Negation
+    template<typename T>
+    inline Variable<T>
+    operator-(Variable<T> const &var) {
+#ifdef DEBUG
+        assert(var.AssociatedTape() != nullptr);
+#endif
+
+        return Variable<T>(var.AssociatedTape(),
+                           var.AssociatedTape()->PushSingleNode(T(-1), var.NodeIndex()),
+                           -var.Value());
+    }
+
     // Sum of Variable<T> and Variable<T>
     template<typename T>
     inline Variable<T>

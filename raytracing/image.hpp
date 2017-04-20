@@ -26,11 +26,11 @@ namespace rt {
 
         // Access element at given indices
         inline ad::Vec3F const &operator()(size_t i, size_t j) const {
-            return content[i * WIDTH + j];
+            return content[j * WIDTH + i];
         }
 
         inline ad::Vec3F &operator()(size_t i, size_t j) {
-            return content[i * WIDTH + j];
+            return content[j * WIDTH + i];
         }
 
         // Access image content as vector
@@ -55,8 +55,8 @@ namespace rt {
         file << WIDTH << " " << HEIGHT << "\n";
         file << "255\n";
         // Write colors to file
-        for (int i = static_cast<int>(HEIGHT - 1); i >= 0; i--) {
-            for (size_t j = 0; j < WIDTH; j++) {
+        for (int j = static_cast<int>(HEIGHT - 1); j >= 0; j--) {
+            for (size_t i = 0; i < WIDTH; i++) {
                 ad::Vec3F c = (*this)(i, j);
                 unsigned char r = static_cast<unsigned char> (c[0].Value() * 255.f);
                 unsigned char g = static_cast<unsigned char> (c[1].Value() * 255.f);
