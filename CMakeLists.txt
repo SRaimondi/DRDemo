@@ -18,5 +18,5 @@ set(SOURCE_FILES
         utils/common.hpp
         utils/common.hpp
         utils/ifthenelse.hpp
-        utils/promote.hpp autodiff/diffobject.hpp raytracing/ray.hpp raytracing/image.hpp)
+        utils/promote.hpp autodiff/diffobject.hpp raytracing/ray.hpp raytracing/image.hpp raytracing/shape.hpp raytracing/intersection.hpp raytracing/sphere.hpp raytracing/sphere.cpp)
 add_executable(DRDemo ${SOURCE_FILES})

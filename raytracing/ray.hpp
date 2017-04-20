@@ -7,7 +7,6 @@
 
 /**
  * This file contains the definition of the Ray class used in the rest of the project
- * For the moment, this is not a differentiable object
  */
 
 #include "diffobject.hpp"
@@ -17,18 +16,18 @@ namespace rt {
     class Ray {
     public:
         // Ray origin and direction
-        ad::Vec3f origin;
-        ad::Vec3f direction;
+        ad::Vec3F origin;
+        ad::Vec3F direction;
 
-        Ray(ad::Vec3f const &o, ad::Vec3f const &d);
+        Ray(ad::Vec3F const &o, ad::Vec3F const &d);
 
         // Compute ray point at given parameter
-        inline ad::Vec3f operator()(float t) const {
+        inline ad::Vec3F operator()(float t) const {
             return origin + t * direction;
         }
     };
 
-    Ray::Ray(ad::Vec3f const &o, ad::Vec3f const &d)
+    Ray::Ray(ad::Vec3F const &o, ad::Vec3F const &d)
             : origin(o), direction(d) {}
 
 } // rt namespace

@@ -114,7 +114,7 @@ namespace utils {
         template<typename E>
         Vector<T, SIZE> &operator/=(E const &a) {
 #ifdef DEBUG
-            assert(a != E(0));
+            assert(a != static_cast<E>(0));
 #endif
             for (size_t i = 0; i < SIZE; i++) {
                 elements[i] /= a;

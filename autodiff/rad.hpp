@@ -13,6 +13,7 @@
 #include <cstring>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <map>
 #include "common.hpp"
 
@@ -63,6 +64,9 @@ namespace rad {
 
     public:
         Variable() noexcept;
+
+        template<typename E>
+        Variable(E const &v) noexcept;
 
         template<typename E>
         Variable(Tape<T> *const t, size_t n_i, E const &v) noexcept;
@@ -133,6 +137,11 @@ namespace rad {
     template<typename T>
     Variable<T>::Variable() noexcept
             : tape(nullptr), node_index(0), value(T(0)) {}
+
+    template<typename T>
+    template<typename E>
+    Variable<T>::Variable(E const &v) noexcept
+            : tape(nullptr), node_index(0), value(v) {}
 
     template<typename T>
     template<typename E>
@@ -289,8 +298,6 @@ namespace rad {
                b.AssociatedTape() != nullptr &&
                a.AssociatedTape() == b.AssociatedTape());
 #endif
-        // Select tape to use
-        auto tape = a.AssociatedTape() != nullptr ? a.AssociatedTape() : b.AssociatedTape();
 
         // If f(a,b) = a/b then df/da = 1/b and df/db = -a/(b*b)
         return Variable<T>(a.AssociatedTape(),
@@ -323,6 +330,8 @@ namespace rad {
     }
 
     // Comparison operators
+
+    // <
     template<typename T>
     inline bool
     operator<(Variable<T> const &a, Variable<T> const &b) noexcept {
@@ -331,10 +340,36 @@ namespace rad {
 
     template<typename T>
     inline bool
+    operator<(Variable<T> const &a, T const &b) noexcept {
+        return a.Value() < b;
+    }
+
+    template<typename T>
+    inline bool
+    operator<(T const &a, Variable<T> const &b) noexcept {
+        return a < b.Value();
+    }
+
+    // <=
+    template<typename T>
+    inline bool
     operator<=(Variable<T> const &a, Variable<T> const &b) noexcept {
         return a.Value() <= b.Value();
     }
 
+    template<typename T>
+    inline bool
+    operator<=(Variable<T> const &a, T const &b) noexcept {
+        return a.Value() <= b;
+    }
+
+    template<typename T>
+    inline bool
+    operator<=(T const &a, Variable<T> const &b) noexcept {
+        return a <= b.Value();
+    }
+
+    // >
     template<typename T>
     inline bool
     operator>(Variable<T> const &a, Variable<T> const &b) noexcept {
@@ -343,10 +378,36 @@ namespace rad {
 
     template<typename T>
     inline bool
+    operator>(Variable<T> const &a, T const &b) noexcept {
+        return a.Value() > b;
+    }
+
+    template<typename T>
+    inline bool
+    operator>(T const &a, Variable<T> const &b) noexcept {
+        return a > b.Value();
+    }
+
+    // >=
+    template<typename T>
+    inline bool
     operator>=(Variable<T> const &a, Variable<T> const &b) noexcept {
         return a.Value() >= b.Value();
     }
 
+    template<typename T>
+    inline bool
+    operator>=(Variable<T> const &a, T const &b) noexcept {
+        return a.Value() >= b;
+    }
+
+    template<typename T>
+    inline bool
+    operator>=(T const &a, Variable<T> const &b) noexcept {
+        return a >= b.Value();
+    }
+
+    // ==
     template<typename T>
     inline bool
     operator==(Variable<T> const &a, Variable<T> const &b) noexcept {
@@ -355,8 +416,33 @@ namespace rad {
 
     template<typename T>
     inline bool
+    operator==(Variable<T> const &a, T const &b) noexcept {
+        return a.Value() == b;
+    }
+
+    template<typename T>
+    inline bool
+    operator==(T const &a, Variable<T> const &b) noexcept {
+        return a == b.Value();
+    }
+
+    // !=
+    template<typename T>
+    inline bool
     operator!=(Variable<T> const &a, Variable<T> const &b) noexcept {
         return a.Value() != b.Value();
+    }
+
+    template<typename T>
+    inline bool
+    operator!=(Variable<T> const &a, T const &b) noexcept {
+        return a.Value() != b;
+    }
+
+    template<typename T>
+    inline bool
+    operator!=(T const &a, Variable<T> const &b) noexcept {
+        return a != b.Value();
     }
 
     // Sign of Variable<T>
