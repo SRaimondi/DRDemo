@@ -54,7 +54,7 @@ namespace rad {
     template<typename T>
     class Variable {
     private:
-        // Pointer to the Tape that created this variable
+        // Pointer to the Tape associated with the Variable
         Tape<T> *tape;
         // TapeNode index in the Tape
         size_t node_index;
@@ -64,10 +64,16 @@ namespace rad {
     public:
         Variable() noexcept;
 
-        Variable(Tape<T> *const t, size_t n_i, T v) noexcept;
-
         template<typename E>
-        Variable(E const &v) noexcept;
+        Variable(Tape<T> *const t, size_t n_i, E const &v) noexcept;
+
+        // Assignment operator with another variable
+        template<typename E>
+        Variable<T> &operator=(Variable<E> const &var) noexcept;
+
+        // Value assignment
+        template<typename E>
+        Variable<T> &operator=(E const &v) noexcept;
 
         // Access Variable fields
         inline Tape<T> *AssociatedTape() const noexcept {
@@ -78,7 +84,7 @@ namespace rad {
             return node_index;
         }
 
-        inline T Value() const noexcept {
+        inline T const &Value() const noexcept {
             return value;
         }
 
@@ -129,13 +135,31 @@ namespace rad {
             : tape(nullptr), node_index(0), value(T(0)) {}
 
     template<typename T>
-    Variable<T>::Variable(Tape<T> *const t, size_t n_i, T v) noexcept
+    template<typename E>
+    Variable<T>::Variable(Tape<T> *const t, size_t n_i, E const &v) noexcept
             : tape(t), node_index(n_i), value(v) {}
 
     template<typename T>
     template<typename E>
-    Variable<T>::Variable(E const &v) noexcept
-            : tape(nullptr), node_index(0), value(v) {}
+    Variable<T> &Variable<T>::operator=(Variable<E> const &var) noexcept {
+        // The assignment operator creates an alias by default
+        if (this != &var) {
+            this->tape = var.AssociatedTape();
+            this->node_index = var.NodeIndex();
+            this->value = var.Value();
+        }
+
+        return *this;
+    }
+
+    template<typename T>
+    template<typename E>
+    Variable<T> &Variable<T>::operator=(E const &v) noexcept {
+        // Assign only a new value to the variable
+        this->value = v;
+
+        return *this;
+    }
 
     /**
      * Declare the mathematical operators and function that allow to write expression using Variable<T>/Variable<T> and
@@ -147,15 +171,13 @@ namespace rad {
     inline Variable<T>
     operator+(Variable<T> const &a, Variable<T> const &b) {
 #ifdef DEBUG
-        assert(a.AssociatedTape() == b.AssociatedTape() ||
-               (a.AssociatedTape() == nullptr && b.AssociatedTape() != nullptr) ||
-               (a.AssociatedTape() != nullptr && b.AssociatedTape() == nullptr));
+        assert(a.AssociatedTape() != nullptr &&
+               b.AssociatedTape() != nullptr &&
+               a.AssociatedTape() == b.AssociatedTape());
 #endif
-        // Select tape to use
-        auto tape = a.AssociatedTape() != nullptr ? a.AssociatedTape() : b.AssociatedTape();
 
-        return Variable<T>(tape,
-                           tape->PushTwoNode(T(1), a.NodeIndex(), T(1), b.NodeIndex()),
+        return Variable<T>(a.AssociatedTape(),
+                           a.AssociatedTape()->PushTwoNode(T(1), a.NodeIndex(), T(1), b.NodeIndex()),
                            a.Value() + b.Value());
     }
 
@@ -187,15 +209,13 @@ namespace rad {
     inline Variable<T>
     operator-(Variable<T> const &a, Variable<T> const &b) {
 #ifdef DEBUG
-        assert(a.AssociatedTape() == b.AssociatedTape() ||
-               (a.AssociatedTape() == nullptr && b.AssociatedTape() != nullptr) ||
-               (a.AssociatedTape() != nullptr && b.AssociatedTape() == nullptr));
+        assert(a.AssociatedTape() != nullptr &&
+               b.AssociatedTape() != nullptr &&
+               a.AssociatedTape() == b.AssociatedTape());
 #endif
-        // Select tape to use
-        auto tape = a.AssociatedTape() != nullptr ? a.AssociatedTape() : b.AssociatedTape();
 
-        return Variable<T>(tape,
-                           tape->PushTwoNode(T(1), a.NodeIndex(), T(-1), b.NodeIndex()),
+        return Variable<T>(a.AssociatedTape(),
+                           a.AssociatedTape()->PushTwoNode(T(1), a.NodeIndex(), T(-1), b.NodeIndex()),
                            a.Value() - b.Value());
     }
 
@@ -227,15 +247,13 @@ namespace rad {
     inline Variable<T>
     operator*(Variable<T> const &a, Variable<T> const &b) {
 #ifdef DEBUG
-        assert(a.AssociatedTape() == b.AssociatedTape() ||
-               (a.AssociatedTape() == nullptr && b.AssociatedTape() != nullptr) ||
-               (a.AssociatedTape() != nullptr && b.AssociatedTape() == nullptr));
+        assert(a.AssociatedTape() != nullptr &&
+               b.AssociatedTape() != nullptr &&
+               a.AssociatedTape() == b.AssociatedTape());
 #endif
-        // Select tape to use
-        auto tape = a.AssociatedTape() != nullptr ? a.AssociatedTape() : b.AssociatedTape();
 
-        return Variable<T>(tape,
-                           tape->PushTwoNode(b.Value(), a.NodeIndex(), a.Value(), b.NodeIndex()),
+        return Variable<T>(a.AssociatedTape(),
+                           a.AssociatedTape()->PushTwoNode(b.Value(), a.NodeIndex(), a.Value(), b.NodeIndex()),
                            a.Value() * b.Value());
     }
 
@@ -267,17 +285,17 @@ namespace rad {
     inline Variable<T>
     operator/(Variable<T> const &a, Variable<T> const &b) {
 #ifdef DEBUG
-        assert(a.AssociatedTape() == b.AssociatedTape() ||
-               (a.AssociatedTape() == nullptr && b.AssociatedTape() != nullptr) ||
-               (a.AssociatedTape() != nullptr && b.AssociatedTape() == nullptr));
+        assert(a.AssociatedTape() != nullptr &&
+               b.AssociatedTape() != nullptr &&
+               a.AssociatedTape() == b.AssociatedTape());
 #endif
         // Select tape to use
         auto tape = a.AssociatedTape() != nullptr ? a.AssociatedTape() : b.AssociatedTape();
 
         // If f(a,b) = a/b then df/da = 1/b and df/db = -a/(b*b)
-        return Variable<T>(tape,
-                           tape->PushTwoNode(T(1) / b.Value(), a.NodeIndex(),
-                                             -a.Value() / (b.Value() * b.Value()), b.NodeIndex()),
+        return Variable<T>(a.AssociatedTape(),
+                           a.AssociatedTape()->PushTwoNode(T(1) / b.Value(), a.NodeIndex(),
+                                                           -a.Value() / (b.Value() * b.Value()), b.NodeIndex()),
                            a.Value() / b.Value());
     }
 

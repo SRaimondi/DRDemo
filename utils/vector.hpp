@@ -218,7 +218,7 @@ namespace utils {
 
     // Multiplication of Vector<T> and E
     template<typename T, typename E, size_t SIZE>
-    Vector<typename traits::Promote<T, E>, SIZE>
+    Vector<typename traits::Promote<T, E>::TResult, SIZE>
     operator*(Vector<T, SIZE> const &a, E const &b) {
         Vector<typename traits::Promote<T, E>::TResult, SIZE> c;
         for (size_t i = 0; i < SIZE; i++) {
@@ -274,7 +274,7 @@ namespace utils {
     template<typename T, typename E, size_t SIZE>
     typename traits::Promote<T, E>::TResult
     Dot(Vector<T, SIZE> const &a, Vector<E, SIZE> const &b) {
-        typename traits::Promote<T, E>::TResult dot = a[0] * b[0];
+        auto dot = a[0] * b[0];
         for (size_t i = 1; i < SIZE; i++) {
             dot += a[i] * b[i];
         }
@@ -339,9 +339,9 @@ namespace utils {
     template<typename T>
     Vector3<T>::Vector3()
             : Vector<T, 3>() {
-        this->elements[0] = T(0);
-        this->elements[1] = T(0);
-        this->elements[2] = T(0);
+        this->elements[0] = 0;
+        this->elements[1] = 0;
+        this->elements[2] = 0;
     }
 
     template<typename T>

@@ -44,7 +44,7 @@ namespace rt {
 
     template<size_t WIDTH, size_t HEIGHT>
     Image<WIDTH, HEIGHT>::Image()
-            : content(ad::Vec3F(0.f)) {}
+            : content(ad::Vec3F()) {}
 
     template<size_t WIDTH, size_t HEIGHT>
     void Image<WIDTH, HEIGHT>::CreatePPM(std::string const &file_name) const {
