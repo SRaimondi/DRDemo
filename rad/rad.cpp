@@ -36,11 +36,11 @@ namespace drdemo {
         return index;
     }
 
-    Float::Float(float v)
+    Float::Float(float v) noexcept
     // Set the value of the variable and push it on the default_tape
             : value(v), node_index(default_tape.PushLeaf()) {}
 
-    Float::Float(size_t index, float v)
+    Float::Float(size_t index, float v) noexcept
             : value(v), node_index(index) {}
 
 } // drdemo namespace
