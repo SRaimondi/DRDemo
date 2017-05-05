@@ -10,7 +10,6 @@
 #define WIDTH 500
 #define HEIGHT 500
 
-
 //// Define spherical n-dimensional function
 //template<typename T, size_t SIZE>
 //T SphericalFunction(utils::Vector<T, SIZE> const &args) {
