@@ -26,5 +26,5 @@ set(SOURCE_FILES
         #        raytracing/intersection.hpp
         #        raytracing/sphere.hpp
         #        raytracing/sphere.cpp
-        )
+        rad/rad.cpp rad/rad.hpp)
 add_executable(DRDemo ${SOURCE_FILES})
