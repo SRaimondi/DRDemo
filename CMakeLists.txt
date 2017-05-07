@@ -15,7 +15,7 @@ set(SOURCE_FILES
         #        autodiff/rad.hpp
         #        autodiff/fad.hpp
         #        utils/vector.hpp
-        #        utils/common.hpp
+        #                utils/common.hpp
         #        utils/common.hpp
         #        utils/ifthenelse.hpp
         #        utils/promote.hpp
