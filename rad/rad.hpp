@@ -294,6 +294,18 @@ namespace drdemo {
         return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.Value()));
     }
 
+    // Max of two Float
+    inline Float Max(Float const &a, Float const &b) noexcept {
+        if (a.Value() > b.Value()) { return a; }
+        return b;
+    }
+
+    // Min of two Float
+    inline Float Min(Float const &a, Float const &b) noexcept {
+        if (a.Value() < b.Value()) { return a; }
+        return b;
+    }
+
 } // drdemo namespace
 
 #endif //DRDEMO_RAD_HPP

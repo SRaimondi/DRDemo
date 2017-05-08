@@ -120,6 +120,16 @@ namespace drdemo {
         return a.x * b.x + a.y * b.y + a.z * b.z;
     }
 
+    template<typename T>
+    inline T AbsDot(Vector3<T> const &a, Vector3<T> const &b) {
+        return std::abs(Dot(a, b));
+    }
+
+    template<>
+    inline Float AbsDot<Float>(Vector3<Float> const &a, Vector3<Float> const &b) {
+        return Abs(a.x * b.x + a.y * b.y + a.z * b.z);
+    }
+
     // Cross product
     template<typename T>
     inline Vector3<T> Cross(Vector3<T> const &a, Vector3<T> const &b) {
@@ -133,6 +143,28 @@ namespace drdemo {
     inline Vector3<T> Normalize(Vector3<T> const &v) {
         return v / Length(v);
     }
+
+    /**
+     * Ray class, attribute are made public for practical reasons
+     */
+    class Ray {
+    public:
+        // Ray public data, all attributes are differentiable
+        // Origin
+        Vector3F o;
+        // Direction, NOT forced to be normalized
+        Vector3F d;
+        // Maximum parameter of the ray
+        Float t_max;
+
+        // Constructor
+        Ray() : t_max(INFINITY) {}
+
+        Ray(Vector3F const &o, Vector3F const &d, Float t_max) : o(o), d(d), t_max(t_max) {}
+
+        template<typename T>
+        Vector3F operator()(T const &t) const { return o + t * d; }
+    };
 
 } // drdemo namespace
 
