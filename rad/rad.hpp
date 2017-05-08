@@ -73,8 +73,8 @@ namespace drdemo {
         size_t node_index;
 
     public:
-        // List of different constructors
-        Float(float v = 0.f) noexcept;
+        // Value constructor, default value is 0
+        explicit Float(float v = 0.f) noexcept;
 
         // Construct Float given index on tape and value
         Float(size_t index, float v) noexcept;
@@ -83,6 +83,9 @@ namespace drdemo {
 
         // Assignment operator, default is to create an alias of the variable, not pushing a new one on the stack
         Float &operator=(Float const &other) = default;
+
+        // Set Float value
+        Float &operator=(float v) noexcept;
 
         // Convert to built-in float type
         inline float Value() const noexcept { return value; }
@@ -245,44 +248,44 @@ namespace drdemo {
     }
 
     // Sign of Float
-    inline int sign(Float const &v) noexcept {
+    inline int Sign(Float const &v) noexcept {
         return static_cast<int>((0.f < v.Value()) - (v.Value() < 0.f));
     }
 
     // Sin of Float
-    inline Float sin(Float const &v) noexcept {
+    inline Float Sin(Float const &v) noexcept {
         return Float(default_tape.PushSingleNode(std::cos(v.Value()), v.NodeIndex()), std::sin(v.Value()));
     }
 
     // Cos of Float
-    inline Float cos(Float const &v) noexcept {
+    inline Float Cos(Float const &v) noexcept {
         return Float(default_tape.PushSingleNode(-std::sin(v.Value()), v.NodeIndex()), std::cos(v.Value()));
     }
 
     // Exp of Float
-    inline Float exp(Float const &v) noexcept {
+    inline Float Exp(Float const &v) noexcept {
         return Float(default_tape.PushSingleNode(std::exp(v.Value()), v.NodeIndex()), std::exp(v.Value()));
     }
 
     // Log of Float
-    inline Float log(Float const &v) noexcept {
+    inline Float Log(Float const &v) noexcept {
         return Float(default_tape.PushSingleNode(1.f / v.Value(), v.NodeIndex()), std::log(v.Value()));
     }
 
     // Pow of Float
-    inline Float pow(Float const &v, float k) noexcept {
+    inline Float Pow(Float const &v, float k) noexcept {
         return Float(default_tape.PushSingleNode(k * std::pow(v.Value(), k - 1.f), v.NodeIndex()),
                      std::pow(v.Value(), k));
     }
 
     // Sqrt of Float
-    inline Float sqrt(Float const &v) noexcept {
+    inline Float Sqrt(Float const &v) noexcept {
         return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.Value()), v.NodeIndex()), std::sqrt(v.Value()));
     }
 
     // Abs of Float
-    inline Float abs(Float const &v) noexcept {
-        return Float(default_tape.PushSingleNode(sign(v), v.NodeIndex()), std::abs(v.Value()));
+    inline Float Abs(Float const &v) noexcept {
+        return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.Value()));
     }
 
 } // drdemo namespace
