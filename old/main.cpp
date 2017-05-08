@@ -1,14 +1,14 @@
-#include <iostream>
-#include "vector.hpp"
-
-#include "sphere.hpp"
-#include "image.hpp"
+//#include <iostream>
+//#include "vector.hpp"
+//
+//#include "sphere.hpp"
+//#include "image.hpp"
 
 //#define N 10
 
 // Define width and height of the image
-#define WIDTH 500
-#define HEIGHT 500
+// #define WIDTH 500
+// #define HEIGHT 500
 
 //// Define spherical n-dimensional function
 //template<typename T, size_t SIZE>

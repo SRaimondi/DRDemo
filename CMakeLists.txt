@@ -8,7 +8,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DDEBUG")
 
 # Include directories
-include_directories(old/autodiff old/utils old/raytracing)
+include_directories(
+        #       old/autodiff old/utils old/raytracing
+        rad)
 
 set(SOURCE_FILES
         #        old/main.cpp
@@ -26,5 +28,7 @@ set(SOURCE_FILES
         #        raytracing/intersection.hpp
         #        raytracing/sphere.hpp
         #        raytracing/sphere.cpp
-        rad/rad.cpp rad/rad.hpp)
+        rad/rad.cpp
+        rad/rad.hpp
+        main.cpp rad/derivative.cpp rad/derivative.hpp)
 add_executable(DRDemo ${SOURCE_FILES})

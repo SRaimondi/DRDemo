@@ -6,6 +6,9 @@
 
 namespace drdemo {
 
+    // Initialize default tape
+    Tape default_tape = Tape();
+
     TapeNode::TapeNode(float w1, size_t p1, float w2, size_t p2) noexcept {
         // Set first child
         weights[0] = w1;
@@ -15,8 +18,7 @@ namespace drdemo {
         parent_i[1] = p2;
     }
 
-    Tape::Tape()
-            : nodes() {}
+    Tape::Tape() {}
 
     size_t Tape::PushLeaf() {
         size_t const index = Size();
@@ -45,7 +47,6 @@ namespace drdemo {
 
     Float &Float::operator=(float v) noexcept {
         value = v;
-
         return *this;
     }
 

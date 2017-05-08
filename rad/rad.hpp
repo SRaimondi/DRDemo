@@ -58,8 +58,8 @@ namespace drdemo {
         size_t PushTwoNode(float w1, size_t p1, float w2, size_t p2);
     };
 
-    // Declare static Tape variable
-    static Tape default_tape;
+    // Declare extern Tape variable
+    extern Tape default_tape;
 
     /**
      * Define Float class that allows to do classical float computations while building the tape
