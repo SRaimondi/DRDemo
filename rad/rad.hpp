@@ -253,55 +253,55 @@ namespace drdemo {
     }
 
     // Sin of Float
-    inline Float Sin(Float const &v) noexcept {
+    inline Float Sin(Float const &v) {
         return Float(default_tape.PushSingleNode(std::cos(v.Value()), v.NodeIndex()), std::sin(v.Value()));
     }
 
     // Cos of Float
-    inline Float Cos(Float const &v) noexcept {
+    inline Float Cos(Float const &v) {
         return Float(default_tape.PushSingleNode(-std::sin(v.Value()), v.NodeIndex()), std::cos(v.Value()));
     }
 
     // Tan of Float
-    inline Float Tan(Float const &v) noexcept {
+    inline Float Tan(Float const &v) {
         return Float(default_tape.PushSingleNode(2.f / (std::cos(2.f * v.Value()) + 1.f), v.NodeIndex()),
                      std::tan(v.Value()));
     }
 
     // Exp of Float
-    inline Float Exp(Float const &v) noexcept {
+    inline Float Exp(Float const &v) {
         return Float(default_tape.PushSingleNode(std::exp(v.Value()), v.NodeIndex()), std::exp(v.Value()));
     }
 
     // Log of Float
-    inline Float Log(Float const &v) noexcept {
+    inline Float Log(Float const &v) {
         return Float(default_tape.PushSingleNode(1.f / v.Value(), v.NodeIndex()), std::log(v.Value()));
     }
 
     // Pow of Float
-    inline Float Pow(Float const &v, float k) noexcept {
+    inline Float Pow(Float const &v, float k) {
         return Float(default_tape.PushSingleNode(k * std::pow(v.Value(), k - 1.f), v.NodeIndex()),
                      std::pow(v.Value(), k));
     }
 
     // Sqrt of Float
-    inline Float Sqrt(Float const &v) noexcept {
+    inline Float Sqrt(Float const &v) {
         return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.Value()), v.NodeIndex()), std::sqrt(v.Value()));
     }
 
     // Abs of Float
-    inline Float Abs(Float const &v) noexcept {
+    inline Float Abs(Float const &v) {
         return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.Value()));
     }
 
     // Max of two Float
-    inline Float Max(Float const &a, Float const &b) noexcept {
+    inline Float Max(Float const &a, Float const &b) {
         if (a.Value() > b.Value()) { return a; }
         return b;
     }
 
     // Min of two Float
-    inline Float Min(Float const &a, Float const &b) noexcept {
+    inline Float Min(Float const &a, Float const &b) {
         if (a.Value() < b.Value()) { return a; }
         return b;
     }
