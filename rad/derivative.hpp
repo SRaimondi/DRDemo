@@ -27,7 +27,7 @@ namespace drdemo {
 
         // Request derivative for a given outgoing variable with respect to a given input variable
         // Basically for df/dx, var_out is f and var_in x
-        float DfwrtDx(Float const &f, Float const &x) const;
+        float Dwrt(Float const &f, Float const &x) const;
     };
 
 } // drdemo namespace

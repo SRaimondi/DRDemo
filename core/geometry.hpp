@@ -155,7 +155,7 @@ namespace drdemo {
         // Direction, NOT forced to be normalized
         Vector3F d;
         // Maximum parameter of the ray
-        Float t_max;
+        mutable Float t_max;
 
         // Constructor
         Ray() : t_max(INFINITY) {}

@@ -33,6 +33,6 @@ set(SOURCE_FILES
         rad/rad.hpp
         rad/derivative.cpp
         rad/derivative.hpp
-        core/geometry.hpp core/spectrum.hpp)
+        core/geometry.hpp core/spectrum.hpp core/camera.hpp core/film.hpp core/film.cpp core/interaction.hpp core/shape.hpp core/scene.hpp core/scene.cpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

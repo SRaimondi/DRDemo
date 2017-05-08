@@ -32,7 +32,7 @@ namespace drdemo {
         }
     }
 
-    float Derivatives::DfwrtDx(Float const &f, Float const &x) const {
+    float Derivatives::Dwrt(Float const &f, Float const &x) const {
         // Check if we computed the derivatives for the given out variable
         auto it = var_derivatives_map.find(f);
         if (it == var_derivatives_map.end()) {
