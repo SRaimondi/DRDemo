@@ -4,18 +4,20 @@
 
 #include <iostream>
 #include "derivative.hpp"
+#include "geometry.hpp"
 
 int main(void) {
 
     // Set namespace used
     using namespace drdemo;
 
-    Float x(1.f), y(2.f);
+    Float x(1.f);
+    Float y(2.f);
 
     // Compute result
     Float z = Exp(x) * Sin(y);
     Float t(5.f);
-    Float f = z * t * t;
+    Float f = t * t * z;
 
     // Compute derivatives
     Derivatives derivatives;

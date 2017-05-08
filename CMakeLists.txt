@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DD
 # Include directories
 include_directories(
         #       old/autodiff old/utils old/raytracing
-        rad)
+        rad geometry)
 
 set(SOURCE_FILES
         #        old/main.cpp
@@ -28,7 +28,11 @@ set(SOURCE_FILES
         #        raytracing/intersection.hpp
         #        raytracing/sphere.hpp
         #        raytracing/sphere.cpp
+        main.cpp
         rad/rad.cpp
         rad/rad.hpp
-        main.cpp rad/derivative.cpp rad/derivative.hpp)
+        rad/derivative.cpp
+        rad/derivative.hpp
+        geometry/geometry.hpp)
+
 add_executable(DRDemo ${SOURCE_FILES})

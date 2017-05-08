@@ -11,7 +11,8 @@
 namespace drdemo {
 
     /**
-     * The Derivatives class is used in conjugation with a variable to compute the derivatives
+     * The Derivatives class is used in conjunction with a variable to compute the derivative of a variable with respect
+     * to another one
      */
     class Derivatives {
     private:

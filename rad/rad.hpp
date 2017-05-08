@@ -79,7 +79,7 @@ namespace drdemo {
         // Construct Float given index on tape and value
         Float(size_t index, float v) noexcept;
 
-        Float(Float const &other) = default;
+        Float(Float const &other) noexcept;
 
         // Assignment operator, default is to create an alias of the variable, not pushing a new one on the stack
         Float &operator=(Float const &other) = default;
@@ -260,6 +260,12 @@ namespace drdemo {
     // Cos of Float
     inline Float Cos(Float const &v) noexcept {
         return Float(default_tape.PushSingleNode(-std::sin(v.Value()), v.NodeIndex()), std::cos(v.Value()));
+    }
+
+    // Tan of Float
+    inline Float Tan(Float const &v) noexcept {
+        return Float(default_tape.PushSingleNode(2.f / (std::cos(2.f * v.Value()) + 1.f), v.NodeIndex()),
+                     std::tan(v.Value()));
     }
 
     // Exp of Float

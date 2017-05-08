@@ -1,0 +1,139 @@
+//
+// Created by simon on 08.05.17.
+//
+
+#ifndef DRDEMO_GEOMETRY_HPP
+#define DRDEMO_GEOMETRY_HPP
+
+#include "rad.hpp"
+
+namespace drdemo {
+
+    /**
+     * Define Vector3 class, components are public for practice
+     */
+    template<typename T>
+    class Vector3 {
+    public:
+        // Vector components
+        T x, y, z;
+
+        // Constructor
+        Vector3()
+                : x(0), y(0), z(0) {}
+
+        Vector3(T const &x, T const &y, T const &z)
+                : x(x), y(y), z(z) {}
+
+        // Index element access
+        T const &operator[](int i) const {
+            if (i == 0) { return x; }
+            if (i == 1) { return y; }
+            return z;
+        }
+
+        T &operator[](int i) {
+            if (i == 0) { return x; }
+            if (i == 1) { return y; }
+            return z;
+        }
+
+        // Sum
+        Vector3<T> operator+(Vector3<T> const &v) const {
+            return Vector3<T>(x + v.x, y + v.y, z + v.z);
+        }
+
+        Vector3<T> &operator+=(Vector3<T> const &v) {
+            *this = *this + v;
+            return *this;
+        }
+
+        // Subtraction
+        Vector3<T> operator-(Vector3<T> const &v) const {
+            return Vector3<T>(x - v.x, y - v.y, z - v.z);
+        }
+
+        Vector3<T> &operator-=(Vector3<T> const &v) {
+            *this = *this - v;
+            return *this;
+        }
+
+        // Scaling
+        template<typename U>
+        Vector3<T> operator*(U const &s) const {
+            return Vector3<T>(s * x, s * y, s * z);
+        }
+
+        template<typename U>
+        Vector3<T> &operator*=(U const &s) {
+            *this = *this * s;
+            return *this;
+        }
+
+        template<typename U>
+        Vector3<T> operator/(U const &s) const {
+            return Vector3<T>(x / s, y / s, z / s);
+        }
+
+        template<typename U>
+        Vector3<T> operator/=(U const &s) {
+            *this = *this / s;
+            return *this;
+        }
+
+        // Negate vector
+        Vector3<T> operator-() const {
+            return Vector3<T>(-x, -y, -z);
+        }
+    };
+
+    // Define common vector types
+    using Vector3F = Vector3<Float>;
+    using Vector3f = Vector3<float>;
+
+    // Squared length of Vector3
+    template<typename T>
+    T LengthSquared(Vector3<T> const &v) {
+        return v.x * v.x + v.y * v.y + v.z * v.z;
+    }
+
+    // Length of Vector3
+    template<typename T>
+    T Length(Vector3<T> const &v) {
+        return std::sqrt(LengthSquared(v));
+    }
+
+    template<>
+    Float Length<Float>(Vector3<Float> const &v) {
+        return Sqrt(LengthSquared(v));
+    }
+
+    // Scaling operator
+    template<typename U, typename T>
+    Vector3<T> operator*(U const &s, Vector3<T> const &v) {
+        return Vector3<T>(s * v.x, s * v.y, s * v.z);
+    }
+
+    // Dot product
+    template<typename T>
+    inline T Dot(Vector3<T> const &a, Vector3<T> const &b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
+    // Cross product
+    template<typename T>
+    inline Vector3<T> Cross(Vector3<T> const &a, Vector3<T> const &b) {
+        return Vector3<T>(a.y * b.z - a.z * b.y,
+                          a.z * b.x - a.x * b.z,
+                          a.x * b.y - a.y * b.x);
+    }
+
+    // Normalize vector
+    template<typename T>
+    inline Vector3<T> Normalize(Vector3<T> const &v) {
+        return v / Length(v);
+    }
+
+} // drdemo namespace
+
+#endif //DRDEMO_GEOMETRY_HPP
