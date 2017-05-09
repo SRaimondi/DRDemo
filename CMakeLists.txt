@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DD
 # Include directories
 include_directories(
         #       old/autodiff old/utils old/raytracing
-        rad core)
+        rad core film)
 
 set(SOURCE_FILES
         #        old/main.cpp
@@ -33,6 +33,15 @@ set(SOURCE_FILES
         rad/rad.hpp
         rad/derivative.cpp
         rad/derivative.hpp
-        core/geometry.hpp core/spectrum.hpp core/camera.hpp core/film.hpp core/film.cpp core/interaction.hpp core/shape.hpp core/scene.hpp core/scene.cpp)
+        core/geometry.hpp
+        core/spectrum.hpp
+        core/camera.hpp
+        core/film.hpp
+        core/film.cpp
+        core/interaction.hpp
+        core/shape.hpp
+        core/scene.hpp
+        core/scene.cpp
+        core/light.hpp film/box_film.cpp film/box_film.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

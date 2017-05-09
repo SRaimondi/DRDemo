@@ -74,7 +74,7 @@ namespace drdemo {
 
     public:
         // Value constructor, default value is 0
-        explicit Float(float v = 0.f) noexcept;
+        explicit Float(float v = 0.f);
 
         // Construct Float given index on tape and value
         Float(size_t index, float v) noexcept;
@@ -92,6 +92,51 @@ namespace drdemo {
 
         // Get node index
         inline size_t NodeIndex() const noexcept { return node_index; }
+
+        // Math operators
+        Float operator-() {
+            return Float(default_tape.PushSingleNode(-1.f, node_index), -value);
+        }
+
+        Float operator+(Float const &v) const {
+            return Float(default_tape.PushTwoNode(1.f, node_index, 1.f, v.NodeIndex()), value + v.Value());
+        }
+
+        Float operator+(float b) {
+            return Float(default_tape.PushSingleNode(1.f, node_index), value + b);
+        }
+
+        Float &operator+=(Float const &v) {
+            *this = *this + v;
+            return *this;
+        }
+
+        Float &operator++() {
+            value += 1.f;
+            return *this;
+        }
+
+        Float operator++(int) {
+            Float result(*this);
+            ++(*this);
+            return result;
+        }
+
+        Float &operator-=(Float const &v) {
+            *this = *this - v;
+            return *this;
+        }
+
+        Float &operator--() {
+            value -= 1.f;
+            return *this;
+        }
+
+        Float operator--(int) {
+            Float result(*this);
+            --(*this);
+            return result;
+        }
     };
 
     /**
@@ -99,19 +144,19 @@ namespace drdemo {
      */
 
     // Negation
-    inline Float operator-(Float const &v) {
-        return Float(default_tape.PushSingleNode(-1.f, v.NodeIndex()), -v.Value());
-    }
+//    inline Float operator-(Float const &v) {
+//        return Float(default_tape.PushSingleNode(-1.f, v.NodeIndex()), -v.Value());
+//    }
 
     // Sum of Float and Float
-    inline Float operator+(Float const &a, Float const &b) {
-        return Float(default_tape.PushTwoNode(1.f, a.NodeIndex(), 1.f, b.NodeIndex()), a.Value() + b.Value());
-    }
+//    inline Float operator+(Float const &a, Float const &b) {
+//        return Float(default_tape.PushTwoNode(1.f, a.NodeIndex(), 1.f, b.NodeIndex()), a.Value() + b.Value());
+//    }
 
     // Sum of Float and float
-    inline Float operator+(Float const &a, float b) {
-        return Float(default_tape.PushSingleNode(1.f, a.NodeIndex()), a.Value() + b);
-    }
+//    inline Float operator+(Float const &a, float b) {
+//        return Float(default_tape.PushSingleNode(1.f, a.NodeIndex()), a.Value() + b);
+//    }
 
     // Sum of float and Float
     inline Float operator+(float a, Float const &b) {
@@ -296,14 +341,12 @@ namespace drdemo {
 
     // Max of two Float
     inline Float Max(Float const &a, Float const &b) {
-        if (a.Value() > b.Value()) { return a; }
-        return b;
+        return (a.Value() > b.Value() ? a : b);
     }
 
     // Min of two Float
     inline Float Min(Float const &a, Float const &b) {
-        if (a.Value() < b.Value()) { return a; }
-        return b;
+        return (a.Value() < b.Value() ? a : b);
     }
 
 } // drdemo namespace

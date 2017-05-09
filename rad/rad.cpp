@@ -38,7 +38,7 @@ namespace drdemo {
         return index;
     }
 
-    Float::Float(float v) noexcept
+    Float::Float(float v)
     // Set the value of the variable and push it on the default_tape
             : value(v), node_index(default_tape.PushLeaf()) {}
 

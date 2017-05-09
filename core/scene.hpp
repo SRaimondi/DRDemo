@@ -5,7 +5,7 @@
 #ifndef DRDEMO_SCENE_HPP
 #define DRDEMO_SCENE_HPP
 
-#include <bits/shared_ptr.h>
+#include <memory>
 #include "shape.hpp"
 
 namespace drdemo {
@@ -21,7 +21,7 @@ namespace drdemo {
     public:
         Scene();
 
-        // Add shapeto scene
+        // Add Shape to scene
         void AddShape(std::shared_ptr<Shape> const &shape);
 
         // Intersect Ray with Scene

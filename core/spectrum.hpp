@@ -31,6 +31,21 @@ namespace drdemo {
         Spectrum(float r, float g, float b)
                 : r(r), g(g), b(b) {}
 
+        // Math operators on itself
+        inline Spectrum &operator+=(Spectrum const &s) {
+            r += s.r;
+            g += s.g;
+            b += s.b;
+            return *this;
+        }
+
+        inline Spectrum &operator-=(Spectrum const &s) {
+            r -= s.r;
+            g -= s.g;
+            b -= s.b;
+            return *this;
+        }
+
         // Spectrum sum
         inline Spectrum operator+(Spectrum const &s) const {
             return Spectrum(r + s.r, g + s.g, b + s.b);
