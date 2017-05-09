@@ -94,16 +94,19 @@ namespace drdemo {
         inline size_t NodeIndex() const noexcept { return node_index; }
 
         // Math operators
+
+        // Negation
         Float operator-() {
             return Float(default_tape.PushSingleNode(-1.f, node_index), -value);
         }
 
+        // Addition
         Float operator+(Float const &v) const {
             return Float(default_tape.PushTwoNode(1.f, node_index, 1.f, v.NodeIndex()), value + v.Value());
         }
 
-        Float operator+(float b) {
-            return Float(default_tape.PushSingleNode(1.f, node_index), value + b);
+        Float operator+(float v) {
+            return Float(default_tape.PushSingleNode(1.f, node_index), value + v);
         }
 
         Float &operator+=(Float const &v) {
@@ -122,6 +125,15 @@ namespace drdemo {
             return result;
         }
 
+        // Subtraction
+        Float operator-(Float const &v) const {
+            return Float(default_tape.PushTwoNode(1.f, node_index, -1.f, v.NodeIndex()), value - v.Value());
+        }
+
+        Float operator-(float v) const {
+            return Float(default_tape.PushSingleNode(1.f, node_index), value - v);
+        }
+
         Float &operator-=(Float const &v) {
             *this = *this - v;
             return *this;
@@ -137,40 +149,37 @@ namespace drdemo {
             --(*this);
             return result;
         }
+
+        // Multiplication
+        Float operator*(Float const &v) const {
+            return Float(default_tape.PushTwoNode(v.Value(), node_index, value, v.NodeIndex()),
+                         value * v.Value());
+        }
+
+        Float operator*(float v) const {
+            return Float(default_tape.PushSingleNode(v, node_index), value * v);
+        }
+
+        // Division
+        Float operator/(Float const &v) const {
+            // If f(a,b) = a/b, then df/da = 1/b and df/db = -a/(b*b)
+            return Float(default_tape.PushTwoNode(1.f / v.Value(), node_index,
+                                                  -value / (v.Value() * v.Value()), v.NodeIndex()),
+                         value / v.Value());
+        }
+
+        Float operator/(float v) const {
+            return Float(default_tape.PushSingleNode(1.f / v, node_index), value / v);
+        }
     };
 
     /**
      * Declare all the Float mathematical operators
      */
 
-    // Negation
-//    inline Float operator-(Float const &v) {
-//        return Float(default_tape.PushSingleNode(-1.f, v.NodeIndex()), -v.Value());
-//    }
-
-    // Sum of Float and Float
-//    inline Float operator+(Float const &a, Float const &b) {
-//        return Float(default_tape.PushTwoNode(1.f, a.NodeIndex(), 1.f, b.NodeIndex()), a.Value() + b.Value());
-//    }
-
-    // Sum of Float and float
-//    inline Float operator+(Float const &a, float b) {
-//        return Float(default_tape.PushSingleNode(1.f, a.NodeIndex()), a.Value() + b);
-//    }
-
     // Sum of float and Float
     inline Float operator+(float a, Float const &b) {
         return Float(default_tape.PushSingleNode(1.f, b.NodeIndex()), a + b.Value());
-    }
-
-    // Subtraction of Float and Float
-    inline Float operator-(Float const &a, Float const &b) {
-        return Float(default_tape.PushTwoNode(1.f, a.NodeIndex(), -1.f, b.NodeIndex()), a.Value() - b.Value());
-    }
-
-    // Subtraction of Float and float
-    inline Float operator-(Float const &a, float b) {
-        return Float(default_tape.PushSingleNode(1.f, a.NodeIndex()), a.Value() - b);
     }
 
     // Subtraction of float and Float
@@ -178,33 +187,9 @@ namespace drdemo {
         return Float(default_tape.PushSingleNode(-1.f, b.NodeIndex()), a - b.Value());
     }
 
-    // Multiplication of Float and Float
-    inline Float operator*(Float const &a, Float const &b) {
-        return Float(default_tape.PushTwoNode(b.Value(), a.NodeIndex(), a.Value(), b.NodeIndex()),
-                     a.Value() * b.Value());
-    }
-
-    // Multiplication of Float and float
-    inline Float operator*(Float const &a, float b) {
-        return Float(default_tape.PushSingleNode(b, a.NodeIndex()), a.Value() * b);
-    }
-
     // Multiplication of float and Float
     inline Float operator*(float a, Float const &b) {
         return Float(default_tape.PushSingleNode(a, b.NodeIndex()), a * b.Value());
-    }
-
-    // Division of Float and Float
-    inline Float operator/(Float const &a, Float const &b) {
-        // If f(a,b) = a/b, then df/da = 1/b and df/db = -a/(b*b)
-        return Float(default_tape.PushTwoNode(1.f / b.Value(), a.NodeIndex(),
-                                              -a.Value() / (b.Value() * b.Value()), b.NodeIndex()),
-                     a.Value() / b.Value());
-    }
-
-    // Division of Float and float
-    inline Float operator/(Float const &a, float b) {
-        return Float(default_tape.PushSingleNode(1.f / b, a.NodeIndex()), a.Value() / b);
     }
 
     // Division of float and Float
