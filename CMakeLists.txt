@@ -8,26 +8,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DDEBUG")
 
 # Include directories
-include_directories(
-        #       old/autodiff old/utils old/raytracing
-        rad core film tonemapper)
+include_directories(rad core film tonemapper shapes camera)
 
 set(SOURCE_FILES
-        #        old/main.cpp
-        #        autodiff/rad.hpp
-        #        autodiff/fad.hpp
-        #        utils/vector.hpp
-        #        utils/common.hpp
-        #        utils/common.hpp
-        #        utils/ifthenelse.hpp
-        #        utils/promote.hpp
-        #        autodiff/diffobject.hpp
-        #        raytracing/ray.hpp
-        #        raytracing/image.hpp
-        #        raytracing/shape.hpp
-        #        raytracing/intersection.hpp
-        #        raytracing/sphere.hpp
-        #        raytracing/sphere.cpp
         main.cpp
         rad/rad.cpp
         rad/rad.hpp
@@ -49,6 +32,10 @@ set(SOURCE_FILES
         tonemapper/clamp_tonemapper.cpp
         tonemapper/clamp_tonemapper.hpp
         shapes/sphere.cpp
-        shapes/sphere.hpp core/common.hpp)
+        shapes/sphere.hpp
+        core/common.hpp
+        core/renderer.hpp
+        camera/pinhole_camera.cpp
+        camera/pinhole_camera.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

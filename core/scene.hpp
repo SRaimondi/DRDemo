@@ -16,7 +16,7 @@ namespace drdemo {
     class Scene {
     protected:
         // List of Shape in the scene
-        std::vector<std::shared_ptr<Shape> > shapes;
+        std::vector<std::shared_ptr<const Shape> > shapes;
 
     public:
         Scene();

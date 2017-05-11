@@ -163,7 +163,8 @@ namespace drdemo {
         // Constructor
         Ray() : t_min(EPS), t_max(INFINITY) {}
 
-        Ray(Vector3F const &o, Vector3F const &d, Float t_min, Float t_max) : o(o), d(d), t_min(t_min), t_max(t_max) {}
+        Ray(Vector3F const &o, Vector3F const &d, float t_min = EPS, float t_max = INFINITY)
+                : o(o), d(d), t_min(t_min), t_max(t_max) {}
 
         template<typename T>
         inline Vector3F operator()(T const &t) const { return o + t * d; }

@@ -7,13 +7,21 @@
 
 namespace drdemo {
 
-    // Small tollerance value
+    // Small tolerance value
 #define EPS 10e-4f
 
     template<typename T>
     T Clamp(T val, T min, T max) {
         return (val < min ? min : (val > max ? max : val));
     }
+
+    // Convert radians to degree
+    template<typename T>
+    inline T RadToDeg(T const &rad) { return (rad * (180.f * M_1_PI)); }
+
+    // Convert degree to radians
+    template<typename T>
+    inline T DegToRad(T const &deg) { return (deg * (M_PI / 180.f)); }
 
 } // drdemo namespace
 
