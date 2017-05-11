@@ -47,6 +47,8 @@ set(SOURCE_FILES
         film/box_film.hpp
         core/tonemapper.hpp
         tonemapper/clamp_tonemapper.cpp
-        tonemapper/clamp_tonemapper.hpp)
+        tonemapper/clamp_tonemapper.hpp
+        shapes/sphere.cpp
+        shapes/sphere.hpp core/common.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -96,7 +96,7 @@ namespace drdemo {
         // Math operators
 
         // Negation
-        Float operator-() {
+        Float operator-() const {
             return Float(default_tape.PushSingleNode(-1.f, node_index), -value);
         }
 

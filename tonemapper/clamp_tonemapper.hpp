@@ -9,6 +9,9 @@
 
 namespace drdemo {
 
+    /**
+     * Define Clamp Tonemapper class
+     */
     class ClampTonemapper : public ToneMapperInterface {
     public:
         ClampTonemapper() = default;

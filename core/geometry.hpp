@@ -6,6 +6,7 @@
 #define DRDEMO_GEOMETRY_HPP
 
 #include "rad.hpp"
+#include "common.hpp"
 
 namespace drdemo {
 
@@ -155,13 +156,14 @@ namespace drdemo {
         Vector3F o;
         // Direction, NOT forced to be normalized
         Vector3F d;
-        // Maximum parameter of the ray
+        // Minimum and maximum parameter of the ray
+        Float t_min;
         mutable Float t_max;
 
         // Constructor
-        Ray() : t_max(INFINITY) {}
+        Ray() : t_min(EPS), t_max(INFINITY) {}
 
-        Ray(Vector3F const &o, Vector3F const &d, Float t_max) : o(o), d(d), t_max(t_max) {}
+        Ray(Vector3F const &o, Vector3F const &d, Float t_min, Float t_max) : o(o), d(d), t_min(t_min), t_max(t_max) {}
 
         template<typename T>
         inline Vector3F operator()(T const &t) const { return o + t * d; }
