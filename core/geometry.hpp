@@ -22,7 +22,8 @@ namespace drdemo {
         Vector3()
                 : x(0), y(0), z(0) {}
 
-        Vector3(T const &x, T const &y, T const &z)
+        template<typename U>
+        Vector3(U const &x, U const &y, U const &z)
                 : x(x), y(y), z(z) {}
 
         // Index element access
@@ -99,18 +100,18 @@ namespace drdemo {
 
     // Length of Vector3
     template<typename T>
-    T Length(Vector3<T> const &v) {
+    inline T Length(Vector3<T> const &v) {
         return std::sqrt(LengthSquared(v));
     }
 
     template<>
-    Float Length<Float>(Vector3<Float> const &v) {
+    inline Float Length<Float>(Vector3<Float> const &v) {
         return Sqrt(LengthSquared(v));
     }
 
     // Scaling operator
     template<typename U, typename T>
-    Vector3<T> operator*(U const &s, Vector3<T> const &v) {
+    inline Vector3<T> operator*(U const &s, Vector3<T> const &v) {
         return Vector3<T>(s * v.x, s * v.y, s * v.z);
     }
 
@@ -163,7 +164,7 @@ namespace drdemo {
         Ray(Vector3F const &o, Vector3F const &d, Float t_max) : o(o), d(d), t_max(t_max) {}
 
         template<typename T>
-        Vector3F operator()(T const &t) const { return o + t * d; }
+        inline Vector3F operator()(T const &t) const { return o + t * d; }
     };
 
 } // drdemo namespace

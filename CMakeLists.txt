@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DD
 # Include directories
 include_directories(
         #       old/autodiff old/utils old/raytracing
-        rad core film)
+        rad core film tonemapper)
 
 set(SOURCE_FILES
         #        old/main.cpp
@@ -42,6 +42,11 @@ set(SOURCE_FILES
         core/shape.hpp
         core/scene.hpp
         core/scene.cpp
-        core/light.hpp film/box_film.cpp film/box_film.hpp)
+        core/light.hpp
+        film/box_film.cpp
+        film/box_film.hpp
+        core/tonemapper.hpp
+        tonemapper/clamp_tonemapper.cpp
+        tonemapper/clamp_tonemapper.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})
