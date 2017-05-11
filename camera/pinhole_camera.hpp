@@ -5,6 +5,7 @@
 #ifndef DRDEMO_PINHOLE_CAMERA_HPP
 #define DRDEMO_PINHOLE_CAMERA_HPP
 
+#include <cstdint>
 #include "camera.hpp"
 
 namespace drdemo {
@@ -21,13 +22,13 @@ namespace drdemo {
         // Field of view
         float bottom, top, left, right;
         // Film size
-        u_int32_t width, height;
+        uint32_t width, height;
 
     public:
         PinholeCamera(Vector3F const &e, Vector3F const &at, Vector3F const &up,
-                      float fov, u_int32_t width, u_int32_t height);
+                      float fov, uint32_t width, uint32_t height);
 
-        Ray GenerateRay(u_int32_t i, u_int32_t j, float s_x, float s_y) const override;
+        Ray GenerateRay(uint32_t i, uint32_t j, float s_x, float s_y) const override;
     };
 
 } // drdemo namespace

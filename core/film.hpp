@@ -16,23 +16,23 @@ namespace drdemo {
     class Film {
     protected:
         // Film size
-        const u_int32_t width, height;
+        const uint32_t width, height;
 
     public:
-        Film(u_int32_t w, u_int32_t h);
+        Film(uint32_t w, uint32_t h);
 
         virtual ~Film();
 
         // Access width and height
-        inline u_int32_t Width() const noexcept { return width; }
+        inline uint32_t Width() const noexcept { return width; }
 
-        inline u_int32_t Height() const noexcept { return height; }
+        inline uint32_t Height() const noexcept { return height; }
 
         // Add sample to the film
-        virtual bool AddSample(Spectrum const &s, u_int32_t i, u_int32_t j, float s_x, float s_y) = 0;
+        virtual bool AddSample(Spectrum const &s, uint32_t i, uint32_t j, float s_x, float s_y) = 0;
 
         // Get final film color at given pixel
-        virtual Spectrum At(u_int32_t i, u_int32_t j) const = 0;
+        virtual Spectrum At(uint32_t i, uint32_t j) const = 0;
     };
 
 } // drdemo namespace

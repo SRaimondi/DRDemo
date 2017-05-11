@@ -36,6 +36,6 @@ set(SOURCE_FILES
         core/common.hpp
         core/renderer.hpp
         camera/pinhole_camera.cpp
-        camera/pinhole_camera.hpp)
+        camera/pinhole_camera.hpp core/integrator.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})
