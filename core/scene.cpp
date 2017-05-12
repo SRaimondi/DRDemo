@@ -12,6 +12,10 @@ namespace drdemo {
         shapes.push_back(shape);
     }
 
+    void Scene::AddLight(std::shared_ptr<LightInterface> const &light) {
+        lights.push_back(light);
+    }
+
     bool Scene::Intersect(Ray const &ray, Interaction *const interaction) const {
         // Hit flag
         bool hit = false;

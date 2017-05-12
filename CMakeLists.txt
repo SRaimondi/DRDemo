@@ -8,7 +8,16 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DDEBUG")
 
 # Include directories
-include_directories(rad core film tonemapper shapes camera)
+include_directories(
+        rad
+        core
+        film
+        tonemapper
+        shapes
+        camera
+        renderer
+        integrator
+        light)
 
 set(SOURCE_FILES
         main.cpp
@@ -36,6 +45,9 @@ set(SOURCE_FILES
         core/common.hpp
         core/renderer.hpp
         camera/pinhole_camera.cpp
-        camera/pinhole_camera.hpp core/integrator.hpp)
+        camera/pinhole_camera.hpp
+        core/integrator.hpp
+        renderer/simple_renderer.cpp
+        renderer/simple_renderer.hpp light/point_light.cpp light/point_light.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

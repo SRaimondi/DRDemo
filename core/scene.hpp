@@ -7,6 +7,7 @@
 
 #include <memory>
 #include "shape.hpp"
+#include "light.hpp"
 
 namespace drdemo {
 
@@ -16,13 +17,27 @@ namespace drdemo {
     class Scene {
     protected:
         // List of Shape in the scene
-        std::vector<std::shared_ptr<const Shape> > shapes;
+        std::vector<std::shared_ptr<Shape> > shapes;
+        // List of Lights in the scene
+        std::vector<std::shared_ptr<LightInterface> > lights;
 
     public:
         Scene();
 
         // Add Shape to scene
         void AddShape(std::shared_ptr<Shape> const &shape);
+
+        // Add Light to scene
+        void AddLight(std::shared_ptr<LightInterface> const &light);
+
+        // Access list of shapes and lights
+        std::vector<std::shared_ptr<Shape> > const &GetShapes() const { return shapes; }
+
+        std::vector<std::shared_ptr<Shape> > &GetShapes() { return shapes; }
+
+        std::vector<std::shared_ptr<LightInterface> > const &GetLights() const { return lights; }
+
+        std::vector<std::shared_ptr<LightInterface> > &GetLights() { return lights; }
 
         // Intersect Ray with Scene
         bool Intersect(Ray const &ray, Interaction *const interaction) const;

@@ -18,7 +18,7 @@ namespace drdemo {
         Spectrum final_spectrum;
         // Write colors to file
         for (int32_t j = film.Height() - 1; j >= 0; j--) {
-            for (uint32_t i = 0; i < film.Width(); i++) {
+            for (unsigned i = 0; i < film.Width(); i++) {
                 final_spectrum = film.At(i, j);
 
                 // Clamp color and output to file

@@ -6,7 +6,7 @@
 #define DRDEMO_LIGHT_HPP
 
 #include "spectrum.hpp"
-#include "scene.hpp"
+#include "interaction.hpp"
 
 namespace drdemo {
 
