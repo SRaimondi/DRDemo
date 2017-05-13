@@ -26,7 +26,7 @@ namespace drdemo {
         virtual ~SurfaceIntegratorInterace() {}
 
         // Compute incoming radiance for given ray
-        virtual Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, uint32_t depth) const = 0;
+        virtual Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, size_t depth) const = 0;
     };
 
 } // drdemo namespace

@@ -6,6 +6,14 @@
 //#include "derivative.hpp"
 //#include "geometry.hpp"
 
+#include <scene.hpp>
+#include <camera.hpp>
+#include <pinhole_camera.hpp>
+#include <sphere.hpp>
+#include <point_light.hpp>
+#include <renderer.hpp>
+#include <simple_renderer.hpp>
+#include <direct_integrator.hpp>
 #include "clamp_tonemapper.hpp"
 #include "box_film.hpp"
 
@@ -40,16 +48,30 @@ int main(void) {
 
     // Create film
     BoxFilterFilm film(WIDTH, HEIGHT);
-    // Set all image to red
-    for (int i = 0; i < WIDTH; i++) {
-        for (int j = 0; j < HEIGHT; j++) {
-            film.AddSample(Spectrum(1.f, 0.f, 0.5f), i, j, 0.5f, 0.5f);
-        }
-    }
+    // Create camera
+    std::shared_ptr<CameraInterface> camera =
+            std::make_shared<PinholeCamera>(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                            60.f, WIDTH, HEIGHT);
+
+    // Create scene
+    Scene scene;
+    // Add sphere
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
+    // Add light
+    // scene.AddLight(std::make_shared<PointLight>(Vector3F(-5.f, 5.f, -5.f), Spectrum(10.f)));
+    scene.AddLight(std::make_shared<PointLight>(Vector3F(-5.f, 5.f, 5.f), Spectrum(10.f)));
+    scene.AddLight(std::make_shared<PointLight>(Vector3F(5.f, 5.f, 5.f), Spectrum(10.f)));
+    // scene.AddLight(std::make_shared<PointLight>(Vector3F(5.f, 5.f, -5.f), Spectrum(10.f)));
+
+    // Create renderer
+    std::shared_ptr<RendererInterface> renderer = std::make_shared<SimpleRenderer>(
+            std::make_shared<DirectIntegrator>());
+
+    // Render image
+    renderer->RenderImage(&film, scene, *camera.get());
 
     // Create image
     ClampTonemapper tonemapper;
-
     tonemapper.Process(std::string("test.ppm"), film);
 
     return EXIT_SUCCESS;

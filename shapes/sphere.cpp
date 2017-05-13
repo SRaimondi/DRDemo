@@ -42,6 +42,9 @@ namespace drdemo {
             if (t_hit < ray.t_max) { return false; }
         }
 
+        // Update new ray maximum value
+        ray.t_max = t_hit;
+
         // Fill interaction
         interaction->p = ray(t_hit);
         interaction->n = Normalize(interaction->p - center);

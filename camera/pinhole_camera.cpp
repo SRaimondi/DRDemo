@@ -7,12 +7,13 @@
 namespace drdemo {
 
     PinholeCamera::PinholeCamera(Vector3F const &e, Vector3F const &at, Vector3F const &up,
-                                 float fov, uint32_t width, uint32_t height)
+                                 float fov, size_t width, size_t height)
             : eye_world(e), width(width), height(height) {
         // Compute camera view volume
         top = std::tan(DegToRad(fov / 2.f));
         bottom = -top;
         right = (width / (float) height) * top;
+        left = -right;
 
         // Compute local base
         w = Normalize(e - at);
@@ -20,7 +21,7 @@ namespace drdemo {
         v = Cross(w, u);
     }
 
-    Ray PinholeCamera::GenerateRay(uint32_t i, uint32_t j, float s_x, float s_y) const {
+    Ray PinholeCamera::GenerateRay(size_t i, size_t j, float s_x, float s_y) const {
         // Compute point on view plane
         float view_plane_x = left + (right - left) * (i + s_x) / static_cast<float>(width);
         float view_plane_y = bottom + (top - bottom) * (j + s_y) / static_cast<float>(height);

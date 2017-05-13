@@ -7,10 +7,10 @@
 
 namespace drdemo {
 
-    BoxFilterFilm::BoxFilterFilm(uint32_t w, uint32_t h)
+    BoxFilterFilm::BoxFilterFilm(size_t w, size_t h)
             : Film(w, h), raster(width * height, Spectrum()), num_samples(width * height) {}
 
-    bool BoxFilterFilm::AddSample(Spectrum const &s, uint32_t i, uint32_t j, float s_x, float s_y) {
+    bool BoxFilterFilm::AddSample(Spectrum const &s, size_t i, size_t j, float s_x, float s_y) {
         // Check we are inside pixel boundaries
         if (s_x < 0.f || s_x > 1.f || s_y < 0.f || s_y > 1.f) { return false; }
         // Add sample
@@ -21,7 +21,7 @@ namespace drdemo {
         return true;
     }
 
-    Spectrum BoxFilterFilm::At(uint32_t i, uint32_t j) const {
+    Spectrum BoxFilterFilm::At(size_t i, size_t j) const {
         return (raster[j * width + i] / num_samples[j * width + i]);
     }
 

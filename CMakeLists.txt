@@ -48,6 +48,10 @@ set(SOURCE_FILES
         camera/pinhole_camera.hpp
         core/integrator.hpp
         renderer/simple_renderer.cpp
-        renderer/simple_renderer.hpp light/point_light.cpp light/point_light.hpp)
+        renderer/simple_renderer.hpp
+        light/point_light.cpp
+        light/point_light.hpp
+        integrator/direct_integrator.cpp
+        integrator/direct_integrator.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

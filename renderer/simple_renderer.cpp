@@ -5,6 +5,7 @@
 #include <iostream>
 #include "simple_renderer.hpp"
 
+// Ray passes thorough the center of the pixel
 const float s_x = 0.5f;
 const float s_y = 0.5f;
 
@@ -20,8 +21,8 @@ namespace drdemo {
         // Incoming radiance
         Spectrum Li;
 
-        for (uint32_t i = 0; i < film->Width(); i++) {
-            for (uint32_t j = 0; j < film->Height(); j++) {
+        for (size_t i = 0; i < film->Width(); i++) {
+            for (size_t j = 0; j < film->Height(); j++) {
                 // Generate ray
                 ray = camera.GenerateRay(i, j, s_x, s_y);
                 // Compute incoming radiance
@@ -34,4 +35,4 @@ namespace drdemo {
         }
     }
 
-}
+} // drdemo namespace

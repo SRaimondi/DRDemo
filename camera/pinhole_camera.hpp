@@ -22,13 +22,13 @@ namespace drdemo {
         // Field of view
         float bottom, top, left, right;
         // Film size
-        uint32_t width, height;
+        size_t width, height;
 
     public:
         PinholeCamera(Vector3F const &e, Vector3F const &at, Vector3F const &up,
-                      float fov, uint32_t width, uint32_t height);
+                      float fov, size_t width, size_t height);
 
-        Ray GenerateRay(uint32_t i, uint32_t j, float s_x, float s_y) const override;
+        Ray GenerateRay(size_t i, size_t j, float s_x, float s_y) const override;
     };
 
 } // drdemo namespace

@@ -17,11 +17,11 @@ namespace drdemo {
         std::vector<Float> num_samples;
 
     public:
-        BoxFilterFilm(uint32_t w, uint32_t h);
+        BoxFilterFilm(size_t w, size_t h);
 
-        bool AddSample(Spectrum const &s, uint32_t i, uint32_t j, float s_x, float s_y) override;
+        bool AddSample(Spectrum const &s, size_t i, size_t j, float s_x, float s_y) override;
 
-        Spectrum At(uint32_t i, uint32_t j) const override;
+        Spectrum At(size_t i, size_t j) const override;
     };
 
 } // drdemo namespace
