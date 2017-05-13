@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 namespace drdemo {
 
@@ -35,10 +36,20 @@ namespace drdemo {
     private:
         // List of Tape nodes
         std::vector<TapeNode> nodes;
+        // Boolean flag to check if the Tape is enabled or not
+        bool enabled;
 
     public:
         // Tape default constructor
         Tape();
+
+        // Enable / Disable tape
+        inline void Enable() { enabled = true; }
+
+        inline void Disable() { enabled = false; }
+
+        // Check if the Tape is enabled
+        inline bool IsEnabled() const { return enabled; }
 
         // Access TapeNode at given index
         inline TapeNode const &At(size_t index) const {
@@ -47,6 +58,9 @@ namespace drdemo {
 
         // Get size of the Tape
         inline size_t Size() const { return nodes.size(); }
+
+        // Clear tape starting from a given index
+        void Clear(size_t starting_index);
 
         // Push a Zero value node (leaf node), returns the index of the node on the Tape
         size_t PushLeaf();
@@ -172,6 +186,8 @@ namespace drdemo {
             return Float(default_tape.PushSingleNode(1.f / v, node_index), value / v);
         }
     };
+
+    std::ostream &operator<<(std::ostream &os, Float const &var);
 
     /**
      * Declare all the Float mathematical operators

@@ -25,4 +25,30 @@ namespace drdemo {
         return (raster[j * width + i] / num_samples[j * width + i]);
     }
 
+    BoxFilterFilm BoxFilterFilm::operator-(BoxFilterFilm const &other) const {
+        BoxFilterFilm difference(width, height);
+
+        // Compute difference between the two films
+        for (size_t j = 0; j < height; ++j) {
+            for (size_t i = 0; i < width; ++i) {
+                difference.raster[i] = At(i, j) - other.At(i, j);
+                difference.num_samples[j * width + i] = 1.f;
+            }
+        }
+
+        return difference;
+    }
+
+    Float BoxFilterFilm::SquaredNorm() const {
+        // Float squared_norm = At(0, 0).r * At(0, 0).r + At(0,0).g * At(0, 0).g + At(0, 0).b * At(0, 0).b;
+        Float squared_norm;
+        for (size_t j = 0; j < height; ++j) {
+            for (size_t i = 0; i < width; i++) {
+                squared_norm += At(i, j).r * At(i, j).r + At(i, j).g * At(i, j).g + At(i, j).b * At(i, j).b;
+            }
+        }
+
+        return squared_norm;
+    }
+
 } // drdemo namespace

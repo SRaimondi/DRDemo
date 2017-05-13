@@ -22,6 +22,12 @@ namespace drdemo {
         bool AddSample(Spectrum const &s, size_t i, size_t j, float s_x, float s_y) override;
 
         Spectrum At(size_t i, size_t j) const override;
+
+        // Compute difference between this film and another one
+        BoxFilterFilm operator-(BoxFilterFilm const &other) const;
+
+        // Compute the squared norm of the image
+        Float SquaredNorm() const;
     };
 
 } // drdemo namespace

@@ -18,24 +18,37 @@ namespace drdemo {
         parent_i[1] = p2;
     }
 
-    Tape::Tape() {}
+    Tape::Tape() : enabled(false) {}
+
+    void Tape::Clear(size_t starting_index) {
+        nodes.erase(nodes.begin() + starting_index, nodes.end());
+    }
 
     size_t Tape::PushLeaf() {
-        size_t const index = Size();
-        nodes.push_back(TapeNode(0.f, index, 0.f, index));
-        return index;
+        if (IsEnabled()) {
+            size_t const index = Size();
+            nodes.push_back(TapeNode(0.f, index, 0.f, index));
+            return index;
+        }
+        return 0;
     }
 
     size_t Tape::PushSingleNode(float w, size_t p) {
-        size_t const index = Size();
-        nodes.push_back(TapeNode(w, p, 0.f, index));
-        return index;
+        if (IsEnabled()) {
+            size_t const index = Size();
+            nodes.push_back(TapeNode(w, p, 0.f, index));
+            return index;
+        }
+        return 0;
     }
 
     size_t Tape::PushTwoNode(float w1, size_t p1, float w2, size_t p2) {
-        size_t const index = Size();
-        nodes.push_back(TapeNode(w1, p1, w2, p2));
-        return index;
+        if (IsEnabled()) {
+            size_t const index = Size();
+            nodes.push_back(TapeNode(w1, p1, w2, p2));
+            return index;
+        }
+        return 0;
     }
 
     Float::Float(float v)
@@ -51,6 +64,11 @@ namespace drdemo {
     Float &Float::operator=(float v) noexcept {
         value = v;
         return *this;
+    }
+
+    std::ostream &operator<<(std::ostream &os, Float const &var) {
+        os << "Value: " << var.Value();
+        return os;
     }
 
 } // drdemo namespace
