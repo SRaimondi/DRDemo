@@ -23,7 +23,8 @@ namespace drdemo {
             Float pdf;
             // FIXME: Add random number generation
             Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
-            L += Li * Clamp(Dot(interaction.n, wi), Float(0.f), Float(1.f)) / pdf;
+            // L += Li * Clamp(Dot(interaction.n, wi), Float(0.f), Float(1.f)) / pdf;
+            L += Li * Abs(Dot(interaction.n, wi)) / pdf;
         }
 
         return L;

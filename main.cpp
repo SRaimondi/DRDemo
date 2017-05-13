@@ -35,7 +35,6 @@ int main(void) {
     Scene scene;
     // Add spheres
     scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(-2.f, 0.f, 0.f), Float(2.f)));
     // Add light
     // scene.AddLight(std::make_shared<PointLight>(Vector3F(-5.f, 5.f, -5.f), Spectrum(10.f)));
     scene.AddLight(std::make_shared<PointLight>(Vector3F(-5.f, 5.f, 3.f), Spectrum(10.f)));
