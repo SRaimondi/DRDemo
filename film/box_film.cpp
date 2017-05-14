@@ -8,7 +8,8 @@
 namespace drdemo {
 
     BoxFilterFilm::BoxFilterFilm(size_t w, size_t h)
-            : Film(w, h), raster(width * height, Spectrum()), num_samples(width * height) {}
+    // DON'T USE THE CONSTRUCTOR OR THE SAME SPECTRUM GETS COPIED
+            : Film(w, h), raster(width * height/* , Spectrum() */), num_samples(width * height) {}
 
     BoxFilterFilm &BoxFilterFilm::operator=(BoxFilterFilm const &other) {
         if (this != &other) {

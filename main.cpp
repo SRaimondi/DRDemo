@@ -14,8 +14,8 @@
 #include "clamp_tonemapper.hpp"
 #include "box_film.hpp"
 
-#define WIDTH 512
-#define HEIGHT 512
+#define WIDTH   512
+#define HEIGHT  512
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -72,10 +72,14 @@ int main(void) {
     // Clear scene's spheres
     scene.ClearShapes();
     // Add new sphere, in a different position with respect to the one used in the target image generation
-    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(1.9f, 0.f, 0.f), Float(2.f));
+    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(1.8f, 0.f, 0.f), Float(2.f));
     // Get variables we can use to compute the gradient
     std::vector<Float const *> vars = sphere->GetDiffVariables();
     scene.AddShape(sphere);
+
+    // Render starting image
+    renderer->RenderImage(&start, scene, *camera.get());
+    tonemapper.Process("start.ppm", start);
 
     // Create gradient storage vector
     std::vector<float> gradient(4, 0.f);
@@ -84,7 +88,7 @@ int main(void) {
     float delta = 0.0001f;
 
     // Save index of tape to clear after
-    size_t clear_index = default_tape.Size();
+    size_t clear_index = default_tape.Size() - 1;
 
     do {
         derivatives.Clear();
@@ -107,17 +111,17 @@ int main(void) {
         // Update sphere
         sphere->UpdateDiffVariables(deltas);
         // Clear tape
-        default_tape.Clear(clear_index);
+        // default_tape.Clear(clear_index);
         // Increase number of iterations
         iters++;
         // Create difference image
         tonemapper.Process(std::string("difference_") + std::to_string(iters) + std::string(".ppm"), difference);
-    } while (GradNorm(gradient) > 0.01f && iters < 100);
+    } while (GradNorm(gradient) > 0.01f && iters < 20);
 
     std::cout << "Iterations: " << iters << std::endl;
 
-    // Create images
-    // tonemapper.Process("start.ppm", start);
+    // Create final image
+    tonemapper.Process("final.ppm", start);
     // tonemapper.Process("difference.ppm", difference);
 
 
