@@ -61,6 +61,15 @@ namespace drdemo {
     Float::Float(Float const &other) noexcept
             : value(other.value), node_index(other.node_index) {}
 
+    Float &Float::operator=(Float const &other) {
+        if (this != &other) {
+            value = other.value;
+            node_index = other.node_index;
+        }
+
+        return *this;
+    }
+
     Float &Float::operator=(float v) noexcept {
         value = v;
         return *this;

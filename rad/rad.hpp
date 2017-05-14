@@ -97,7 +97,7 @@ namespace drdemo {
         Float(Float const &other) noexcept;
 
         // Assignment operator, default is to create an alias of the variable, not pushing a new one on the stack
-        Float &operator=(Float const &other) = default;
+        Float &operator=(Float const &other);
 
         // Set Float value
         Float &operator=(float v) noexcept;
@@ -325,6 +325,7 @@ namespace drdemo {
 
     // Log of Float
     inline Float Log(Float const &v) {
+        assert(v.Value() > 0.f);
         return Float(default_tape.PushSingleNode(1.f / v.Value(), v.NodeIndex()), std::log(v.Value()));
     }
 
@@ -341,6 +342,7 @@ namespace drdemo {
 
     // Abs of Float
     inline Float Abs(Float const &v) {
+        assert(v.Value() != 0.f);
         return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.Value()));
     }
 

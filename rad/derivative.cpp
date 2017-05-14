@@ -31,8 +31,8 @@ namespace drdemo {
             size_t const rev_index = size - 1 - i;
             TapeNode const &node = default_tape.At(rev_index);
             // Add children contribution
-            derivs[node.parent_i[0]] += node.weights[0] * derivs[rev_index];
-            derivs[node.parent_i[1]] += node.weights[1] * derivs[rev_index];
+            derivs.at(node.parent_i[0]) += node.weights[0] * derivs.at(rev_index);
+            derivs.at(node.parent_i[1]) += node.weights[1] * derivs.at(rev_index);
         }
     }
 

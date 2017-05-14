@@ -25,7 +25,7 @@ namespace drdemo {
         // Add sample
         raster[j * width + i] += s;
         // Increase number of samples of the pixel
-        num_samples[j * width + i]++;
+        ++num_samples[j * width + i];
 
         return true;
     }

@@ -31,6 +31,9 @@ namespace drdemo {
         Vector3(U const &v)
                 : x(v), y(v), z(v) {}
 
+        Vector3(Vector3<T> const &other)
+                : x(other.x), y(other.y), z(other.z) {}
+
         // Index element access
         T const &operator[](int i) const {
             if (i == 0) { return x; }

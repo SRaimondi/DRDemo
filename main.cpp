@@ -72,7 +72,7 @@ int main(void) {
     // Clear scene's spheres
     scene.ClearShapes();
     // Add new sphere, in a different position with respect to the one used in the target image generation
-    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(0.f), Float(2.f));
+    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(1.9f, 0.f, 0.f), Float(2.f));
     // Get variables we can use to compute the gradient
     std::vector<Float const *> vars = sphere->GetDiffVariables();
     scene.AddShape(sphere);
