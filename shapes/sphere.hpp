@@ -22,9 +22,15 @@ namespace drdemo {
     public:
         Sphere(Vector3F const &c, Float const &r);
 
+        // Shape methods
         bool Intersect(Ray const &ray, Interaction *const interaction) const override;
 
         bool IntersectP(Ray const &ray) const override;
+
+        // Differentiable object methods
+        std::vector<Float const *> GetDiffVariables() const override;
+
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0);
     };
 
 } // drdemo namespace

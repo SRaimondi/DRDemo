@@ -17,13 +17,26 @@
 #define WIDTH 512
 #define HEIGHT 512
 
+// Compute gradient norm, considering the gradient as a float vector
+float GradNorm(std::vector<float> const &grad) {
+    float norm = 0.f;
+    for (auto const &e : grad) {
+        norm += e * e;
+    }
+
+    return std::sqrt(norm);
+}
+
 int main(void) {
 
     // Set namespace used
     using namespace drdemo;
 
     // Disable tape
-    default_tape.Disable();
+    // default_tape.Disable();
+
+    // Derivatives computation class
+    Derivatives derivatives;
 
     // Create target film and starting
     BoxFilterFilm target(WIDTH, HEIGHT);
@@ -53,24 +66,59 @@ int main(void) {
     // Render target image
     renderer->RenderImage(&target, scene, *camera.get());
 
+    // Create target image
+    tonemapper.Process("target.ppm", target);
+
     // Clear scene's spheres
     scene.ClearShapes();
-    // Add new sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f), Float(2.f)));
-    // Render starting image
-    renderer->RenderImage(&start, scene, *camera.get());
+    // Add new sphere, in a different position with respect to the one used in the target image generation
+    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(0.f), Float(2.f));
+    // Get variables we can use to compute the gradient
+    std::vector<Float const *> vars = sphere->GetDiffVariables();
+    scene.AddShape(sphere);
 
-    // Compute image difference
-    BoxFilterFilm difference = target - start;
-    // print Squared Norm of difference
-    std::cout << difference.SquaredNorm() << std::endl;
-    // Compute abs
-    difference.Abs();
+    // Create gradient storage vector
+    std::vector<float> gradient(4, 0.f);
+    std::vector<float> deltas(4, 0.f);
+    size_t iters = 0;
+    float delta = 0.0001f;
+
+    // Save index of tape to clear after
+    size_t clear_index = default_tape.Size();
+
+    do {
+        derivatives.Clear();
+        // Render new image
+        renderer->RenderImage(&start, scene, *camera.get());
+        // Compute image difference
+        BoxFilterFilm difference = target - start;
+        // Compute squared norm of images differences
+        Float sq_norm = difference.SquaredNorm();
+        std::cout << "Difference squared norm: " << sq_norm << std::endl;
+        // Compute derivatives
+        derivatives.ComputeDerivatives(sq_norm);
+        // Compute gradient
+        for (int i = 0; i < 4; i++) {
+            gradient[i] = derivatives.Dwrt(sq_norm, *vars[i]);
+            // Compute deltas to update variables
+            deltas[i] = -delta * gradient[i];
+        }
+        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        // Update sphere
+        sphere->UpdateDiffVariables(deltas);
+        // Clear tape
+        default_tape.Clear(clear_index);
+        // Increase number of iterations
+        iters++;
+        // Create difference image
+        tonemapper.Process(std::string("difference_") + std::to_string(iters) + std::string(".ppm"), difference);
+    } while (GradNorm(gradient) > 0.01f && iters < 100);
+
+    std::cout << "Iterations: " << iters << std::endl;
 
     // Create images
-    tonemapper.Process("target.ppm", target);
-    tonemapper.Process("start.ppm", start);
-    tonemapper.Process("difference.ppm", difference);
+    // tonemapper.Process("start.ppm", start);
+    // tonemapper.Process("difference.ppm", difference);
 
 
     // Create derivatives

@@ -13,6 +13,7 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
+#include <cassert>
 
 namespace drdemo {
 
@@ -176,6 +177,7 @@ namespace drdemo {
 
         // Division
         Float operator/(Float const &v) const {
+            assert(v.Value() != 0.f);
             // If f(a,b) = a/b, then df/da = 1/b and df/db = -a/(b*b)
             return Float(default_tape.PushTwoNode(1.f / v.Value(), node_index,
                                                   -value / (v.Value() * v.Value()), v.NodeIndex()),
@@ -183,6 +185,7 @@ namespace drdemo {
         }
 
         Float operator/(float v) const {
+            assert(v != 0.f);
             return Float(default_tape.PushSingleNode(1.f / v, node_index), value / v);
         }
     };
@@ -210,6 +213,7 @@ namespace drdemo {
 
     // Division of float and Float
     inline Float operator/(float a, Float const &b) {
+        assert(b.Value() != 0.f);
         return Float(default_tape.PushSingleNode(-a / (b.Value() * b.Value()), b.NodeIndex()), a / b.Value());
     }
 

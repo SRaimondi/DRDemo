@@ -6,13 +6,14 @@
 #define DRDEMO_SHAPE_HPP
 
 #include "interaction.hpp"
+#include "diff_object.hpp"
 
 namespace drdemo {
 
     /**
      * Define base Shape class, all other shapes must inherit from it
      */
-    class Shape {
+    class Shape : public DiffObjectInterface {
     public:
         virtual ~Shape() {}
 

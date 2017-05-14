@@ -22,6 +22,9 @@ namespace drdemo {
     public:
         Derivatives() = default;
 
+        // Clear derivatives
+        void Clear();
+
         // Compute derivatives for a given variable
         void ComputeDerivatives(Float const &var);
 

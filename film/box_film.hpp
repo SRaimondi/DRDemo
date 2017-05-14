@@ -19,6 +19,8 @@ namespace drdemo {
     public:
         BoxFilterFilm(size_t w, size_t h);
 
+        BoxFilterFilm &operator=(BoxFilterFilm const &other);
+
         bool AddSample(Spectrum const &s, size_t i, size_t j, float s_x, float s_y) override;
 
         Spectrum At(size_t i, size_t j) const override;

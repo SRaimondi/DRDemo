@@ -7,6 +7,10 @@
 
 namespace drdemo {
 
+    void Derivatives::Clear() {
+        var_derivatives_map.clear();
+    }
+
     void Derivatives::ComputeDerivatives(Float const &var) {
         size_t const size = default_tape.Size();
         // Check if element is already in the map

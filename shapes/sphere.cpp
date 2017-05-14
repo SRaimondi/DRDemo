@@ -90,4 +90,25 @@ namespace drdemo {
         return true;
     }
 
+    std::vector<Float const *> Sphere::GetDiffVariables() const {
+        std::vector<Float const *> vars;
+
+        // Push sphere center variables
+        vars.push_back(&(center.x));
+        vars.push_back(&(center.y));
+        vars.push_back(&(center.z));
+        // Push radius variable
+        vars.push_back(&(radius));
+
+        return vars;
+    }
+
+    void Sphere::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+        // Order is supposed to be sphere's center (x,y,z) and radius
+        center.x = center.x + delta[starting_index];
+        center.y = center.y + delta[starting_index + 1];
+        center.z = center.z + delta[starting_index + 2];
+        radius = radius + delta[starting_index + 3];
+    }
+
 } // drdemo namespace
