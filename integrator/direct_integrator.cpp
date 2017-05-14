@@ -6,8 +6,6 @@
 
 namespace drdemo {
 
-    DirectIntegrator::DirectIntegrator() {}
-
     Spectrum DirectIntegrator::IncomingRadiance(Ray const &ray, Scene const &scene, size_t) const {
         // Final ray incoming radiance
         Spectrum L;

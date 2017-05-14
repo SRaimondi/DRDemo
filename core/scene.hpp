@@ -30,14 +30,21 @@ namespace drdemo {
         // Add Light to scene
         void AddLight(std::shared_ptr<LightInterface> const &light);
 
-        // Access list of shapes and lights
+        // Access list of shapes
         std::vector<std::shared_ptr<Shape> > const &GetShapes() const { return shapes; }
 
         std::vector<std::shared_ptr<Shape> > &GetShapes() { return shapes; }
 
+        // Clear list of shapes
+        void ClearShapes() { shapes.clear(); }
+
+        // Access list of lights
         std::vector<std::shared_ptr<LightInterface> > const &GetLights() const { return lights; }
 
         std::vector<std::shared_ptr<LightInterface> > &GetLights() { return lights; }
+
+        // Clear list of lights
+        void ClearLights() { lights.clear(); }
 
         // Intersect Ray with Scene
         bool Intersect(Ray const &ray, Interaction *const interaction) const;

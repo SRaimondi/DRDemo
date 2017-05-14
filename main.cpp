@@ -56,7 +56,6 @@ int main(void) {
     derivatives.ComputeDerivatives(squared_norm);
 
     std::cout << default_tape.Size() << std::endl;
-    std::cout << default_tape.Size() * sizeof(TapeNode) << std::endl;
 
     // Create image
     ClampTonemapper tonemapper;

@@ -26,8 +26,9 @@ namespace drdemo {
         // Compute difference between this film and another one
         BoxFilterFilm operator-(BoxFilterFilm const &other) const;
 
-        // Compute the squared norm of the image
-        Float SquaredNorm() const;
+        Float SquaredNorm() const override;
+
+        void Abs() override;
     };
 
 } // drdemo namespace

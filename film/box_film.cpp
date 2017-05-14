@@ -31,7 +31,7 @@ namespace drdemo {
         // Compute difference between the two films
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; ++i) {
-                difference.raster[i] = At(i, j) - other.At(i, j);
+                difference.raster[j * width + i] = At(i, j) - other.At(i, j);
                 difference.num_samples[j * width + i] = 1.f;
             }
         }
@@ -49,6 +49,14 @@ namespace drdemo {
         }
 
         return squared_norm;
+    }
+
+    void BoxFilterFilm::Abs() {
+        for (size_t j = 0; j < height; ++j) {
+            for (size_t i = 0; i < width; i++) {
+                raster[j * width + i] = drdemo::Abs(raster[j * width + i]);
+            }
+        }
     }
 
 } // drdemo namespace

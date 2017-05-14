@@ -77,6 +77,12 @@ namespace drdemo {
         }
     };
 
+
+    // Abs of spectrum
+    inline Spectrum Abs(Spectrum const &s) {
+        return Spectrum(Abs(s.r), Abs(s.g), Abs(s.b));
+    }
+
     template<typename U>
     inline Spectrum operator*(U const &t, Spectrum const &s) {
         return Spectrum(t * s.r, t * s.g, t * s.b);

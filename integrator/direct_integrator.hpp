@@ -13,10 +13,8 @@ namespace drdemo {
      * Define DirectIntegrator class, which is a simple integrator that computes direct illumination the scene
      */
     class DirectIntegrator : public SurfaceIntegratorInterace {
-    private:
-
     public:
-        DirectIntegrator();
+        DirectIntegrator() = default;
 
         Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, size_t depth) const override;
     };

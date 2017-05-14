@@ -33,6 +33,12 @@ namespace drdemo {
 
         // Get final film color at given pixel
         virtual Spectrum At(size_t i, size_t j) const = 0;
+
+        // Compute the squared norm of the image
+        virtual Float SquaredNorm() const = 0;
+
+        // Compute absolute value of the film
+        virtual void Abs() = 0;
     };
 
 } // drdemo namespace
