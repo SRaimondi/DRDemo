@@ -18,7 +18,7 @@ namespace drdemo {
         parent_i[1] = p2;
     }
 
-    Tape::Tape() : enabled(false) {}
+    Tape::Tape() : enabled(true) {}
 
     void Tape::Clear(size_t starting_index) {
         nodes.erase(nodes.begin() + starting_index, nodes.end());

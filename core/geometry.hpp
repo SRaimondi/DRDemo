@@ -27,6 +27,10 @@ namespace drdemo {
         Vector3(U const &x, U const &y, U const &z)
                 : x(x), y(y), z(z) {}
 
+        template<typename U>
+        Vector3(U const &v)
+                : x(v), y(v), z(v) {}
+
         // Index element access
         T const &operator[](int i) const {
             if (i == 0) { return x; }
