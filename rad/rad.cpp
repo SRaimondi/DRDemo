@@ -64,9 +64,12 @@ namespace drdemo {
     Float &Float::operator=(Float const &other) {
         if (this != &other) {
             value = other.value;
+#ifdef FLOAT_NO_ALIAS
+            node_index = default_tape.PushLeaf();
+#else
             node_index = other.node_index;
+#endif
         }
-
         return *this;
     }
 

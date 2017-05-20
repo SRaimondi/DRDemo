@@ -110,13 +110,15 @@ int main(void) {
         std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
         // Update sphere
         sphere->UpdateDiffVariables(deltas);
-        // Clear tape
-        // default_tape.Clear(clear_index);
         // Increase number of iterations
         iters++;
         // Create difference image
+        difference.Abs();
         tonemapper.Process(std::string("difference_") + std::to_string(iters) + std::string(".ppm"), difference);
-    } while (GradNorm(gradient) > 0.01f && iters < 20);
+        // Clear tape
+        // default_tape.Clear(clear_index);
+        std::cout << "Tape size: " << default_tape.Size() << std::endl;
+    } while (GradNorm(gradient) > 0.01f && iters < 6);
 
     std::cout << "Iterations: " << iters << std::endl;
 
