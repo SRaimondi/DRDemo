@@ -12,8 +12,8 @@
 #include <box_film.hpp>
 #include <clamp_tonemapper.hpp>
 
-#define WIDTH   200
-#define HEIGHT  200
+#define WIDTH   512
+#define HEIGHT  512
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {

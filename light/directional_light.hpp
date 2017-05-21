@@ -15,7 +15,7 @@ namespace drdemo {
     class DirectionalLight : public LightInterface {
     private:
         // Point light direction
-        Vector3f direction;
+        Vector3F direction;
         // Intensity
         Spectrum intensity;
 
