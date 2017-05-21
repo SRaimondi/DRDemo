@@ -22,9 +22,9 @@ namespace drdemo {
                 final_spectrum = film.At(i, j);
 
                 // Clamp color and output to file
-                unsigned char r = static_cast<unsigned char>(Clamp(final_spectrum.r.Value() * 255.f, 0.f, 255.f));
-                unsigned char g = static_cast<unsigned char>(Clamp(final_spectrum.g.Value() * 255.f, 0.f, 255.f));
-                unsigned char b = static_cast<unsigned char>(Clamp(final_spectrum.b.Value() * 255.f, 0.f, 255.f));
+                unsigned char r = static_cast<unsigned char>(Clamp(final_spectrum.r.GetValue() * 255.f, 0.f, 255.f));
+                unsigned char g = static_cast<unsigned char>(Clamp(final_spectrum.g.GetValue() * 255.f, 0.f, 255.f));
+                unsigned char b = static_cast<unsigned char>(Clamp(final_spectrum.b.GetValue() * 255.f, 0.f, 255.f));
 
                 // Output spectrum to file
                 file << r << g << b;

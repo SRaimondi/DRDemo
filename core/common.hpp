@@ -7,7 +7,7 @@
 
 namespace drdemo {
 
-    // Small tolerance value
+    // Small tolerance value used in the ray tracing part
 #define EPS 10e-4f
 
     template<typename T>

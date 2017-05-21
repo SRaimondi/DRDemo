@@ -88,7 +88,7 @@ namespace drdemo {
         size_t node_index;
 
     public:
-        // Value constructor, default value is 0
+        // GetValue constructor, default value is 0
         explicit Float(float v = 0.f);
 
         // Construct Float given index on tape and value
@@ -103,7 +103,10 @@ namespace drdemo {
         Float &operator=(float v) noexcept;
 
         // Convert to built-in float type
-        inline float Value() const noexcept { return value; }
+        inline float GetValue() const noexcept { return value; }
+
+        // Set value of Float
+        inline void SetValue(float v) noexcept { value = v; }
 
         // Get node index
         inline size_t NodeIndex() const noexcept { return node_index; }
@@ -117,7 +120,7 @@ namespace drdemo {
 
         // Addition
         Float operator+(Float const &v) const {
-            return Float(default_tape.PushTwoNode(1.f, node_index, 1.f, v.NodeIndex()), value + v.Value());
+            return Float(default_tape.PushTwoNode(1.f, node_index, 1.f, v.NodeIndex()), value + v.GetValue());
         }
 
         Float operator+(float v) {
@@ -142,7 +145,7 @@ namespace drdemo {
 
         // Subtraction
         Float operator-(Float const &v) const {
-            return Float(default_tape.PushTwoNode(1.f, node_index, -1.f, v.NodeIndex()), value - v.Value());
+            return Float(default_tape.PushTwoNode(1.f, node_index, -1.f, v.NodeIndex()), value - v.GetValue());
         }
 
         Float operator-(float v) const {
@@ -167,8 +170,8 @@ namespace drdemo {
 
         // Multiplication
         Float operator*(Float const &v) const {
-            return Float(default_tape.PushTwoNode(v.Value(), node_index, value, v.NodeIndex()),
-                         value * v.Value());
+            return Float(default_tape.PushTwoNode(v.GetValue(), node_index, value, v.NodeIndex()),
+                         value * v.GetValue());
         }
 
         Float operator*(float v) const {
@@ -177,11 +180,11 @@ namespace drdemo {
 
         // Division
         Float operator/(Float const &v) const {
-            assert(v.Value() != 0.f);
+            assert(v.GetValue() != 0.f);
             // If f(a,b) = a/b, then df/da = 1/b and df/db = -a/(b*b)
-            return Float(default_tape.PushTwoNode(1.f / v.Value(), node_index,
-                                                  -value / (v.Value() * v.Value()), v.NodeIndex()),
-                         value / v.Value());
+            return Float(default_tape.PushTwoNode(1.f / v.GetValue(), node_index,
+                                                  -value / (v.GetValue() * v.GetValue()), v.NodeIndex()),
+                         value / v.GetValue());
         }
 
         Float operator/(float v) const {
@@ -198,162 +201,162 @@ namespace drdemo {
 
     // Sum of float and Float
     inline Float operator+(float a, Float const &b) {
-        return Float(default_tape.PushSingleNode(1.f, b.NodeIndex()), a + b.Value());
+        return Float(default_tape.PushSingleNode(1.f, b.NodeIndex()), a + b.GetValue());
     }
 
     // Subtraction of float and Float
     inline Float operator-(float a, Float const &b) {
-        return Float(default_tape.PushSingleNode(-1.f, b.NodeIndex()), a - b.Value());
+        return Float(default_tape.PushSingleNode(-1.f, b.NodeIndex()), a - b.GetValue());
     }
 
     // Multiplication of float and Float
     inline Float operator*(float a, Float const &b) {
-        return Float(default_tape.PushSingleNode(a, b.NodeIndex()), a * b.Value());
+        return Float(default_tape.PushSingleNode(a, b.NodeIndex()), a * b.GetValue());
     }
 
     // Division of float and Float
     inline Float operator/(float a, Float const &b) {
-        assert(b.Value() != 0.f);
-        return Float(default_tape.PushSingleNode(-a / (b.Value() * b.Value()), b.NodeIndex()), a / b.Value());
+        assert(b.GetValue() != 0.f);
+        return Float(default_tape.PushSingleNode(-a / (b.GetValue() * b.GetValue()), b.NodeIndex()), a / b.GetValue());
     }
 
     // Comparison operator
 
     // <
     inline bool operator<(Float const &a, Float const &b) noexcept {
-        return a.Value() < b.Value();
+        return a.GetValue() < b.GetValue();
     }
 
     inline bool operator<(Float const &a, float b) noexcept {
-        return a.Value() < b;
+        return a.GetValue() < b;
     }
 
     inline bool operator<(float a, Float const &b) noexcept {
-        return a < b.Value();
+        return a < b.GetValue();
     }
 
     // <=
     inline bool operator<=(Float const &a, Float const &b) noexcept {
-        return a.Value() <= b.Value();
+        return a.GetValue() <= b.GetValue();
     }
 
     inline bool operator<=(Float const &a, float b) noexcept {
-        return a.Value() <= b;
+        return a.GetValue() <= b;
     }
 
     inline bool operator<=(float a, Float const &b) noexcept {
-        return a <= b.Value();
+        return a <= b.GetValue();
     }
 
     // >
     inline bool operator>(Float const &a, Float const &b) noexcept {
-        return a.Value() > b.Value();
+        return a.GetValue() > b.GetValue();
     }
 
     inline bool operator>(Float const &a, float b) noexcept {
-        return a.Value() > b;
+        return a.GetValue() > b;
     }
 
     inline bool operator>(float a, Float const &b) noexcept {
-        return a > b.Value();
+        return a > b.GetValue();
     }
 
     // >=
     inline bool operator>=(Float const &a, Float const &b) noexcept {
-        return a.Value() >= b.Value();
+        return a.GetValue() >= b.GetValue();
     }
 
     inline bool operator>=(Float const &a, float b) noexcept {
-        return a.Value() >= b;
+        return a.GetValue() >= b;
     }
 
     inline bool operator>=(float a, Float const &b) noexcept {
-        return a >= b.Value();
+        return a >= b.GetValue();
     }
 
     // ==
     inline bool operator==(Float const &a, Float const &b) noexcept {
-        return a.Value() == b.Value();
+        return a.GetValue() == b.GetValue();
     }
 
     inline bool operator==(Float const &a, float b) noexcept {
-        return a.Value() == b;
+        return a.GetValue() == b;
     }
 
     inline bool operator==(float a, Float const &b) noexcept {
-        return a == b.Value();
+        return a == b.GetValue();
     }
 
     // !=
     inline bool operator!=(Float const &a, Float const &b) noexcept {
-        return a.Value() != b.Value();
+        return a.GetValue() != b.GetValue();
     }
 
     inline bool operator!=(Float const &a, float b) noexcept {
-        return a.Value() != b;
+        return a.GetValue() != b;
     }
 
     inline bool operator!=(float a, Float const &b) noexcept {
-        return a != b.Value();
+        return a != b.GetValue();
     }
 
     // Sign of Float
     inline int Sign(Float const &v) noexcept {
-        return static_cast<int>((0.f < v.Value()) - (v.Value() < 0.f));
+        return static_cast<int>((0.f < v.GetValue()) - (v.GetValue() < 0.f));
     }
 
     // Sin of Float
     inline Float Sin(Float const &v) {
-        return Float(default_tape.PushSingleNode(std::cos(v.Value()), v.NodeIndex()), std::sin(v.Value()));
+        return Float(default_tape.PushSingleNode(std::cos(v.GetValue()), v.NodeIndex()), std::sin(v.GetValue()));
     }
 
     // Cos of Float
     inline Float Cos(Float const &v) {
-        return Float(default_tape.PushSingleNode(-std::sin(v.Value()), v.NodeIndex()), std::cos(v.Value()));
+        return Float(default_tape.PushSingleNode(-std::sin(v.GetValue()), v.NodeIndex()), std::cos(v.GetValue()));
     }
 
     // Tan of Float
     inline Float Tan(Float const &v) {
-        return Float(default_tape.PushSingleNode(2.f / (std::cos(2.f * v.Value()) + 1.f), v.NodeIndex()),
-                     std::tan(v.Value()));
+        return Float(default_tape.PushSingleNode(2.f / (std::cos(2.f * v.GetValue()) + 1.f), v.NodeIndex()),
+                     std::tan(v.GetValue()));
     }
 
     // Exp of Float
     inline Float Exp(Float const &v) {
-        return Float(default_tape.PushSingleNode(std::exp(v.Value()), v.NodeIndex()), std::exp(v.Value()));
+        return Float(default_tape.PushSingleNode(std::exp(v.GetValue()), v.NodeIndex()), std::exp(v.GetValue()));
     }
 
     // Log of Float
     inline Float Log(Float const &v) {
-        assert(v.Value() > 0.f);
-        return Float(default_tape.PushSingleNode(1.f / v.Value(), v.NodeIndex()), std::log(v.Value()));
+        assert(v.GetValue() > 0.f);
+        return Float(default_tape.PushSingleNode(1.f / v.GetValue(), v.NodeIndex()), std::log(v.GetValue()));
     }
 
     // Pow of Float
     inline Float Pow(Float const &v, float k) {
-        return Float(default_tape.PushSingleNode(k * std::pow(v.Value(), k - 1.f), v.NodeIndex()),
-                     std::pow(v.Value(), k));
+        return Float(default_tape.PushSingleNode(k * std::pow(v.GetValue(), k - 1.f), v.NodeIndex()),
+                     std::pow(v.GetValue(), k));
     }
 
     // Sqrt of Float
     inline Float Sqrt(Float const &v) {
-        return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.Value()), v.NodeIndex()), std::sqrt(v.Value()));
+        return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.GetValue()), v.NodeIndex()), std::sqrt(v.GetValue()));
     }
 
     // Abs of Float
     inline Float Abs(Float const &v) {
-        assert(v.Value() != 0.f);
-        return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.Value()));
+        assert(v.GetValue() != 0.f);
+        return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.GetValue()));
     }
 
     // Max of two Float
     inline Float Max(Float const &a, Float const &b) {
-        return (a.Value() > b.Value() ? a : b);
+        return (a.GetValue() > b.GetValue() ? a : b);
     }
 
     // Min of two Float
     inline Float Min(Float const &a, Float const &b) {
-        return (a.Value() < b.Value() ? a : b);
+        return (a.GetValue() < b.GetValue() ? a : b);
     }
 
 } // drdemo namespace

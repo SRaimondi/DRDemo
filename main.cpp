@@ -31,46 +31,57 @@ Float Spherical(std::vector<Float> const &x) {
     return res;
 }
 
+// Matyas function
+Float Matyas(std::vector<Float> const &x) {
+    return 0.26f * (x[0] * x[0] + x[1] * x[1]) - 0.48f * x[0] * x[1];
+}
+
 int main(void) {
 
     // Set namespace used
     using namespace drdemo;
 
     // Minimization test
-    std::vector<Float> x(10);
+    std::vector<Float> x(100);
 
     // Initialize with some random data
     for (size_t i = 0; i < x.size(); i++) {
-        x[i] = i + 1.f;
+        x[i] = 6.f;
     }
 
     Derivatives derivatives;
 
     std::vector<float> gradient(x.size(), 0.f);
     size_t iters = 0;
-    float delta = 0.01f;
+    float delta = 0.1f;
+
+    // Get index of the variable we need to keep
+    size_t clear_index = default_tape.Size();
 
     do {
         derivatives.Clear();
         // Compute spherical function value
         Float y = Spherical(x);
+        // Float y = Matyas(x);
         // Compute derivatives
         derivatives.ComputeDerivatives(y);
         // Compute gradient and update
         for (int i = 0; i < x.size(); i++) {
             gradient[i] = derivatives.Dwrt(y, x[i]);
-            x[i] = x[i] - delta * gradient[i];
+            x[i].SetValue(x[i].GetValue() - delta * gradient[i]);
         }
         std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
         // Increase number of iterations
         iters++;
         // Clear tape
-        // default_tape.Clear(clear_index);
+        default_tape.Clear(clear_index);
         std::cout << "Tape size: " << default_tape.Size() << std::endl;
-    } while (GradNorm(gradient) > 0.0001f && iters < 1000);
+    } while (GradNorm(gradient) > 0.0001f && iters < 10000);
 
+    std::cout << std::endl << "Final gradient norm: " << GradNorm(gradient) << std::endl;
     std::cout << "Iterations: " << iters << std::endl;
 
+    std::cout << "#### Final x ####" << std::endl;
     for (auto const & x_i : x) {
         std::cout << x_i << " ";
     }

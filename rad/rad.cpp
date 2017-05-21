@@ -79,7 +79,7 @@ namespace drdemo {
     }
 
     std::ostream &operator<<(std::ostream &os, Float const &var) {
-        os << var.Value();
+        os << var.GetValue();
         return os;
     }
 
