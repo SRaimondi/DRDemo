@@ -37,6 +37,8 @@ namespace drdemo {
     private:
         // List of Tape nodes
         std::vector<TapeNode> nodes;
+        // List of checkpoints to reset the nodes to a certain point
+        std::vector<size_t> clear_indices;
         // Boolean flag to check if the Tape is enabled or not
         bool enabled;
 
@@ -59,6 +61,18 @@ namespace drdemo {
 
         // Get size of the Tape
         inline size_t Size() const { return nodes.size(); }
+
+        // Push current size of nodes, can be used to clear after
+        inline void Push() {
+            clear_indices.push_back(nodes.size());
+        }
+
+        // Pop current portion of stack, uses last checkpoint saved
+        inline void Pop() {
+            nodes.erase(nodes.begin() + clear_indices[clear_indices.size() - 1], nodes.end());
+            // Delete index
+            clear_indices.pop_back();
+        }
 
         // Clear tape starting from a given index
         void Clear(size_t starting_index);

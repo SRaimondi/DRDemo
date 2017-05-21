@@ -4,11 +4,17 @@
 
 #include <scene.hpp>
 #include <derivative.hpp>
+#include <box_film.hpp>
+#include <clamp_tonemapper.hpp>
+#include <camera.hpp>
+#include <pinhole_camera.hpp>
+#include <sphere.hpp>
+#include <point_light.hpp>
+#include <direct_integrator.hpp>
+#include <simple_renderer.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
-
-using namespace drdemo;
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -22,8 +28,8 @@ float GradNorm(std::vector<float> const &grad) {
 
 
 // Spherical function, minimization test
-Float Spherical(std::vector<Float> const &x) {
-    Float res = x[0] * x[0];
+drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
+    drdemo::Float res = x[0] * x[0];
     for (size_t i = 1; i < x.size(); i++) {
         res += x[i] * x[i];
     }
@@ -31,10 +37,10 @@ Float Spherical(std::vector<Float> const &x) {
     return res;
 }
 
-// Matyas function
-Float Matyas(std::vector<Float> const &x) {
-    return 0.26f * (x[0] * x[0] + x[1] * x[1]) - 0.48f * x[0] * x[1];
-}
+//// Matyas function
+//Float Matyas(std::vector<Float> const &x) {
+//    return 0.26f * (x[0] * x[0] + x[1] * x[1]) - 0.48f * x[0] * x[1];
+//}
 
 int main(void) {
 
@@ -42,7 +48,7 @@ int main(void) {
     using namespace drdemo;
 
     // Minimization test
-    std::vector<Float> x(100);
+    std::vector<Float> x(10);
 
     // Initialize with some random data
     for (size_t i = 0; i < x.size(); i++) {
@@ -56,9 +62,14 @@ int main(void) {
     float delta = 0.1f;
 
     // Get index of the variable we need to keep
-    size_t clear_index = default_tape.Size();
+    // size_t clear_index = default_tape.Size();
+
+
 
     do {
+        // Push current index of tape to remove nodes after
+        default_tape.Push();
+        // Clear derivatives
         derivatives.Clear();
         // Compute spherical function value
         Float y = Spherical(x);
@@ -74,7 +85,8 @@ int main(void) {
         // Increase number of iterations
         iters++;
         // Clear tape
-        default_tape.Clear(clear_index);
+        // default_tape.Clear(clear_index);
+        default_tape.Pop();
         std::cout << "Tape size: " << default_tape.Size() << std::endl;
     } while (GradNorm(gradient) > 0.0001f && iters < 10000);
 
@@ -86,6 +98,7 @@ int main(void) {
         std::cout << x_i << " ";
     }
     std::cout << std::endl;
+
 
 //    // Disable tape
 //    // default_tape.Disable();
@@ -143,7 +156,7 @@ int main(void) {
 //    float delta = 0.0001f;
 //
 //    // Save index of tape to clear after
-//    size_t clear_index = default_tape.Size() - 1;
+//    size_t clear_index = default_tape.Size();
 //
 //    do {
 //        derivatives.Clear();
@@ -179,14 +192,14 @@ int main(void) {
 //
 //    // Create final image
 //    tonemapper.Process("final.ppm", start);
-//    // tonemapper.Process("difference.ppm", difference);
-//
-//
-//    // Create derivatives
-//    // Derivatives derivatives;
-//    // derivatives.ComputeDerivatives(squared_norm);
-//
-//    // std::cout << default_tape.Size() << std::endl;
+    // tonemapper.Process("difference.ppm", difference);
+
+
+    // Create derivatives
+    // Derivatives derivatives;
+    // derivatives.ComputeDerivatives(squared_norm);
+
+    // std::cout << default_tape.Size() << std::endl;
 
     return EXIT_SUCCESS;
 }
