@@ -52,6 +52,9 @@ set(SOURCE_FILES
         light/point_light.cpp
         light/point_light.hpp
         integrator/direct_integrator.cpp
-        integrator/direct_integrator.hpp rad/diff_object.hpp)
+        integrator/direct_integrator.hpp
+        rad/diff_object.hpp
+        light/directional_light.cpp
+        light/directional_light.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

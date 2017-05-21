@@ -10,8 +10,8 @@ namespace drdemo {
             : position(p), intensity(i) {}
 
     Spectrum
-    PointLight::SampleLi(Interaction const &interaction, float, float, Vector3F *const wi,
-                         Float *pdf) const {
+    PointLight::SampleLi(Interaction const &interaction, float, float,
+                         Vector3F *const wi, Float *pdf) const {
         *wi = Normalize(position - interaction.p);
         *pdf = 1.f;
 

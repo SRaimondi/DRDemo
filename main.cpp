@@ -4,6 +4,13 @@
 
 #include <scene.hpp>
 #include <derivative.hpp>
+#include <sphere.hpp>
+#include <point_light.hpp>
+#include <pinhole_camera.hpp>
+#include <simple_renderer.hpp>
+#include <direct_integrator.hpp>
+#include <box_film.hpp>
+#include <clamp_tonemapper.hpp>
 
 #define WIDTH   200
 #define HEIGHT  200
@@ -88,6 +95,37 @@ int main(void) {
 //        std::cout << x_i << " ";
 //    }
 //    std::cout << std::endl;
+
+    // Derivatives computation class
+    Derivatives derivatives;
+
+    // Disable tape to render target image
+    default_tape.Disable();
+
+    // Create scene
+    Scene scene;
+
+    // Add spheres
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
+    // Add lights
+    scene.AddLight(std::make_shared<PointLight>(Vector3F(-5.f, 5.f, 3.f), Spectrum(10.f)));
+    scene.AddLight(std::make_shared<PointLight>(Vector3F(5.f, 5.f, 3.f), Spectrum(10.f)));
+
+    // Create camera
+    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+
+    // Create renderer
+    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
+
+    // Render target image
+    BoxFilterFilm target(WIDTH, HEIGHT);
+    render.RenderImage(&target, scene, camera);
+
+    // Create tonemapper and process target image
+    ClampTonemapper tonemapper;
+    tonemapper.Process("target.ppm", target);
+
+
 
 
 //    // Disable tape
