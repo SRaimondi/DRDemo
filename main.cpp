@@ -4,17 +4,9 @@
 
 #include <scene.hpp>
 #include <derivative.hpp>
-#include <box_film.hpp>
-#include <clamp_tonemapper.hpp>
-#include <camera.hpp>
-#include <pinhole_camera.hpp>
-#include <sphere.hpp>
-#include <point_light.hpp>
-#include <direct_integrator.hpp>
-#include <simple_renderer.hpp>
 
-#define WIDTH   512
-#define HEIGHT  512
+#define WIDTH   200
+#define HEIGHT  200
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -27,15 +19,15 @@ float GradNorm(std::vector<float> const &grad) {
 }
 
 
-// Spherical function, minimization test
-drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
-    drdemo::Float res = x[0] * x[0];
-    for (size_t i = 1; i < x.size(); i++) {
-        res += x[i] * x[i];
-    }
-
-    return res;
-}
+//// Spherical function, minimization test
+//drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
+//    drdemo::Float res = x[0] * x[0];
+//    for (size_t i = 1; i < x.size(); i++) {
+//        res += x[i] * x[i];
+//    }
+//
+//    return res;
+//}
 
 //// Matyas function
 //Float Matyas(std::vector<Float> const &x) {
@@ -47,57 +39,55 @@ int main(void) {
     // Set namespace used
     using namespace drdemo;
 
-    // Minimization test
-    std::vector<Float> x(10);
+//    // Minimization test
+//    std::vector<Float> x(10);
+//
+//    // Initialize with some random data
+//    for (size_t i = 0; i < x.size(); i++) {
+//        x[i] = 6.f;
+//    }
+//
+//    Derivatives derivatives;
+//
+//    std::vector<float> gradient(x.size(), 0.f);
+//    size_t iters = 0;
+//    float delta = 0.1f;
+//
+//    // Get index of the variable we need to keep
+//    // size_t clear_index = default_tape.Size();
 
-    // Initialize with some random data
-    for (size_t i = 0; i < x.size(); i++) {
-        x[i] = 6.f;
-    }
-
-    Derivatives derivatives;
-
-    std::vector<float> gradient(x.size(), 0.f);
-    size_t iters = 0;
-    float delta = 0.1f;
-
-    // Get index of the variable we need to keep
-    // size_t clear_index = default_tape.Size();
-
-
-
-    do {
-        // Push current index of tape to remove nodes after
-        default_tape.Push();
-        // Clear derivatives
-        derivatives.Clear();
-        // Compute spherical function value
-        Float y = Spherical(x);
-        // Float y = Matyas(x);
-        // Compute derivatives
-        derivatives.ComputeDerivatives(y);
-        // Compute gradient and update
-        for (int i = 0; i < x.size(); i++) {
-            gradient[i] = derivatives.Dwrt(y, x[i]);
-            x[i].SetValue(x[i].GetValue() - delta * gradient[i]);
-        }
-        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-        // Increase number of iterations
-        iters++;
-        // Clear tape
-        // default_tape.Clear(clear_index);
-        default_tape.Pop();
-        std::cout << "Tape size: " << default_tape.Size() << std::endl;
-    } while (GradNorm(gradient) > 0.0001f && iters < 10000);
-
-    std::cout << std::endl << "Final gradient norm: " << GradNorm(gradient) << std::endl;
-    std::cout << "Iterations: " << iters << std::endl;
-
-    std::cout << "#### Final x ####" << std::endl;
-    for (auto const & x_i : x) {
-        std::cout << x_i << " ";
-    }
-    std::cout << std::endl;
+//    do {
+//        // Push current index of tape to remove nodes after
+//        default_tape.Push();
+//        // Clear derivatives
+//        derivatives.Clear();
+//        // Compute spherical function value
+//        Float y = Spherical(x);
+//        // Float y = Matyas(x);
+//        // Compute derivatives
+//        derivatives.ComputeDerivatives(y);
+//        // Compute gradient and update
+//        for (int i = 0; i < x.size(); i++) {
+//            gradient[i] = derivatives.Dwrt(y, x[i]);
+//            x[i].SetValue(x[i].GetValue() - delta * gradient[i]);
+//        }
+//        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+//        // Increase number of iterations
+//        iters++;
+//        // Clear tape
+//        // default_tape.Clear(clear_index);
+//        default_tape.Pop();
+//        std::cout << "Tape size: " << default_tape.Size() << std::endl;
+//    } while (GradNorm(gradient) > 0.0001f && iters < 10000);
+//
+//    std::cout << std::endl << "Final gradient norm: " << GradNorm(gradient) << std::endl;
+//    std::cout << "Iterations: " << iters << std::endl;
+//
+//    std::cout << "#### Final x ####" << std::endl;
+//    for (auto const & x_i : x) {
+//        std::cout << x_i << " ";
+//    }
+//    std::cout << std::endl;
 
 
 //    // Disable tape
@@ -131,34 +121,38 @@ int main(void) {
 //    std::shared_ptr<RendererInterface> renderer = std::make_shared<SimpleRenderer>(
 //            std::make_shared<DirectIntegrator>());
 //
+//    default_tape.Push();
 //    // Render target image
 //    renderer->RenderImage(&target, scene, *camera.get());
 //
 //    // Create target image
 //    tonemapper.Process("target.ppm", target);
 //
+//    default_tape.Pop();
+//
 //    // Clear scene's spheres
 //    scene.ClearShapes();
 //    // Add new sphere, in a different position with respect to the one used in the target image generation
-//    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(1.8f, 0.f, 0.f), Float(2.f));
+//    std::shared_ptr<Shape> sphere = std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f));
 //    // Get variables we can use to compute the gradient
 //    std::vector<Float const *> vars = sphere->GetDiffVariables();
 //    scene.AddShape(sphere);
 //
 //    // Render starting image
-//    renderer->RenderImage(&start, scene, *camera.get());
-//    tonemapper.Process("start.ppm", start);
+//    // renderer->RenderImage(&start, scene, *camera.get());
+//    // tonemapper.Process("start.ppm", start);
 //
 //    // Create gradient storage vector
 //    std::vector<float> gradient(4, 0.f);
 //    std::vector<float> deltas(4, 0.f);
 //    size_t iters = 0;
-//    float delta = 0.0001f;
+//    float delta = 0.001f;
 //
 //    // Save index of tape to clear after
-//    size_t clear_index = default_tape.Size();
+//    // size_t clear_index = default_tape.Size();
 //
 //    do {
+//        // default_tape.Push();
 //        derivatives.Clear();
 //        // Render new image
 //        renderer->RenderImage(&start, scene, *camera.get());
@@ -185,21 +179,20 @@ int main(void) {
 //        tonemapper.Process(std::string("difference_") + std::to_string(iters) + std::string(".ppm"), difference);
 //        // Clear tape
 //        // default_tape.Clear(clear_index);
+//        // default_tape.Pop();
 //        std::cout << "Tape size: " << default_tape.Size() << std::endl;
-//    } while (GradNorm(gradient) > 0.01f && iters < 6);
+//    } while (GradNorm(gradient) > 0.01f);
 //
 //    std::cout << "Iterations: " << iters << std::endl;
+//    std::cout << "Final norm: " << GradNorm(gradient) << std::endl;
 //
 //    // Create final image
-//    tonemapper.Process("final.ppm", start);
+//    BoxFilterFilm final(WIDTH, HEIGHT);
+//    // Render new image
+//    renderer->RenderImage(&final, scene, *camera.get());
+//    tonemapper.Process("final.ppm", final);
     // tonemapper.Process("difference.ppm", difference);
 
-
-    // Create derivatives
-    // Derivatives derivatives;
-    // derivatives.ComputeDerivatives(squared_norm);
-
-    // std::cout << default_tape.Size() << std::endl;
 
     return EXIT_SUCCESS;
 }

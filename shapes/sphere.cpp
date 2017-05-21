@@ -105,10 +105,10 @@ namespace drdemo {
 
     void Sphere::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
         // Order is supposed to be sphere's center (x,y,z) and radius
-        center.x = center.x + delta[starting_index];
-        center.y = center.y + delta[starting_index + 1];
-        center.z = center.z + delta[starting_index + 2];
-        radius = radius + delta[starting_index + 3];
+        center.x.SetValue(center.x.GetValue() + delta[starting_index]);
+        center.y.SetValue(center.y.GetValue() + delta[starting_index + 1]);
+        center.z.SetValue(center.z.GetValue() + delta[starting_index + 2]);
+        radius.SetValue(radius.GetValue() + delta[starting_index + 3]);
     }
 
 } // drdemo namespace

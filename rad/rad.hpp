@@ -359,7 +359,7 @@ namespace drdemo {
 
     // Abs of Float
     inline Float Abs(Float const &v) {
-        assert(v.GetValue() != 0.f);
+        // assert(v.GetValue() != 0.f);
         return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.GetValue()));
     }
 
