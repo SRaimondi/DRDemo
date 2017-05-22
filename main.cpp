@@ -5,12 +5,12 @@
 #include <scene.hpp>
 #include <derivative.hpp>
 #include <sphere.hpp>
-#include <point_light.hpp>
 #include <pinhole_camera.hpp>
 #include <simple_renderer.hpp>
 #include <direct_integrator.hpp>
 #include <box_film.hpp>
 #include <clamp_tonemapper.hpp>
+#include <directional_light.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -108,8 +108,7 @@ int main(void) {
     // Add spheres
     scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
     // Add lights
-    scene.AddLight(std::make_shared<PointLight>(Vector3F(-5.f, 5.f, 3.f), Spectrum(10.f)));
-    scene.AddLight(std::make_shared<PointLight>(Vector3F(5.f, 5.f, 3.f), Spectrum(10.f)));
+    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.5f, 0.5f, 1.f), Spectrum(0.9f)));
 
     // Create camera
     auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
