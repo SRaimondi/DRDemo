@@ -90,17 +90,13 @@ namespace drdemo {
         return true;
     }
 
-    std::vector<Float const *> Sphere::GetDiffVariables() const {
-        std::vector<Float const *> vars;
-
+    void Sphere::GetDiffVariables(std::vector<Float const *> & vars) const {
         // Push sphere center variables
         vars.push_back(&(center.x));
         vars.push_back(&(center.y));
         vars.push_back(&(center.z));
         // Push radius variable
         vars.push_back(&(radius));
-
-        return vars;
     }
 
     void Sphere::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {

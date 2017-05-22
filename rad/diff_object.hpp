@@ -17,7 +17,7 @@ namespace drdemo {
         virtual ~DiffObjectInterface() {}
 
         // Return a list of references to the differentiable variables in the object
-        virtual std::vector<Float const *> GetDiffVariables() const = 0;
+        virtual void GetDiffVariables(std::vector<Float const *> & vars) const = 0;
 
         // Update values of differentiable variables in the object, starting index tells the object
         // from where to start to get the deltas

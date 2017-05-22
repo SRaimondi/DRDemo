@@ -130,6 +130,7 @@ int main(void) {
     // Change sphere position
     scene.ClearShapes();
     scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(2.f)));
+    //scene.AddShape(std::make_shared<Sphere>(Vector3F(-2.f, 0.f, 0.f), Float(2.f)));
 
     // Render start image
     BoxFilterFilm x(WIDTH, HEIGHT);
@@ -140,7 +141,12 @@ int main(void) {
 
     derivatives.ComputeDerivatives(x_2_norm);
 
-    auto vars = scene.GetShapes()[0]->GetDiffVariables();
+    std::vector<Float const *> vars;
+
+    for (auto const & s : scene.GetShapes()) {
+        s->GetDiffVariables(vars);
+    }
+
     for (auto const & var : vars) {
         std::cout << derivatives.Dwrt(x_2_norm, *var) << std::endl;
     }
