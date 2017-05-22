@@ -99,6 +99,10 @@ namespace drdemo {
         vars.push_back(&(radius));
     }
 
+    size_t Sphere::GetNumVars() const noexcept {
+        return 4;
+    }
+
     void Sphere::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
         // Order is supposed to be sphere's center (x,y,z) and radius
         center.x.SetValue(center.x.GetValue() + delta[starting_index]);

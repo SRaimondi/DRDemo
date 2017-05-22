@@ -151,11 +151,11 @@ namespace drdemo {
             return *this;
         }
 
-        Float operator++(int) {
-            Float result(*this);
-            ++(*this);
-            return result;
-        }
+//        Float operator++(int) {
+//            Float result(*this);
+//            ++(*this);
+//            return result;
+//        }
 
         // Subtraction
         Float operator-(Float const &v) const {
@@ -176,11 +176,11 @@ namespace drdemo {
             return *this;
         }
 
-        Float operator--(int) {
-            Float result(*this);
-            --(*this);
-            return result;
-        }
+//        Float operator--(int) {
+//            Float result(*this);
+//            --(*this);
+//            return result;
+//        }
 
         // Multiplication
         Float operator*(Float const &v) const {

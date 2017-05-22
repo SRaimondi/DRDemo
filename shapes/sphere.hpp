@@ -30,7 +30,9 @@ namespace drdemo {
         // Differentiable object methods
         void GetDiffVariables(std::vector<Float const *> & vars) const override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0);
+        size_t GetNumVars() const noexcept override;
+
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
     };
 
 } // drdemo namespace
