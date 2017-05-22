@@ -105,10 +105,10 @@ int main(void) {
     // Create scene
     Scene scene;
 
-    // Add spheres
+    // Add sphere
     scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
     // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.5f, 0.5f, 1.f), Spectrum(0.9f)));
+    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
     // Create camera
     auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
@@ -124,6 +124,29 @@ int main(void) {
     ClampTonemapper tonemapper;
     tonemapper.Process("target.ppm", target);
 
+    // Re-enable tape
+    default_tape.Enable();
+
+    // Change sphere position
+    scene.ClearShapes();
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(2.f)));
+
+    // Render start image
+    BoxFilterFilm x(WIDTH, HEIGHT);
+    render.RenderImage(&x, scene, camera);
+
+    // Compute squared norm of image
+    Float x_2_norm = x.SquaredNorm();
+
+    derivatives.ComputeDerivatives(x_2_norm);
+
+    auto vars = scene.GetShapes()[0]->GetDiffVariables();
+    for (auto const & var : vars) {
+        std::cout << derivatives.Dwrt(x_2_norm, *var) << std::endl;
+    }
+
+    // Process target image
+    tonemapper.Process("x.ppm", x);
 
 
 

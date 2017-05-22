@@ -19,8 +19,10 @@ namespace drdemo {
         // Constructors
         Spectrum() : r(), g(), b() {}
 
-        explicit Spectrum(Float const &v)
-                : r(v), g(v), b(v) {}
+        // TODO Review this, might cause some problems
+//        explicit Spectrum(Float const &v)
+//                : r(v), g(v), b(v) {}
+
 
         explicit Spectrum(float v)
                 : r(v), g(v), b(v) {}
