@@ -102,7 +102,7 @@ int main(/* int argc, char *argv[] */) {
     // Create tape
     rad::Tape<float> tape(10000);
     // Create image
-    rt::Image<WIDTH, HEIGHT> image;
+    rt::Image <WIDTH, HEIGHT> image;
 
     // Create sphere at the center of the screen
     rt::Shape *sphere = new rt::Sphere(150.f, 250.f, -200.f, 100.f, tape);

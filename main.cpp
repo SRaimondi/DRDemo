@@ -12,8 +12,8 @@
 #include <clamp_tonemapper.hpp>
 #include <directional_light.hpp>
 
-#define WIDTH   512
-#define HEIGHT  512
+#define WIDTH   256
+#define HEIGHT  256
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -100,7 +100,7 @@ int main(void) {
     Derivatives derivatives;
 
     // Disable tape to render target image
-    default_tape.Disable();
+    // default_tape.Disable();
 
     // Create scene
     Scene scene;
@@ -125,7 +125,7 @@ int main(void) {
     // tonemapper.Process("target.ppm", target);
 
     // Re-enable tape to compute derivatives
-    default_tape.Enable();
+    // default_tape.Enable();
 
     // Change sphere position
     scene.ClearShapes();
@@ -186,6 +186,7 @@ int main(void) {
         // std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
         // std::cout << std::endl;
 
+        std::cout << iters << std::endl;
         iters++;
     } while (GradNorm(gradient) > 0.001f && iters < 1000);
 

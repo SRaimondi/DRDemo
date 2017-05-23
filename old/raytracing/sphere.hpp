@@ -24,7 +24,7 @@ namespace rt {
         // Constructor, needs a tape that is used to initialize the variable we can compute the derivative with respect to
         Sphere(float x_c, float y_c, float z_c, float r, rad::Tape<float> &tape);
 
-        std::vector<rad::Variable<float>> GetDifferentiableVariables() const override;
+        std::vector <rad::Variable<float>> GetDifferentiableVariables() const override;
 
         bool Intersect(Ray const &ray, Intersection *const intersection) const override;
     };

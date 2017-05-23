@@ -56,28 +56,36 @@ namespace traits {
     };
 
     template<typename T>
-    class Promote<rad::Variable<T>, T> {
-    public:
-        typedef typename rad::Variable<T> TResult;
-    };
+    class Promote<rad::Variable < T>
 
-    template<typename T>
-    class Promote<T, rad::Variable<T>> {
+    , T> {
     public:
-        typedef typename rad::Variable<T> TResult;
-    };
+    typedef typename rad::Variable<T> TResult;
+};
 
-    template<typename T>
-    class Promote<fad::Variable<T>, T> {
-    public:
-        typedef typename fad::Variable<T> TResult;
-    };
+template<typename T>
+class Promote<T, rad::Variable < T>>
 
-    template<typename T>
-    class Promote<T, fad::Variable<T>> {
-    public:
-        typedef typename fad::Variable<T> TResult;
-    };
+{
+public:
+typedef typename rad::Variable<T> TResult;
+};
+
+template<typename T>
+class Promote<fad::Variable < T>
+
+, T> {
+public:
+typedef typename fad::Variable<T> TResult;
+};
+
+template<typename T>
+class Promote<T, fad::Variable < T>>
+
+{
+public:
+typedef typename fad::Variable<T> TResult;
+};
 
 } // traits namespace
 

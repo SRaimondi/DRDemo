@@ -23,7 +23,7 @@ namespace ad {
     class RADDiffObjectInterface {
     public:
         // Return a std::vector with all the variables that can be used to compute a derivative
-        virtual std::vector<rad::Variable<T> > GetDifferentiableVariables() const = 0;
+        virtual std::vector <rad::Variable<T>> GetDifferentiableVariables() const = 0;
     };
 
     /**

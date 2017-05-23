@@ -13,8 +13,8 @@ rt::Sphere::Sphere(float x_c, float y_c, float z_c, float r, rad::Tape<float> &t
     radius = tape.NewVariable(r);
 }
 
-std::vector<rad::Variable<float>> rt::Sphere::GetDifferentiableVariables() const {
-    std::vector<rad::Variable<float>> vars;
+std::vector <rad::Variable<float>> rt::Sphere::GetDifferentiableVariables() const {
+    std::vector <rad::Variable<float>> vars;
     // Push into the vector the center and the radius
     vars.push_back(center[0]);
     vars.push_back(center[1]);
