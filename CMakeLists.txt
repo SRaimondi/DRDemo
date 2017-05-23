@@ -17,7 +17,8 @@ include_directories(
         camera
         renderer
         integrator
-        light)
+        light
+        utilities)
 
 set(SOURCE_FILES
         main.cpp
@@ -55,6 +56,6 @@ set(SOURCE_FILES
         integrator/direct_integrator.hpp
         rad/diff_object.hpp
         light/directional_light.cpp
-        light/directional_light.hpp)
+        light/directional_light.hpp utilities/vector.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

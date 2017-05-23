@@ -11,7 +11,7 @@
 namespace drdemo {
 
     /**
-     * Define Vector3 class, components are public for practice
+     * Define Vector3 class, components are public for practice and allocated on the stack frame
      */
     template<typename T>
     class Vector3 {

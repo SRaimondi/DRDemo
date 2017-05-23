@@ -117,15 +117,15 @@ int main(void) {
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
 
     // Render target image
-    // BoxFilterFilm target(WIDTH, HEIGHT);
-    // render.RenderImage(&target, scene, camera);
+    BoxFilterFilm target(WIDTH, HEIGHT);
+    render.RenderImage(&target, scene, camera);
 
     // Create tone-mapper and process target image
     ClampTonemapper tonemapper;
-    // tonemapper.Process("target.ppm", target);
+    tonemapper.Process("target.ppm", target);
 
     // Re-enable tape to compute derivatives
-    // default_tape.Enable();
+    default_tape.Enable();
 
     // Change sphere position
     scene.ClearShapes();
@@ -150,7 +150,7 @@ int main(void) {
 
         // Compute squared norm
         Float x_2_norm = x.SquaredNorm();
-        // std::cout << "Energy: " << x_2_norm << std::endl;
+        std::cout << "Energy: " << x_2_norm << std::endl;
 
         // Compute derivatives
         derivatives.ComputeDerivatives(x_2_norm);
@@ -186,7 +186,8 @@ int main(void) {
         // std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
         // std::cout << std::endl;
 
-        std::cout << iters << std::endl;
+        std::cout << "Iteration: " << iters << std::endl;
+        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl << std::endl;
         iters++;
     } while (GradNorm(gradient) > 0.001f && iters < 1000);
 

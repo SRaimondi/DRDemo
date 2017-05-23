@@ -12,7 +12,7 @@
  * and they must be initialized thorough a tape in case of reverse automatic differentiation
  */
 
-#include "vector.hpp"
+#include "../../utilities/vector.hpp"
 
 namespace ad {
 
