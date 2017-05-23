@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <cassert>
+#include <tape_storage.hpp>
 
 namespace drdemo {
 
@@ -27,6 +28,8 @@ namespace drdemo {
         // Parent node indices in the tape
         size_t parent_i[2];
 
+        TapeNode() = default;
+
         TapeNode(float w1, size_t p1, float w2, size_t p2) noexcept;
     };
 
@@ -36,7 +39,8 @@ namespace drdemo {
     class Tape {
     private:
         // List of Tape nodes
-        std::vector<TapeNode> nodes;
+        // std::vector<TapeNode> nodes;
+        TapeStorage<TapeNode> nodes;
         // List of checkpoints to reset the nodes to a certain point
         std::vector<size_t> clear_indices;
         // Boolean flag to check if the Tape is enabled or not
@@ -47,29 +51,36 @@ namespace drdemo {
         Tape();
 
         // Enable / Disable tape
-        inline void Enable() { enabled = true; }
+        // TODO This is not working, use Push / Pop
+        // inline void Enable() { enabled = true; }
 
-        inline void Disable() { enabled = false; }
+        // inline void Disable() { enabled = false; }
 
         // Check if the Tape is enabled
         inline bool IsEnabled() const { return enabled; }
 
         // Access TapeNode at given index
         inline TapeNode const &At(size_t index) const {
-            return nodes.at(index);
+            // return nodes.at(index);
+            return nodes.At(index);
         }
 
         // Get size of the Tape
-        inline size_t Size() const { return nodes.size(); }
+        inline size_t Size() const {
+            // return nodes.size();
+            return nodes.Size();
+        }
 
         // Push current size of nodes, can be used to clear after
         inline void Push() {
-            clear_indices.push_back(nodes.size());
+            // clear_indices.push_back(nodes.size());
+            clear_indices.push_back(nodes.Size());
         }
 
         // Pop current portion of stack, uses last checkpoint saved
         inline void Pop() {
-            nodes.erase(nodes.begin() + clear_indices[clear_indices.size() - 1], nodes.end());
+            // nodes.erase(nodes.begin() + clear_indices[clear_indices.size() - 1], nodes.end());
+            nodes.Cut(clear_indices[clear_indices.size() - 1]);
             // Delete index
             clear_indices.pop_back();
         }

@@ -26,15 +26,15 @@ float GradNorm(std::vector<float> const &grad) {
 }
 
 
-//// Spherical function, minimization test
-//drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
-//    drdemo::Float res = x[0] * x[0];
-//    for (size_t i = 1; i < x.size(); i++) {
-//        res += x[i] * x[i];
-//    }
-//
-//    return res;
-//}
+// Spherical function, minimization test
+drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
+    drdemo::Float res = x[0] * x[0];
+    for (size_t i = 1; i < x.size(); i++) {
+        res += x[i] * x[i];
+    }
+
+    return res;
+}
 
 //// Matyas function
 //Float Matyas(std::vector<Float> const &x) {
@@ -62,7 +62,7 @@ int main(void) {
 //
 //    // Get index of the variable we need to keep
 //    // size_t clear_index = default_tape.Size();
-
+//
 //    do {
 //        // Push current index of tape to remove nodes after
 //        default_tape.Push();
@@ -96,6 +96,11 @@ int main(void) {
 //    }
 //    std::cout << std::endl;
 
+
+
+
+
+
     // Derivatives computation class
     Derivatives derivatives;
 
@@ -106,7 +111,7 @@ int main(void) {
     Scene scene;
 
     // Add sphere
-    // scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
     // Add lights
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
@@ -116,20 +121,23 @@ int main(void) {
     // Create renderer
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
 
+    // default_tape.Push();
+
     // Render target image
-    BoxFilterFilm target(WIDTH, HEIGHT);
-    render.RenderImage(&target, scene, camera);
+    // BoxFilterFilm start(WIDTH, HEIGHT);
+    // render.RenderImage(&start, scene, camera);
 
     // Create tone-mapper and process target image
     ClampTonemapper tonemapper;
-    tonemapper.Process("target.ppm", target);
+    // tonemapper.Process("start.ppm", start);
 
     // Re-enable tape to compute derivatives
-    default_tape.Enable();
+    // default_tape.Enable();
+    // default_tape.Pop();
 
     // Change sphere position
-    scene.ClearShapes();
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
+    // scene.ClearShapes();
+    // scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
 
     // Gradient
     std::vector<float> gradient(4, 0.f);
@@ -165,10 +173,13 @@ int main(void) {
             delta[i] = -0.000001f * gradient[i];    // Learning rate
         }
 
-//        std::cout << "GRADIENT" << std::endl;
-//        for (auto const & x_i : gradient) {
-//            std::cout << x_i << std::endl;
-//        }
+        std::cout << "Iteration: " << iters << std::endl;
+        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        std::cout << "Gradient values: (";
+        for (auto const &x_i : gradient) {
+            std::cout << x_i << ", ";
+        }
+        std::cout << ")" << std::endl;
 
         // std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
 
@@ -178,29 +189,32 @@ int main(void) {
         // Process target image
         // tonemapper.Process("x_" + std::to_string(iters) + ".ppm", x);
 
-        // std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
+        std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
         // Pop variables
         default_tape.Pop();
 
         // Print tape size
-        // std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
+        std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
         // std::cout << std::endl;
 
-        std::cout << "Iteration: " << iters << std::endl;
-        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl << std::endl;
+        std::cout << "Sphere data" << std::endl;
+        std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
         iters++;
     } while (GradNorm(gradient) > 0.001f && iters < 1000);
 
     std::cout << "Iterations: " << iters << std::endl;
     std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
 
-    default_tape.Disable();
+    // default_tape.Disable();
     BoxFilterFilm final(WIDTH, HEIGHT);
 
     render.RenderImage(&final, scene, camera);
     tonemapper.Process("final.ppm", final);
 
     std::cout << scene.GetShapes()[0]->ToString() << std::endl;
+
+
+
 
 //    // Disable tape
 //    // default_tape.Disable();

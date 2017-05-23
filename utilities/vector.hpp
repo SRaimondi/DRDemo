@@ -8,11 +8,13 @@
 #include <cstdlib>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 
 namespace drdemo {
 
     /**
      * Define generic size and type vector class, elements are allocated on the heap
+     * This class is supposed to be used with built-in types like int
      */
     template<typename T>
     class Vector {
@@ -43,7 +45,6 @@ namespace drdemo {
 
         // Element access operator
         inline T const &operator[](size_t i) const noexcept { return elements[i]; }
-
         inline T &operator[](size_t i) noexcept { return elements[i]; }
 
         inline T const &At(size_t i) const noexcept {
@@ -162,6 +163,15 @@ namespace drdemo {
         return result;
     }
 
+    template<typename T, typename U>
+    Vector<T> operator/(Vector<T> const &v, U const &s) {
+        Vector<T> result(v.Size());
+        for (size_t i = 0; i < v.Size(); ++i) {
+            result[i] = v[i] / static_cast<T>(s);
+        }
+        return result;
+    }
+
     template<typename T>
     Vector<T> operator/(Vector<T> const &v1, Vector<T> const &v2) {
         assert(v1.Size() == v2.Size());
@@ -181,6 +191,18 @@ namespace drdemo {
             dot += v1[i] * v2[i];
         }
         return dot;
+    }
+
+    // Vector length squared
+    template<typename T>
+    T Length2(Vector<T> const &v) {
+        return Dot(v, v);
+    }
+
+    // Vector length
+    template<typename T>
+    T Length(Vector<T> const &v) {
+        return std::sqrt(Length2(v));
     }
 
 } // drdemo namespace

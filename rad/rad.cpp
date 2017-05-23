@@ -21,13 +21,15 @@ namespace drdemo {
     Tape::Tape() : enabled(true) {}
 
     void Tape::Clear(size_t starting_index) {
-        nodes.erase(nodes.begin() + starting_index, nodes.end());
+        // nodes.erase(nodes.begin() + starting_index, nodes.end());
+        nodes.Cut(starting_index);
     }
 
     size_t Tape::PushLeaf() {
         if (IsEnabled()) {
             size_t const index = Size();
-            nodes.push_back(TapeNode(0.f, index, 0.f, index));
+            // nodes.push_back(TapeNode(0.f, index, 0.f, index));
+            nodes.Append(TapeNode(0.f, index, 0.f, index));
             return index;
         }
         return 0;
@@ -36,7 +38,8 @@ namespace drdemo {
     size_t Tape::PushSingleNode(float w, size_t p) {
         if (IsEnabled()) {
             size_t const index = Size();
-            nodes.push_back(TapeNode(w, p, 0.f, index));
+            // nodes.push_back(TapeNode(w, p, 0.f, index));
+            nodes.Append(TapeNode(w, p, 0.f, index));
             return index;
         }
         return 0;
@@ -45,7 +48,8 @@ namespace drdemo {
     size_t Tape::PushTwoNode(float w1, size_t p1, float w2, size_t p2) {
         if (IsEnabled()) {
             size_t const index = Size();
-            nodes.push_back(TapeNode(w1, p1, w2, p2));
+            // nodes.push_back(TapeNode(w1, p1, w2, p2));
+            nodes.Append(TapeNode(w1, p1, w2, p2));
             return index;
         }
         return 0;
