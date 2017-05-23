@@ -90,6 +90,14 @@ namespace drdemo {
         return true;
     }
 
+    std::string Sphere::ToString() const {
+        return "Center: (" + std::to_string(center.x.GetValue()) +
+                ", " + std::to_string(center.y.GetValue()) +
+                ", " + std::to_string(center.z.GetValue()) + ")" +
+                "\n" +
+                "Radius: " + std::to_string(radius.GetValue());
+    }
+
     void Sphere::GetDiffVariables(std::vector<Float const *> & vars) const {
         // Push sphere center variables
         vars.push_back(&(center.x));

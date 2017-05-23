@@ -27,6 +27,8 @@ namespace drdemo {
 
         bool IntersectP(Ray const &ray) const override;
 
+        std::string ToString() const override;
+
         // Differentiable object methods
         void GetDiffVariables(std::vector<Float const *> & vars) const override;
 

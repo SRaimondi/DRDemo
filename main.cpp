@@ -106,7 +106,7 @@ int main(void) {
     Scene scene;
 
     // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
+    // scene.AddShape(std::make_shared<Sphere>(Vector3F(2.f, 0.f, 0.f), Float(2.f)));
     // Add lights
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
@@ -117,12 +117,12 @@ int main(void) {
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
 
     // Render target image
-    BoxFilterFilm target(WIDTH, HEIGHT);
-    render.RenderImage(&target, scene, camera);
+    // BoxFilterFilm target(WIDTH, HEIGHT);
+    // render.RenderImage(&target, scene, camera);
 
     // Create tone-mapper and process target image
     ClampTonemapper tonemapper;
-    tonemapper.Process("target.ppm", target);
+    // tonemapper.Process("target.ppm", target);
 
     // Re-enable tape to compute derivatives
     default_tape.Enable();
@@ -150,7 +150,7 @@ int main(void) {
 
         // Compute squared norm
         Float x_2_norm = x.SquaredNorm();
-        std::cout << "Energy: " << x_2_norm << std::endl;
+        // std::cout << "Energy: " << x_2_norm << std::endl;
 
         // Compute derivatives
         derivatives.ComputeDerivatives(x_2_norm);
@@ -162,32 +162,43 @@ int main(void) {
         // Compute gradient and deltas
         for (size_t i = 0; i < vars.size(); i++) {
             gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
-            delta[i] = -0.0001f * gradient[i];    // Learning rate
+            delta[i] = -0.000001f * gradient[i];    // Learning rate
         }
 
-        std::cout << "GRADIENT" << std::endl;
-        for (auto const & x_i : gradient) {
-            std::cout << x_i << std::endl;
-        }
+//        std::cout << "GRADIENT" << std::endl;
+//        for (auto const & x_i : gradient) {
+//            std::cout << x_i << std::endl;
+//        }
 
-        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        // std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
 
         // Update scene vars, hardcoded for the moment
         scene.GetShapes()[0]->UpdateDiffVariables(delta);
 
         // Process target image
-        tonemapper.Process("x_" + std::to_string(iters) + ".ppm", x);
+        // tonemapper.Process("x_" + std::to_string(iters) + ".ppm", x);
 
+        // std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
         // Pop variables
         default_tape.Pop();
 
         // Print tape size
-        std::cout << "Tape size: " << default_tape.Size() << std::endl;
-        std::cout << std::endl;
+        // std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
+        // std::cout << std::endl;
 
         iters++;
-    } while (GradNorm(gradient) > 0.001f);
+    } while (GradNorm(gradient) > 0.001f && iters < 1000);
 
+    std::cout << "Iterations: " << iters << std::endl;
+    std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+
+    default_tape.Disable();
+    BoxFilterFilm final(WIDTH, HEIGHT);
+
+    render.RenderImage(&final, scene, camera);
+    tonemapper.Process("final.ppm", final);
+
+    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
 
 //    // Disable tape
 //    // default_tape.Disable();

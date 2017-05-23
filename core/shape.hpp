@@ -22,6 +22,9 @@ namespace drdemo {
 
         // Check for intersection between Ray and the shape
         virtual bool IntersectP(Ray const &ray) const = 0;
+
+        // Convert shape data to string
+        virtual std::string ToString() const = 0;
     };
 
 } // drdemo namespace
