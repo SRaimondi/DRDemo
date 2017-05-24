@@ -98,9 +98,6 @@ int main(void) {
 
 
 
-
-
-
     // Derivatives computation class
     Derivatives derivatives;
 
@@ -187,7 +184,9 @@ int main(void) {
         scene.GetShapes()[0]->UpdateDiffVariables(delta);
 
         // Process target image
-        // tonemapper.Process("x_" + std::to_string(iters) + ".ppm", x);
+//        if (iters == 554) {
+//            tonemapper.Process("x_" + std::to_string(iters) + ".ppm", x);
+//        }
 
         std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
         // Pop variables
@@ -202,7 +201,7 @@ int main(void) {
         iters++;
     } while (GradNorm(gradient) > 0.001f && iters < 1000);
 
-    std::cout << "Iterations: " << iters << std::endl;
+    std::cout << "Total iterations: " << iters << std::endl;
     std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
 
     // default_tape.Disable();
@@ -212,6 +211,7 @@ int main(void) {
     tonemapper.Process("final.ppm", final);
 
     std::cout << scene.GetShapes()[0]->ToString() << std::endl;
+
 
 
 

@@ -12,7 +12,7 @@ namespace drdemo {
         // Compute camera view volume
         top = std::tan(DegToRad(fov / 2.f));
         bottom = -top;
-        right = (width / (float) height) * top;
+        right = (width / static_cast<float>(height)) * top;
         left = -right;
 
         // Compute local base

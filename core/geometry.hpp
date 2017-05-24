@@ -151,7 +151,9 @@ namespace drdemo {
     // Normalize vector
     template<typename T>
     inline Vector3<T> Normalize(Vector3<T> const &v) {
-        return v / Length(v);
+        T length = Length(v);
+        assert(length != 0.f);
+        return v / length;
     }
 
     /**

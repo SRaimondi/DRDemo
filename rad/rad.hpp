@@ -157,6 +157,11 @@ namespace drdemo {
             return *this;
         }
 
+        Float &operator+=(float v) {
+            *this = *this + v;
+            return *this;
+        }
+
         Float &operator++() {
             value += 1.f;
             return *this;
@@ -370,7 +375,7 @@ namespace drdemo {
 
     // Abs of Float
     inline Float Abs(Float const &v) {
-        // assert(v.GetValue() != 0.f);
+        assert(v != 0.f);
         return Float(default_tape.PushSingleNode(Sign(v), v.NodeIndex()), std::abs(v.GetValue()));
     }
 

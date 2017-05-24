@@ -11,6 +11,14 @@ namespace drdemo {
 
     TapeNode::TapeNode(float w1, size_t p1, float w2, size_t p2) noexcept {
         // Set first child
+//        if (std::isnan(w1)) { std::cout << "############################# Nan w1" << std::endl; }
+//        if (std::isnan(w2)) { std::cout << "############################# Nan w2" << std::endl; }
+//        if (std::isinf(w1)) { std::cout << "############################# Inf w1" << std::endl; }
+//        if (std::isinf(w2)) { std::cout << "############################# Inf w2" << std::endl; }
+//        assert(!std::isnan(w1));
+//        assert(!std::isnan(w2));
+//        assert(!std::isinf(w1));
+//        assert(!std::isinf(w2));
         weights[0] = w1;
         parent_i[0] = p1;
         // Set second child

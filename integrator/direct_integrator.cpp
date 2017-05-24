@@ -22,6 +22,11 @@ namespace drdemo {
             // FIXME: Add random number generation
             Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
             // L += Li * Clamp(Dot(interaction.n, wi), Float(0.f), Float(1.f)) / pdf;
+            Float dot = Dot(interaction.n, wi);
+            assert(!std::isnan(dot.GetValue()));
+            assert(!isinf(dot.GetValue()));
+            assert(dot != 0.f);
+            assert(pdf != 0.f);
             L += Li * Abs(Dot(interaction.n, wi)) / pdf;
         }
 

@@ -25,13 +25,16 @@ namespace drdemo {
         if (s_x < 0.f || s_x > 1.f || s_y < 0.f || s_y > 1.f) { return false; }
         // Add sample
         raster[j * width + i] += s;
-        // Increase number of samples of the pixel
-        ++num_samples[j * width + i];
+        // Increase number of samples of the pixel by one
+        num_samples[j * width + i] += 1.f;
 
         return true;
     }
 
     Spectrum BoxFilterFilm::At(size_t i, size_t j) const {
+        // DEBUG ASSERTION
+        assert(num_samples[j * width + i] != 0.f);
+
         return (raster[j * width + i] / num_samples[j * width + i]);
     }
 
