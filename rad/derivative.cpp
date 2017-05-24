@@ -31,6 +31,10 @@ namespace drdemo {
             size_t const rev_index = size - 1 - i;
             TapeNode const &node = default_tape.At(rev_index);
 
+            if (std::isnan(derivs[rev_index])) {
+                int a = 1;
+            }
+
             // DEBUG ASSERTIONS
 //            assert(!std::isinf(node.weights[0]));
 //            assert(!std::isinf(node.weights[1]));
@@ -43,10 +47,11 @@ namespace drdemo {
                 // Add derivative to 0.f
                 derivs[node.parent_i[0]] += 0.f; // TODO Fix this for clarity
             } else {
-                derivs[node.parent_i[0]] += node.weights[0] * derivs[rev_index];
-            }
-            if (std::isnan(derivs[node.parent_i[0]])) { // FIXME
-                int bla = 1;
+                float temp = node.weights[0] * derivs[rev_index];
+                if (std::isnan(temp)) { // FIXME
+                    int bla = 1;
+                }
+                derivs[node.parent_i[0]] += temp;
             }
             // assert(!std::isnan(derivs[node.parent_i[0]]));
 
@@ -55,10 +60,11 @@ namespace drdemo {
                 // Add derivative to 0.f
                 derivs[node.parent_i[1]] += 0.f; // TODO Fix this for clarity
             } else {
-                derivs[node.parent_i[1]] += node.weights[1] * derivs[rev_index];
-            }
-            if (std::isnan(derivs[node.parent_i[1]])) { // FIXME
-                int bla = 1;
+                float temp = node.weights[1] * derivs[rev_index];
+                if (std::isnan(temp)) { // FIXME
+                    int bla = 1;
+                }
+                derivs[node.parent_i[1]] += temp;
             }
 
             // assert(!std::isnan(derivs[node.parent_i[1]]));
