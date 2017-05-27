@@ -19,7 +19,13 @@ namespace drdemo {
         Float discr = b * b - 4.f * a * c;
         if (discr < 0.f) { return false; }
         // Compute root
-        Float root = Sqrt(discr);
+        Float root;
+        if (discr == 0.f) {
+            root = discr; // TODO Check this!!!!!!
+        } else {
+            root = Sqrt(discr);
+        }
+
         Float q;
         if (b < 0.f) {
             q = -0.5f * (b - root);

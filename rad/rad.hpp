@@ -358,7 +358,7 @@ namespace drdemo {
 
     // Log of Float
     inline Float Log(Float const &v) {
-        assert(v.GetValue() > 0.f);
+        assert(v > 0.f);
         return Float(default_tape.PushSingleNode(1.f / v.GetValue(), v.NodeIndex()), std::log(v.GetValue()));
     }
 
@@ -370,6 +370,7 @@ namespace drdemo {
 
     // Sqrt of Float
     inline Float Sqrt(Float const &v) {
+        assert(v != 0.f);
         return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.GetValue()), v.NodeIndex()), std::sqrt(v.GetValue()));
     }
 

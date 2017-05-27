@@ -25,16 +25,28 @@ float GradNorm(std::vector<float> const &grad) {
     return std::sqrt(norm);
 }
 
-
-// Spherical function, minimization test
-drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
-    drdemo::Float res = x[0] * x[0];
-    for (size_t i = 1; i < x.size(); i++) {
-        res += x[i] * x[i];
+// Print gradient
+void PrintGradient(std::vector<float> const &grad) {
+    std::cout << "(";
+    for (size_t i = 0; i < grad.size(); ++i) {
+        std::cout << grad[i];
+        if (i != grad.size() - 1) {
+            std::cout << ", ";
+        }
     }
-
-    return res;
+    std::cout << ")" << std::endl;
 }
+
+
+//// Spherical function, minimization test
+//drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
+//    drdemo::Float res = x[0] * x[0];
+//    for (size_t i = 1; i < x.size(); i++) {
+//        res += x[i] * x[i];
+//    }
+//
+//    return res;
+//}
 
 //// Matyas function
 //Float Matyas(std::vector<Float> const &x) {
@@ -172,21 +184,11 @@ int main(void) {
 
         std::cout << "Iteration: " << iters << std::endl;
         std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-        std::cout << "Gradient values: (";
-        for (auto const &x_i : gradient) {
-            std::cout << x_i << ", ";
-        }
-        std::cout << ")" << std::endl;
-
-        // std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        std::cout << "Gradient values: ";
+        PrintGradient(gradient);
 
         // Update scene vars, hardcoded for the moment
         scene.GetShapes()[0]->UpdateDiffVariables(delta);
-
-        // Process target image
-//        if (iters == 554) {
-//            tonemapper.Process("x_" + std::to_string(iters) + ".ppm", x);
-//        }
 
         std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
         // Pop variables
@@ -194,7 +196,6 @@ int main(void) {
 
         // Print tape size
         std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
-        // std::cout << std::endl;
 
         std::cout << "Sphere data" << std::endl;
         std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
@@ -211,8 +212,6 @@ int main(void) {
     tonemapper.Process("final.ppm", final);
 
     std::cout << scene.GetShapes()[0]->ToString() << std::endl;
-
-
 
 
 
