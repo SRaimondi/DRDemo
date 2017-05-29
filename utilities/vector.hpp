@@ -14,7 +14,6 @@ namespace drdemo {
 
     /**
      * Define generic size and type vector class, elements are allocated on the heap
-     * This class is supposed to be used with built-in types like int, float, ...
      */
     template<typename T>
     class Vector {
@@ -198,12 +197,6 @@ namespace drdemo {
     template<typename T>
     T Length2(Vector<T> const &v) {
         return Dot(v, v);
-    }
-
-    // Vector length
-    template<typename T>
-    T Length(Vector<T> const &v) {
-        return std::sqrt(Length2(v));
     }
 
 } // drdemo namespace

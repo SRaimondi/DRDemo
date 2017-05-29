@@ -7,6 +7,7 @@
 
 #include "spectrum.hpp"
 #include "geometry.hpp"
+#include "vector.hpp"
 
 namespace drdemo {
 
@@ -36,6 +37,9 @@ namespace drdemo {
 
         // Compute the squared norm of the image
         virtual Float SquaredNorm() const = 0;
+
+        // Convert Film to flat r, g, b data
+        virtual Vector<float> Raw() const = 0;
 
         // Compute absolute value of the film
         virtual void Abs() = 0;

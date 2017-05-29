@@ -144,8 +144,6 @@ int main(void) {
     // default_tape.Enable();
     // default_tape.Pop();
 
-    // return EXIT_SUCCESS;
-
     // Change sphere position
     // scene.ClearShapes();
     // scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));

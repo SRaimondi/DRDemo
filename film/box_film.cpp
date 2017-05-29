@@ -54,6 +54,23 @@ namespace drdemo {
         return difference;
     }
 
+    BoxFilterFilm BoxFilterFilm::operator-(Vector<float> const &raw_other) const {
+        BoxFilterFilm difference(width, height);
+
+        // Compute difference
+        for (size_t j = 0; j < height; ++j) {
+            for (size_t i = 0; i < width; ++i) {
+                size_t const index = j * width + i;
+                Spectrum const & s = At(i, j);
+                difference.raster[index].r = s.r - raw_other[3 * index];
+                difference.raster[index].g = s.g - raw_other[3 * index + 1];
+                difference.raster[index].b = s.b - raw_other[3 * index + 2];
+            }
+        }
+
+        return difference;
+    }
+
     Float BoxFilterFilm::SquaredNorm() const {
         Float squared_norm = Norm(At(0, 0));
         for (size_t j = 0; j < height; ++j) {
@@ -67,10 +84,28 @@ namespace drdemo {
         return squared_norm;
     }
 
+    Vector<float> BoxFilterFilm::Raw() const {
+        Vector<float> raw_data = Vector<float>(width * height * 3);
+
+        for (size_t j = 0; j < height; ++j) {
+            for (size_t i = 0; i < width; ++i) {
+                // Get color and compute index
+                size_t const index = j * width + i;
+                Spectrum const & s = At(i, j);
+                // Store float data
+                raw_data[3 * index] = s.r.GetValue();
+                raw_data[3 * index + 1] = s.g.GetValue();
+                raw_data[3 * index + 2] = s.b.GetValue();
+            }
+        }
+
+        return raw_data;
+    }
+
     void BoxFilterFilm::Abs() {
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; i++) {
-                raster.at(j * width + i) = drdemo::Abs(raster.at(j * width + i));
+                raster.[j * width + i] = drdemo::Abs(raster[j * width + i]);
             }
         }
     }
