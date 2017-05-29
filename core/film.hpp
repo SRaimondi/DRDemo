@@ -32,7 +32,7 @@ namespace drdemo {
         virtual bool AddSample(Spectrum const &s, size_t i, size_t j, float s_x, float s_y) = 0;
 
         // Get final film color at given pixel
-        virtual Spectrum At(size_t i, size_t j) const = 0;
+        virtual Spectrum const &At(size_t i, size_t j) const = 0;
 
         // Compute the squared norm of the image
         virtual Float SquaredNorm() const = 0;

@@ -44,9 +44,9 @@ namespace drdemo {
         ~TapeStorage();
 
         // Access element by index
-        inline T const &operator[](size_t i) const { return data[i]; }
+        inline T const &operator[](size_t i) const noexcept { return data[i]; }
 
-        inline T &operator[](size_t i) { return data[i]; }
+        inline T &operator[](size_t i) noexcept { return data[i]; }
 
         // Access element with boundaries check
         inline T const &At(size_t i) const {

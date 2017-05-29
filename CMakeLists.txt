@@ -56,6 +56,10 @@ set(SOURCE_FILES
         integrator/direct_integrator.hpp
         rad/diff_object.hpp
         light/directional_light.cpp
-        light/directional_light.hpp utilities/vector.hpp utilities/tape_storage.hpp core/bbox.hpp core/bbox.cpp)
+        light/directional_light.hpp
+        utilities/vector.hpp
+        utilities/tape_storage.hpp
+        core/bbox.hpp
+        core/bbox.cpp utilities/iofile.cpp utilities/iofile.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

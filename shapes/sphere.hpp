@@ -29,6 +29,8 @@ namespace drdemo {
 
         BBOX BBox() const override;
 
+        Vector3F Centroid() const override;
+
         std::string ToString() const override;
 
         // Differentiable object methods

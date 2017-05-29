@@ -101,6 +101,10 @@ namespace drdemo {
         return BBOX(center - Vector3F(radius, radius, radius), center + Vector3F(radius, radius, radius));
     }
 
+    Vector3F Sphere::Centroid() const {
+        return center;
+    }
+
     std::string Sphere::ToString() const {
         return "Center: (" + std::to_string(center.x.GetValue()) +
                ", " + std::to_string(center.y.GetValue()) +

@@ -14,7 +14,7 @@ namespace drdemo {
 
     /**
      * Define generic size and type vector class, elements are allocated on the heap
-     * This class is supposed to be used with built-in types like int
+     * This class is supposed to be used with built-in types like int, float, ...
      */
     template<typename T>
     class Vector {
@@ -168,7 +168,7 @@ namespace drdemo {
     Vector<T> operator/(Vector<T> const &v, U const &s) {
         Vector<T> result(v.Size());
         for (size_t i = 0; i < v.Size(); ++i) {
-            result[i] = v[i] / static_cast<T>(s);
+            result[i] = v[i] / s;
         }
         return result;
     }
@@ -187,8 +187,8 @@ namespace drdemo {
     template<typename T>
     T Dot(Vector<T> const &v1, Vector<T> const &v2) {
         assert(v1.Size() == v2.Size());
-        T dot(0);
-        for (size_t i = 0; i < v1.Size(); ++i) {
+        T dot = v1[0] * v2[0];
+        for (size_t i = 1; i < v1.Size(); ++i) {
             dot += v1[i] * v2[i];
         }
         return dot;
