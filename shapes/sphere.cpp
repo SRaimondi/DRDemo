@@ -97,6 +97,10 @@ namespace drdemo {
         return true;
     }
 
+    BBOX Sphere::BBox() const {
+        return BBOX(center - Vector3F(radius, radius, radius), center + Vector3F(radius, radius, radius));
+    }
+
     std::string Sphere::ToString() const {
         return "Center: (" + std::to_string(center.x.GetValue()) +
                ", " + std::to_string(center.y.GetValue()) +

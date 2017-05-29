@@ -156,25 +156,52 @@ namespace drdemo {
         return v / length;
     }
 
+    // Minimum vector between two
+    template<typename T>
+    inline Vector3<T> Min(Vector3<T> const &v1, Vector3<T> const &v2) {
+        return Vector3<T>(std::min(v1.x, v2.x), std::min(v1.y, v2.y), std::min(v1.z, v2.z));
+    }
+
+    template<>
+    inline Vector3<Float> Min(Vector3<Float> const &v1, Vector3<Float> const &v2) {
+        return Vector3<Float>(Min(v1.x, v2.x), Min(v1.y, v2.y), Min(v1.z, v2.z));
+    }
+
+    // Maximum vector between two
+    template<typename T>
+    inline Vector3<T> Max(Vector3<T> const &v1, Vector3<T> const &v2) {
+        return Vector3<T>(std::max(v1.x, v2.x), std::max(v1.y, v2.y), std::max(v1.z, v2.z));
+    }
+
+    template<>
+    inline Vector3<Float> Max(Vector3<Float> const &v1, Vector3<Float> const &v2) {
+        return Vector3<Float>(Max(v1.x, v2.x), Max(v1.y, v2.y), Max(v1.z, v2.z));
+    }
+
     /**
      * Ray class, attribute are made public for practical reasons
      */
     class Ray {
     public:
-        // Ray public data, all attributes are differentiable
         // Origin
         Vector3F o;
         // Direction, NOT forced to be normalized
         Vector3F d;
         // Minimum and maximum parameter of the ray
-        Float t_min;
+        mutable Float t_min;
         mutable Float t_max;
+        // Ray direction sign
+        int sign[3];
 
         // Constructor
         Ray() : t_min(EPS), t_max(INFINITY) {}
 
         Ray(Vector3F const &o, Vector3F const &d, float t_min = EPS, float t_max = INFINITY)
-                : o(o), d(d), t_min(t_min), t_max(t_max) {}
+                : o(o), d(d), t_min(t_min), t_max(t_max) {
+            sign[0] = d.x < 0.f;
+            sign[1] = d.y < 0.f;
+            sign[2] = d.z < 0.f;
+        }
 
         template<typename T>
         inline Vector3F operator()(T const &t) const { return o + t * d; }

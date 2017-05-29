@@ -7,6 +7,7 @@
 
 #include "interaction.hpp"
 #include "diff_object.hpp"
+#include "bbox.hpp"
 
 namespace drdemo {
 
@@ -22,6 +23,9 @@ namespace drdemo {
 
         // Check for intersection between Ray and the shape
         virtual bool IntersectP(Ray const &ray) const = 0;
+
+        // Compute Shape BBOX
+        virtual BBOX BBox() const = 0;
 
         // Convert shape data to string
         virtual std::string ToString() const = 0;

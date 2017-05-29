@@ -27,6 +27,8 @@ namespace drdemo {
 
         bool IntersectP(Ray const &ray) const override;
 
+        BBOX BBox() const override;
+
         std::string ToString() const override;
 
         // Differentiable object methods
