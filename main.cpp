@@ -122,7 +122,7 @@ int main(void) {
     // Add sphere
     scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
     // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(1.f, 0.f, 1.f), Spectrum(0.5f)));
+    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
     // Create camera
     auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
