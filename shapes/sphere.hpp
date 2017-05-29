@@ -30,7 +30,7 @@ namespace drdemo {
         std::string ToString() const override;
 
         // Differentiable object methods
-        void GetDiffVariables(std::vector<Float const *> & vars) const override;
+        void GetDiffVariables(std::vector<Float const *> &vars) const override;
 
         size_t GetNumVars() const noexcept override;
 

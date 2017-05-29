@@ -53,7 +53,7 @@ namespace drdemo {
     }
 
     Float BoxFilterFilm::SquaredNorm() const {
-        Float squared_norm = At(0, 0).r * At(0, 0).r + At(0,0).g * At(0, 0).g + At(0, 0).b * At(0, 0).b;
+        Float squared_norm = At(0, 0).r * At(0, 0).r + At(0, 0).g * At(0, 0).g + At(0, 0).b * At(0, 0).b;
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; i++) {
                 if (j != 0 && i != 0) {

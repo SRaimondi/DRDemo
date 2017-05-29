@@ -18,10 +18,11 @@ namespace drdemo {
         // Compute discriminant
         Float discr = b * b - 4.f * a * c;
         if (discr < 0.f) { return false; }
+
         // Compute root
         Float root;
         if (discr == 0.f) {
-            root = discr; // TODO Check this!!!!!!
+            root = 0.f; // TODO Check this!!!!!!
         } else {
             root = Sqrt(discr);
         }
@@ -98,13 +99,13 @@ namespace drdemo {
 
     std::string Sphere::ToString() const {
         return "Center: (" + std::to_string(center.x.GetValue()) +
-                ", " + std::to_string(center.y.GetValue()) +
-                ", " + std::to_string(center.z.GetValue()) + ")" +
-                "\n" +
-                "Radius: " + std::to_string(radius.GetValue());
+               ", " + std::to_string(center.y.GetValue()) +
+               ", " + std::to_string(center.z.GetValue()) + ")" +
+               "\n" +
+               "Radius: " + std::to_string(radius.GetValue());
     }
 
-    void Sphere::GetDiffVariables(std::vector<Float const *> & vars) const {
+    void Sphere::GetDiffVariables(std::vector<Float const *> &vars) const {
         // Push sphere center variables
         vars.push_back(&(center.x));
         vars.push_back(&(center.y));
@@ -123,6 +124,8 @@ namespace drdemo {
         center.y.SetValue(center.y.GetValue() + delta[starting_index + 1]);
         center.z.SetValue(center.z.GetValue() + delta[starting_index + 2]);
         radius.SetValue(radius.GetValue() + delta[starting_index + 3]);
+        // Check if radius hac become negative
+        if (radius.GetValue() < 0.f) { radius.SetValue(0.f); }
     }
 
 } // drdemo namespace

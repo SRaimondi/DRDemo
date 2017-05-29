@@ -45,6 +45,7 @@ namespace drdemo {
 
         // Element access operator
         inline T const &operator[](size_t i) const noexcept { return elements[i]; }
+
         inline T &operator[](size_t i) noexcept { return elements[i]; }
 
         inline T const &At(size_t i) const noexcept {

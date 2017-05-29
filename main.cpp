@@ -12,8 +12,8 @@
 #include <clamp_tonemapper.hpp>
 #include <directional_light.hpp>
 
-#define WIDTH   256
-#define HEIGHT  256
+#define WIDTH   512
+#define HEIGHT  512
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -144,6 +144,8 @@ int main(void) {
     // default_tape.Enable();
     // default_tape.Pop();
 
+    // return EXIT_SUCCESS;
+
     // Change sphere position
     // scene.ClearShapes();
     // scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
@@ -165,6 +167,9 @@ int main(void) {
         BoxFilterFilm x(WIDTH, HEIGHT);
         render.RenderImage(&x, scene, camera);
 
+        // Output image of current rendering
+        tonemapper.Process("iters_" + std::to_string(iters) + ".ppm", x);
+
         // Compute squared norm
         Float x_2_norm = x.SquaredNorm();
         std::cout << "Energy: " << x_2_norm << std::endl;
@@ -179,7 +184,7 @@ int main(void) {
         // Compute gradient and deltas
         for (size_t i = 0; i < vars.size(); i++) {
             gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
-            delta[i] = -0.000001f * gradient[i];    // Learning rate
+            delta[i] = -0.00001f * gradient[i];    // Learning rate
         }
 
         std::cout << "Iteration: " << iters << std::endl;
@@ -211,6 +216,7 @@ int main(void) {
     render.RenderImage(&final, scene, camera);
     tonemapper.Process("final.ppm", final);
 
+    std::cout << "Final sphere data" << std::endl;
     std::cout << scene.GetShapes()[0]->ToString() << std::endl;
 
 

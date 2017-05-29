@@ -10,7 +10,7 @@ namespace drdemo {
             : direction(d), intensity(i) {}
 
     Spectrum
-    DirectionalLight::SampleLi(Interaction const &, float , float ,
+    DirectionalLight::SampleLi(Interaction const &, float, float,
                                Vector3F *const wi, Float *pdf) const {
         *wi = Normalize(direction);
         *pdf = 1.f;

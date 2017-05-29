@@ -371,7 +371,8 @@ namespace drdemo {
     // Sqrt of Float
     inline Float Sqrt(Float const &v) {
         assert(v != 0.f);
-        return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.GetValue()), v.NodeIndex()), std::sqrt(v.GetValue()));
+        return Float(default_tape.PushSingleNode(0.5f / std::sqrt(v.GetValue()), v.NodeIndex()),
+                     std::sqrt(v.GetValue()));
     }
 
     // Abs of Float
