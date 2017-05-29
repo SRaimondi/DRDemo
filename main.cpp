@@ -15,6 +15,8 @@
 #define WIDTH   512
 #define HEIGHT  512
 
+#define MAX_ITERS 200
+
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
     float norm = 0.f;
@@ -120,7 +122,7 @@ int main(void) {
     Scene scene;
 
     // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
     // Add lights
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
@@ -130,23 +132,28 @@ int main(void) {
     // Create renderer
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
 
-    // default_tape.Push();
+    default_tape.Push();
 
     // Render target image
-    // BoxFilterFilm start(WIDTH, HEIGHT);
-    // render.RenderImage(&start, scene, camera);
+    BoxFilterFilm target(WIDTH, HEIGHT);
+    render.RenderImage(&target, scene, camera);
+
+    // Convert image to raw
+    Vector<float> raw_target = target.Raw();
 
     // Create tone-mapper and process target image
     ClampTonemapper tonemapper;
-    // tonemapper.Process("start.ppm", start);
+    tonemapper.Process("target.ppm", target);
 
     // Re-enable tape to compute derivatives
     // default_tape.Enable();
-    // default_tape.Pop();
 
-    // Change sphere position
-    // scene.ClearShapes();
-    // scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
+    // Remove from tape rendering variables
+    default_tape.Pop();
+
+    // Change sphere position to center and try to match the images
+    scene.ClearShapes();
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(), Float(2.f)));
 
     // Gradient
     std::vector<float> gradient(4, 0.f);
@@ -168,8 +175,11 @@ int main(void) {
         // Output image of current rendering
         tonemapper.Process("iters_" + std::to_string(iters) + ".ppm", x);
 
-        // Compute squared norm
-        Float x_2_norm = x.SquaredNorm();
+        // Compute difference
+        BoxFilterFilm difference = x - raw_target;
+
+        // Compute squared norm of difference
+        Float x_2_norm = difference.SquaredNorm();
         std::cout << "Energy: " << x_2_norm << std::endl;
 
         // Compute derivatives
@@ -182,7 +192,7 @@ int main(void) {
         // Compute gradient and deltas
         for (size_t i = 0; i < vars.size(); i++) {
             gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
-            delta[i] = -0.00001f * gradient[i];    // Learning rate
+            delta[i] = -0.000001f * gradient[i];    // Learning rate
         }
 
         std::cout << "Iteration: " << iters << std::endl;
@@ -203,7 +213,7 @@ int main(void) {
         std::cout << "Sphere data" << std::endl;
         std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
         iters++;
-    } while (GradNorm(gradient) > 0.001f && iters < 1000);
+    } while (GradNorm(gradient) > 0.001f && iters < MAX_ITERS);
 
     std::cout << "Total iterations: " << iters << std::endl;
     std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;

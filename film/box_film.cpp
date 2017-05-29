@@ -105,7 +105,7 @@ namespace drdemo {
     void BoxFilterFilm::Abs() {
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; i++) {
-                raster.[j * width + i] = drdemo::Abs(raster[j * width + i]);
+                raster[j * width + i] = drdemo::Abs(raster[j * width + i]);
             }
         }
     }
