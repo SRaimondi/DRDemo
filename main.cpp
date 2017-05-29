@@ -159,7 +159,10 @@ int main(void) {
     std::vector<float> gradient(4, 0.f);
     std::vector<float> delta(4, 0.f);
 
+    // Number of iterations
     size_t iters = 0;
+    // Energy value
+    float energy;
 
     // Try to minimize squared norm of image
     do {
@@ -180,7 +183,12 @@ int main(void) {
 
         // Compute squared norm of difference
         Float x_2_norm = difference.SquaredNorm();
-        std::cout << "Energy: " << x_2_norm << std::endl;
+        energy = x_2_norm.GetValue();
+        std::cout << "Energy: " << energy << std::endl;
+
+        // Create difference image
+        difference.Abs();
+        tonemapper.Process("iters_" + std::to_string(iters) + "_difference.ppm", difference);
 
         // Compute derivatives
         derivatives.ComputeDerivatives(x_2_norm);
@@ -213,8 +221,10 @@ int main(void) {
         std::cout << "Sphere data" << std::endl;
         std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
         iters++;
-    } while (GradNorm(gradient) > 0.001f && iters < MAX_ITERS);
+        // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
+    } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
 
+    std::cout << "Final energy: " << energy << std::endl;
     std::cout << "Total iterations: " << iters << std::endl;
     std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
 
