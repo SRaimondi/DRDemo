@@ -27,7 +27,7 @@ namespace drdemo {
         Vector3(U const &x, U const &y, U const &z)
                 : x(x), y(y), z(z) {}
 
-        // TODO Review this also
+        // TODO Review this
 //        template<typename U>
 //        Vector3(U const &v)
 //                : x(v), y(v), z(v) {}

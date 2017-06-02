@@ -96,9 +96,11 @@ namespace drdemo {
     template<typename T>
     TapeStorage<T> &TapeStorage<T>::operator=(TapeStorage<T> const &other) {
         if (this != &other) {
-            // TODO Review this
-            assert(max_size == other.max_size);
             size = other.size;
+            max_size = other.max_size;
+            if (data != nullptr) { delete[] data; }
+            // Allocate space
+            data = new T[max_size];
             std::copy(other.data, other.data + size, data);
         }
         return *this;

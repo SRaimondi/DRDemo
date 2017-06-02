@@ -5,7 +5,7 @@
 #ifndef DRDEMO_BVH_HPP
 #define DRDEMO_BVH_HPP
 
-#include <bits/shared_ptr.h>
+#include <memory>
 #include "shape.hpp"
 
 namespace drdemo {
@@ -25,7 +25,8 @@ namespace drdemo {
     };
 
     /**
-     * Define BVH acceleration structure for fast triangle mesh ray tracing
+     * Define BVH acceleration structure for fast triangle mesh ray intersection
+     * TODO: Can we just use float for BVH?
      */
     class BVH : public Shape {
     private:
@@ -34,7 +35,7 @@ namespace drdemo {
         uint32_t num_leafs;
         uint32_t leaf_size;
         // Shapes in the BVH
-        std::vector<std::shared_ptr<Shape const> > &objects;
+        std::vector<std::shared_ptr<const Shape> > &objects;
         // Flat tree data
         std::vector<BVHFlatNode> flat_tree;
 
