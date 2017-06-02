@@ -35,7 +35,7 @@ namespace drdemo {
         uint32_t num_leafs;
         uint32_t leaf_size;
         // Shapes in the BVH
-        std::vector<std::shared_ptr<const Shape> > &objects;
+        std::vector<std::shared_ptr<const Shape> > &shapes;
         // Flat tree data
         std::vector<BVHFlatNode> flat_tree;
 
@@ -43,7 +43,7 @@ namespace drdemo {
         void Build();
 
     public:
-        BVH(std::vector<std::shared_ptr<Shape const> > &objs, uint32_t leaf_size = 4);
+        BVH(std::vector<std::shared_ptr<Shape const> > &s, uint32_t leaf_size = 4);
 
         // Rebuild BVH data structure, needed when we update the triangles positions
         void Rebuild();

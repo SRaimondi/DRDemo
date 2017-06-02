@@ -217,7 +217,7 @@ namespace drdemo {
                         // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1));
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                     } else {
-                        std::cerr << "Can not read face format, might be deprecated!" << std::endl;
+                        std::cerr << "Can not read face format!" << std::endl;
                     }
                 } else {
                     std::cerr << "Unrecognized token during .obj parsing" << std::endl;
@@ -235,7 +235,14 @@ namespace drdemo {
             // uvs.shrink_to_fit();
 
             // Print out some data about the loaded mesh
-            std::cout << "Loaded triangle mesh with " << triangles.size() << " triangles" << std::endl;
+            std::cout << "Loaded triangle mesh with " << triangles.size() << " triangles and "
+                      << vertices.size() << " vertices." << std::endl;
+        }
+    }
+
+    void TriangleMesh::CreateTriangles(std::vector<std::shared_ptr<Shape const> > &objects) {
+        for (size_t t = 0; t < triangles.size(); ++t) {
+            objects.push_back(std::make_shared<Triangle const>(*this, t));
         }
     }
 

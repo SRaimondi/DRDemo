@@ -15,12 +15,12 @@ namespace drdemo {
 
         // If non-zero then this is the index of the parent (used in offsets)
         uint32_t parent;
-        // The range of objects in the object list covered by this entry
+        // The range of shapes in the object list covered by this entry
         uint32_t start, end;
     };
 
     void BVH::Build() {
-        // Create entryy stack
+        // Create entry stack
         BVHBuildEntry todo[128];
         uint32_t stack_ptr = 0;
 
@@ -29,12 +29,12 @@ namespace drdemo {
         const uint32_t touched_twice = 0xfffffffd;
 
         // Push the root
-        todo[stack_ptr++] = BVHBuildEntry(0, (uint32_t) objects.size(), 0xfffffffc);
+        todo[stack_ptr++] = BVHBuildEntry(0, (uint32_t) shapes.size(), 0xfffffffc);
 
         // Declare local variables for construction
         BVHFlatNode node;
         // Reserve space for build nodes (num_objects * 2)
-        flat_tree.reserve(objects.size() * 2);
+        flat_tree.reserve(shapes.size() * 2);
 
         // Loop until we have object on the stack to do
         while (stack_ptr > 0) {
@@ -51,11 +51,11 @@ namespace drdemo {
             node.right_offset = untouched;
 
             // Compute BBox for the node
-            BBOX bb = objects[start]->BBox();
-            BBOX bc = BBOX(objects[start]->Centroid());
+            BBOX bb = shapes[start]->BBox();
+            BBOX bc = BBOX(shapes[start]->Centroid());
             for (uint32_t o = start + 1; o < end; o++) {
-                bb.ExpandTo(objects[o]->BBox());
-                bc.ExpandTo(objects[o]->Centroid());
+                bb.ExpandTo(shapes[o]->BBox());
+                bc.ExpandTo(shapes[o]->Centroid());
             }
             // Set node BBox
             node.bbox = bb;
@@ -87,13 +87,13 @@ namespace drdemo {
             // Split on the center of the longest axis
             float split_coord = 0.5f * (bc.MinPoint()[split_axis] + bc.MaxPoint()[split_axis]).GetValue();
 
-            // Partition the list of objects
+            // Partition the list of shapes
             uint32_t mid = start;
             for (uint32_t i = start; i < end; i++) {
                 // Check if the object centroid is below the split coordinate
-                if (objects[i]->Centroid()[split_axis] < split_coord) {
+                if (shapes[i]->Centroid()[split_axis] < split_coord) {
                     // Swap primitives position
-                    std::swap(objects[i], objects[mid]);
+                    std::swap(shapes[i], shapes[mid]);
                     ++mid;
                 }
             }
@@ -109,35 +109,160 @@ namespace drdemo {
         }
     }
 
-    BVH::BVH(std::vector<std::shared_ptr<Shape const> > &objs, uint32_t leaf_size)
-            : num_nodes(0), num_leafs(0), leaf_size(leaf_size), objects(objs), flat_tree() {
-        if (!objects.empty()) {
+    BVH::BVH(std::vector<std::shared_ptr<Shape const> > &s, uint32_t leaf_size)
+            : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s), flat_tree() {
+        if (!shapes.empty()) {
             // Build tree
             Build();
         }
 
         // Print tree data
         std::cout << "Built BVH with " << num_nodes << " nodes, "
-                  << num_leafs << " leafs and " << objects.size() << " objects" << std::endl;
+                  << num_leafs << " leafs and " << shapes.size() << " shapes" << std::endl;
     }
 
     void BVH::Rebuild() {
-
+        std::cout << "Rebuilding BVH..." << std::endl;
+        // Clear flat tree data and rebuild
+        flat_tree.clear();
+        Build();
     }
 
+    // Define tree traversal struct
+    struct BVHTraversal {
+        BVHTraversal() = default;
+
+        BVHTraversal(uint32_t i, float min_t)
+                : i(i), min_t(min_t) {}
+
+        // Node
+        uint32_t i;
+        // Minimum hit for this node
+        float min_t;
+    };
+
     bool BVH::Intersect(Ray const &ray, Interaction *const interaction) const {
-        return false;
+        if (shapes.empty()) { return false; }
+        // Local used interval
+        Float child_0_min, child_0_max;
+        Float child_1_min, child_1_max;
+
+        // Working set stack
+        BVHTraversal todo[64];
+        int32_t stack_ptr = 0;
+
+        // Flag fot hit
+        bool hit = false;
+
+        // Push the root node on the stack
+        todo[stack_ptr] = BVHTraversal(0, ray.t_min.GetValue());
+
+        while (stack_ptr >= 0) {
+            // Pop node to work on
+            uint32_t ni = todo[stack_ptr].i;
+            float near = todo[stack_ptr].min_t;
+            stack_ptr--;
+            const BVHFlatNode &node = flat_tree[ni];
+
+            if (near > ray.t_max) { continue; }
+
+            // Check if node is a leag
+            if (node.right_offset == 0) {
+                for (uint32_t o = 0; o < node.num_prims; o++) {
+                    if (shapes[node.start + o]->Intersect(ray, interaction)) {
+                        hit = true;
+                    }
+                }
+            } else {
+                // Not a leaf, check intersection with child BBox
+                bool hit_c0 = flat_tree[ni + 1].bbox.Intersect(ray, &child_0_min, &child_0_max);
+                bool hit_c1 = flat_tree[ni + node.right_offset].bbox.Intersect(ray, &child_1_min, &child_1_max);
+
+                // Check if we hit both
+                if (hit_c0 && hit_c1) {
+                    // Check which child was closer
+                    if (child_0_max <= child_1_min) {
+                        // Add farther child first
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                    } else {
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                    }
+                } else if (hit_c0) {
+                    todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                } else if (hit_c1) {
+                    todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                }
+            }
+        }
+
+        return hit;
     }
 
     bool BVH::IntersectP(Ray const &ray) const {
+        if (shapes.empty()) { return false; }
+        // Local used interval
+        Float child_0_min, child_0_max;
+        Float child_1_min, child_1_max;
+
+        // Working set stack
+        BVHTraversal todo[64];
+        int32_t stack_ptr = 0;
+
+        // Push the root node on the stack
+        todo[stack_ptr] = BVHTraversal(0, ray.t_min.GetValue());
+
+        while (stack_ptr >= 0) {
+            // Pop node to work on
+            uint32_t ni = todo[stack_ptr].i;
+            float near = todo[stack_ptr].min_t;
+            stack_ptr--;
+            const BVHFlatNode &node = flat_tree[ni];
+
+            if (near > ray.t_max) { continue; }
+
+            // Check if node is a leag
+            if (node.right_offset == 0) {
+                for (uint32_t o = 0; o < node.num_prims; o++) {
+                    if (shapes[node.start + o]->IntersectP(ray)) {
+                        return true;
+                    }
+                }
+            } else {
+                // Not a leaf, check intersection with child BBox
+                bool hit_c0 = flat_tree[ni + 1].bbox.Intersect(ray, &child_0_min, &child_0_max);
+                bool hit_c1 = flat_tree[ni + node.right_offset].bbox.Intersect(ray, &child_1_min, &child_1_max);
+
+                // Check if we hit both
+                if (hit_c0 && hit_c1) {
+                    // Check which child was closer
+                    if (child_0_max <= child_1_min) {
+                        // Add farther child first
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                    } else {
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                    }
+                } else if (hit_c0) {
+                    todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                } else if (hit_c1) {
+                    todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                }
+            }
+        }
+
         return false;
     }
 
     BBOX BVH::BBox() const {
         return BBOX();
+        // TODO Change interface to remove this
     }
 
     Vector3F BVH::Centroid() const {
+        // TODO Change interface to remove this
         return drdemo::Vector3F();
     }
 
@@ -146,15 +271,23 @@ namespace drdemo {
     }
 
     void BVH::GetDiffVariables(std::vector<Float const *> &vars) const {
-
+        // Loop over the list of all Shapes and request variables
+        for (auto const &shape : shapes) {
+            shape->GetDiffVariables(vars);
+        }
     }
 
     size_t BVH::GetNumVars() const noexcept {
-        return 0;
+        size_t total_vars = 0;
+        for (auto const &shape : shapes) {
+            total_vars += shape->GetNumVars();
+        }
+
+        return total_vars;
     }
 
     void BVH::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
-
+        // TODO implement this
     }
 
 } // drdemo namespace

@@ -13,7 +13,7 @@ namespace drdemo {
 
     void BBOX::ExpandTo(BBOX const &b) {
         bounds[0] = Min(bounds[0], b.bounds[0]);
-        bounds[1] = Min(bounds[1], b.bounds[1]);
+        bounds[1] = Max(bounds[1], b.bounds[1]);
     }
 
     unsigned BBOX::MaxDimension() const {
