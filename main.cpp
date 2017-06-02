@@ -61,11 +61,15 @@ int main(void) {
     // Set namespace used
     using namespace drdemo;
 
+    /**
+     * Triangle mesh loading + simple minimization against black image
+     */
+
     // Try to load sphere mesh
     auto mesh = TriangleMesh("../objs/sphere.obj");
 
     // Get list of triangles
-    std::vector<std::shared_ptr<Shape const> > triangles;
+    std::vector<std::shared_ptr<Shape> > triangles;
     mesh.CreateTriangles(triangles);
 
     // Build BVH
@@ -81,7 +85,7 @@ int main(void) {
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
     // Create camera
-    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 3.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
 
     // Create renderer
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
@@ -94,7 +98,12 @@ int main(void) {
     ClampTonemapper tonemapper;
     tonemapper.Process("obj_test.ppm", test);
 
+    std::cout << "Tape size: " << default_tape.Size() << std::endl;
 
+
+    /**
+     * Function minimisation test
+     */
 //    // Minimization test
 //    std::vector<Float> x(10);
 //
@@ -146,6 +155,9 @@ int main(void) {
 //    std::cout << std::endl;
 
 
+    /**
+     * Geometric sphere description minimisation against target sphere image
+     */
 
 //    // Derivatives computation class
 //    Derivatives derivatives;

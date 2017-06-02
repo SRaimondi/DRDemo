@@ -19,7 +19,8 @@ include_directories(
         renderer
         integrator
         light
-        utilities)
+        utilities
+        tests)
 
 set(SOURCE_FILES
         main.cpp
@@ -65,6 +66,8 @@ set(SOURCE_FILES
         utilities/iofile.cpp
         utilities/iofile.hpp
         shapes/triangle_mesh.cpp
-        shapes/triangle_mesh.hpp accelerators/bvh.cpp accelerators/bvh.hpp)
+        shapes/triangle_mesh.hpp
+        accelerators/bvh.cpp
+        accelerators/bvh.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

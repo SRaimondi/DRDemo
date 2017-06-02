@@ -240,9 +240,9 @@ namespace drdemo {
         }
     }
 
-    void TriangleMesh::CreateTriangles(std::vector<std::shared_ptr<Shape const> > &objects) {
+    void TriangleMesh::CreateTriangles(std::vector<std::shared_ptr<Shape> > &objects) {
         for (size_t t = 0; t < triangles.size(); ++t) {
-            objects.push_back(std::make_shared<Triangle const>(*this, t));
+            objects.push_back(std::make_shared<Triangle>(*this, t));
         }
     }
 

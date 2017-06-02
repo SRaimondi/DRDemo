@@ -109,7 +109,7 @@ namespace drdemo {
         }
     }
 
-    BVH::BVH(std::vector<std::shared_ptr<Shape const> > &s, uint32_t leaf_size)
+    BVH::BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size)
             : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s), flat_tree() {
         if (!shapes.empty()) {
             // Build tree
@@ -117,8 +117,7 @@ namespace drdemo {
         }
 
         // Print tree data
-        std::cout << "Built BVH with " << num_nodes << " nodes, "
-                  << num_leafs << " leafs and " << shapes.size() << " shapes" << std::endl;
+        std::cout << ToString() << std::endl;
     }
 
     void BVH::Rebuild() {
@@ -257,17 +256,18 @@ namespace drdemo {
     }
 
     BBOX BVH::BBox() const {
-        return BBOX();
-        // TODO Change interface to remove this
+        return flat_tree[0].bbox;
     }
 
     Vector3F BVH::Centroid() const {
-        // TODO Change interface to remove this
-        return drdemo::Vector3F();
+        Vector3F extent = flat_tree[0].bbox.Extent();
+
+        return flat_tree[0].bbox.MinPoint() + 0.5f * extent;
     }
 
     std::string BVH::ToString() const {
-        return std::string();
+        return "BVH acceleration structure with " + std::to_string(num_nodes) + " nodes, "
+               + std::to_string(num_leafs) + " and " + std::to_string(shapes.size()) + " shapes.";
     }
 
     void BVH::GetDiffVariables(std::vector<Float const *> &vars) const {
@@ -287,7 +287,11 @@ namespace drdemo {
     }
 
     void BVH::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
-        // TODO implement this
+        size_t used_vars = 0;
+        for (auto &shape : shapes) {
+            shape->UpdateDiffVariables(delta, starting_index + used_vars);
+            used_vars += shape->GetNumVars();
+        }
     }
 
 } // drdemo namespace

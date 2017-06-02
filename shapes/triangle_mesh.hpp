@@ -86,7 +86,7 @@ namespace drdemo {
         TriangleMesh(std::string const &file_name);
 
         // Adds the triangles in the mesh to a vector of shape
-        void CreateTriangles(std::vector<std::shared_ptr<Shape const> > &objects);
+        void CreateTriangles(std::vector<std::shared_ptr<Shape> > &objects);
 
         // Access mesh information
         inline size_t NumTriangles() const { return triangles.size(); }
