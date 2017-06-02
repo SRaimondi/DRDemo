@@ -45,11 +45,15 @@ namespace drdemo {
 
     }
 
-    size_t Triangle::GetNumVars() const {
+    size_t Triangle::GetNumVars() const noexcept {
         return 0;
     }
 
     void Triangle::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+
+    }
+
+    TriangleMesh::TriangleMesh(std::string const &file_name) {
 
     }
 
