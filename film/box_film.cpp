@@ -61,7 +61,7 @@ namespace drdemo {
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; ++i) {
                 size_t const index = j * width + i;
-                Spectrum const & s = At(i, j);
+                Spectrum const &s = At(i, j);
                 difference.raster[index].r = s.r - raw_other[3 * index];
                 difference.raster[index].g = s.g - raw_other[3 * index + 1];
                 difference.raster[index].b = s.b - raw_other[3 * index + 2];
@@ -91,7 +91,7 @@ namespace drdemo {
             for (size_t i = 0; i < width; ++i) {
                 // Get color and compute index
                 size_t const index = j * width + i;
-                Spectrum const & s = At(i, j);
+                Spectrum const &s = At(i, j);
                 // Store float data
                 raw_data[3 * index] = s.r.GetValue();
                 raw_data[3 * index + 1] = s.g.GetValue();

@@ -35,6 +35,7 @@ namespace drdemo {
 
         // Access minimum and maximum
         inline Vector3F const &MinPoint() const { return bounds[0]; }
+
         inline Vector3F const &MaxPoint() const { return bounds[1]; }
 
         // BBOX utility methods
@@ -54,7 +55,7 @@ namespace drdemo {
         Float Surface() const;
 
         // Compute intersection with ray
-        bool Intersect(Ray const &ray, Float * const t_min, Float * const t_max) const;
+        bool Intersect(Ray const &ray, Float *const t_min, Float *const t_max) const;
     };
 
 } // drdemo namespace

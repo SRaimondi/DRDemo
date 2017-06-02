@@ -60,6 +60,10 @@ set(SOURCE_FILES
         utilities/vector.hpp
         utilities/tape_storage.hpp
         core/bbox.hpp
-        core/bbox.cpp utilities/iofile.cpp utilities/iofile.hpp)
+        core/bbox.cpp
+        utilities/iofile.cpp
+        utilities/iofile.hpp
+        shapes/triangle_mesh.cpp
+        shapes/triangle_mesh.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

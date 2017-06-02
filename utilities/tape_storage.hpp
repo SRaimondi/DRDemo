@@ -26,7 +26,7 @@ namespace drdemo {
 
     public:
         // Default constructor
-        explicit TapeStorage(size_t start_size = 100);
+        explicit TapeStorage(size_t start_size);
 
         // Copy constructor
         TapeStorage(TapeStorage<T> const &other);
