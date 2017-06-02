@@ -9,6 +9,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -DD
 
 # Include directories
 include_directories(
+        accelerators
         rad
         core
         film
@@ -64,6 +65,6 @@ set(SOURCE_FILES
         utilities/iofile.cpp
         utilities/iofile.hpp
         shapes/triangle_mesh.cpp
-        shapes/triangle_mesh.hpp)
+        shapes/triangle_mesh.hpp accelerators/bvh.cpp accelerators/bvh.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -178,6 +178,14 @@ namespace drdemo {
         return Vector3<Float>(Max(v1.x, v2.x), Max(v1.y, v2.y), Max(v1.z, v2.z));
     }
 
+    // Print vector
+    template<typename T>
+    std::ostream &operator<<(std::ostream &os, Vector3<T> const &v) {
+        os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+
+        return os;
+    }
+
     /**
      * Ray class, attribute are made public for practical reasons
      */

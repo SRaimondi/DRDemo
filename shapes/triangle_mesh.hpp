@@ -25,13 +25,13 @@ namespace drdemo {
         // Vertices indices
         uint32_t v[3];
         // Normal indices
-        uint32_t n[3];
+        // uint32_t n[3];
 
         // Default constructor
         TriangleIndices() = default;
 
-        TriangleIndices(uint32_t v0, uint32_t v1, uint32_t v2,
-                        uint32_t n0 = 0, uint32_t n1 = 0, uint32_t n2 = 0);
+        TriangleIndices(uint32_t v0, uint32_t v1, uint32_t v2 /*,
+                        uint32_t n0 = 0, uint32_t n1 = 0, uint32_t n2 = 0 */ );
     };
 
     /**
@@ -40,12 +40,12 @@ namespace drdemo {
     class Triangle : public Shape {
     private:
         // Reference to the TriangleMesh holding the data
-        TriangleMesh const &mesh;
+        TriangleMesh &mesh;
         // Index of the triangle data
         uint32_t const triangle_index;
 
     public:
-        Triangle(TriangleMesh const &mesh, uint32_t t_i);
+        Triangle(TriangleMesh &mesh, uint32_t t_i);
 
         // Shape methods
         bool Intersect(Ray const &ray, Interaction *const interaction) const override;
@@ -79,7 +79,7 @@ namespace drdemo {
         // Loaded vertices
         std::vector<Vector3F> vertices;
         // Loaded normals
-        std::vector<Vector3F> normals;
+        // std::vector<Vector3F> normals; FIXME : I don't know if this makes sense since the mesh will probably change
 
     public:
         TriangleMesh(std::string const &file_name);

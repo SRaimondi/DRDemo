@@ -154,7 +154,7 @@ int main(void) {
 
     // Change sphere position to center and try to match the images
     scene.ClearShapes();
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, -2.f), Float(1.f)));
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
 
     // Gradient
     std::vector<float> gradient(4, 0.f);
