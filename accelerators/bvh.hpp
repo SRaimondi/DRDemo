@@ -28,7 +28,7 @@ namespace drdemo {
      * Define BVH acceleration structure for fast triangle mesh ray intersection
      * TODO: Can we just use float for BVH?
      */
-    class BVH : public Shape {
+    class BVH /* : public Shape */ {
     private:
         // Number of nodes, leafs and leaf size
         uint32_t num_nodes;
@@ -39,32 +39,38 @@ namespace drdemo {
         // Flat tree data
         std::vector<BVHFlatNode> flat_tree;
 
-        // Build the tree
-        void Build();
-
     public:
         BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size = 4);
+
+        // Build the tree
+        void Build();
 
         // Rebuild BVH data structure, needed when we update the triangles positions
         void Rebuild();
 
         // Shape methods
-        bool Intersect(Ray const &ray, Interaction *const interaction) const override;
+        // bool Intersect(Ray const &ray, Interaction *const interaction) const override;
 
-        bool IntersectP(Ray const &ray) const override;
+        bool Intersect(Ray const &ray, Interaction *const interaction) const;
 
-        BBOX BBox() const override;
+        // bool IntersectP(Ray const &ray) const override;
 
-        Vector3F Centroid() const override;
+        bool IntersectP(Ray const &ray) const;
 
-        std::string ToString() const override;
+        // BBOX BBox() const override;
+
+        // Vector3F Centroid() const override;
+
+        // std::string ToString() const override;
+
+        std::string ToString() const;
 
         // Differentiable object methods
-        void GetDiffVariables(std::vector<Float const *> &vars) const override;
+        // void GetDiffVariables(std::vector<Float const *> &vars) const override;
 
-        size_t GetNumVars() const noexcept override;
+        // size_t GetNumVars() const noexcept override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
+        // void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
     };
 
 } // drdemo namespace

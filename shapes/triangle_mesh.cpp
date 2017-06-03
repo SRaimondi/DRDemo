@@ -167,7 +167,14 @@ namespace drdemo {
         }
     }
 
-    TriangleMesh::TriangleMesh(std::string const &file_name) {
+    void TriangleMesh::CreateTriangles() {
+        for (size_t t = 0; t < triangles.size(); ++t) {
+            shapes.push_back(std::make_shared<Triangle>(*this, t));
+        }
+    }
+
+    TriangleMesh::TriangleMesh(std::string const &file_name)
+            : bvh(shapes) {
         // Loaded file lines
         std::vector<std::string> loaded_file;
         if (ReadFile(file_name.c_str(), loaded_file)) {
@@ -232,19 +239,65 @@ namespace drdemo {
             triangles.shrink_to_fit();
             vertices.shrink_to_fit();
 
-            // normals.shrink_to_fit();
-            // uvs.shrink_to_fit();
-
             // Print out some data about the loaded mesh
             std::cout << "Loaded triangle mesh with " << triangles.size() << " triangles and "
                       << vertices.size() << " vertices." << std::endl;
+
+            // Create triangles
+            CreateTriangles();
+
+            // Build BVH
+            bvh.Build();
+
+            // normals.shrink_to_fit();
+            // uvs.shrink_to_fit();
         }
     }
 
-    void TriangleMesh::CreateTriangles(std::vector<std::shared_ptr<Shape> > &objects) {
-        for (size_t t = 0; t < triangles.size(); ++t) {
-            objects.push_back(std::make_shared<Triangle>(*this, t));
+    bool TriangleMesh::Intersect(Ray const &ray, Interaction *const interaction) const {
+        return bvh.Intersect(ray, interaction);
+    }
+
+    bool TriangleMesh::IntersectP(Ray const &ray) const {
+        return bvh.IntersectP(ray);
+    }
+
+    BBOX TriangleMesh::BBox() const {
+        return BBOX(); // TODO
+    }
+
+    Vector3F TriangleMesh::Centroid() const {
+        return drdemo::Vector3F(); // TODO
+    }
+
+    std::string TriangleMesh::ToString() const {
+        return std::__cxx11::string(); // TODO
+    }
+
+    void TriangleMesh::GetDiffVariables(std::vector<Float const *> &vars) const {
+        // Add pointer to all components of each vertex
+        for (auto const &v : vertices) {
+            vars.push_back(&(v.x));
+            vars.push_back(&(v.y));
+            vars.push_back(&(v.z));
         }
+    }
+
+    size_t TriangleMesh::GetNumVars() const noexcept {
+        return vertices.size() * 3;
+    }
+
+    void TriangleMesh::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+        size_t used_vars = 0;
+        for (auto &v : vertices) {
+            // Update vertex values
+            v.x.SetValue(v.x.GetValue() + delta[starting_index + used_vars++]);
+            v.y.SetValue(v.y.GetValue() + delta[starting_index + used_vars++]);
+            v.z.SetValue(v.z.GetValue() + delta[starting_index + used_vars++]);
+        }
+
+        // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment
+        bvh.Rebuild();
     }
 
 } // drdemo namespace

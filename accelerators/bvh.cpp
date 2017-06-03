@@ -20,6 +20,8 @@ namespace drdemo {
     };
 
     void BVH::Build() {
+        if (shapes.empty()) { return; }
+
         // Create entry stack
         BVHBuildEntry todo[128];
         uint32_t stack_ptr = 0;
@@ -107,18 +109,13 @@ namespace drdemo {
             todo[stack_ptr++] = BVHBuildEntry(mid, end, num_nodes - 1);
             todo[stack_ptr++] = BVHBuildEntry(start, mid, num_nodes - 1);
         }
-    }
-
-    BVH::BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size)
-            : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s), flat_tree() {
-        if (!shapes.empty()) {
-            // Build tree
-            Build();
-        }
 
         // Print tree data
         std::cout << ToString() << std::endl;
     }
+
+    BVH::BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size)
+            : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s), flat_tree() {}
 
     void BVH::Rebuild() {
         std::cout << "Rebuilding BVH..." << std::endl;
@@ -255,43 +252,43 @@ namespace drdemo {
         return false;
     }
 
-    BBOX BVH::BBox() const {
-        return flat_tree[0].bbox;
-    }
-
-    Vector3F BVH::Centroid() const {
-        Vector3F extent = flat_tree[0].bbox.Extent();
-
-        return flat_tree[0].bbox.MinPoint() + 0.5f * extent;
-    }
+//    BBOX BVH::BBox() const {
+//        return flat_tree[0].bbox;
+//    }
+//
+//    Vector3F BVH::Centroid() const {
+//        Vector3F extent = flat_tree[0].bbox.Extent();
+//
+//        return flat_tree[0].bbox.MinPoint() + 0.5f * extent;
+//    }
 
     std::string BVH::ToString() const {
         return "BVH acceleration structure with " + std::to_string(num_nodes) + " nodes, "
                + std::to_string(num_leafs) + " and " + std::to_string(shapes.size()) + " shapes.";
     }
 
-    void BVH::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME
-        // Loop over the list of all Shapes and request variables
-        for (auto const &shape : shapes) {
-            shape->GetDiffVariables(vars);
-        }
-    }
-
-    size_t BVH::GetNumVars() const noexcept { // FIXME
-        size_t total_vars = 0;
-        for (auto const &shape : shapes) {
-            total_vars += shape->GetNumVars();
-        }
-
-        return total_vars;
-    }
-
-    void BVH::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) { // FIXME
-        size_t used_vars = 0;
-        for (auto &shape : shapes) {
-            shape->UpdateDiffVariables(delta, starting_index + used_vars);
-            used_vars += shape->GetNumVars();
-        }
-    }
+//    void BVH::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME
+//        // Loop over the list of all Shapes and request variables
+//        for (auto const &shape : shapes) {
+//            shape->GetDiffVariables(vars);
+//        }
+//    }
+//
+//    size_t BVH::GetNumVars() const noexcept { // FIXME
+//        size_t total_vars = 0;
+//        for (auto const &shape : shapes) {
+//            total_vars += shape->GetNumVars();
+//        }
+//
+//        return total_vars;
+//    }
+//
+//    void BVH::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) { // FIXME
+//        size_t used_vars = 0;
+//        for (auto &shape : shapes) {
+//            shape->UpdateDiffVariables(delta, starting_index + used_vars);
+//            used_vars += shape->GetNumVars();
+//        }
+//    }
 
 } // drdemo namespace

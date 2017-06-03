@@ -11,7 +11,6 @@
 #include <clamp_tonemapper.hpp>
 #include <directional_light.hpp>
 #include <triangle_mesh.hpp>
-#include <bvh.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -69,21 +68,20 @@ int main(void) {
     Derivatives derivatives;
 
     // Try to load sphere mesh
-    auto mesh = TriangleMesh("../objs/sphere.obj");
+    auto mesh = std::make_shared<TriangleMesh>("../objs/sphere.obj");
 
     // Get list of triangles
-    std::vector<std::shared_ptr<Shape> > triangles;
-    mesh.CreateTriangles(triangles);
+    // std::vector<std::shared_ptr<Shape> > triangles;
+    // mesh.CreateTriangles(triangles);
 
     // Build BVH
-    auto bvh = std::make_shared<BVH>(triangles);
+    // auto bvh = std::make_shared<BVH>(triangles);
 
-    // Try to render
     // Create scene
     Scene scene;
 
     // Add sphere
-    scene.AddShape(bvh);
+    scene.AddShape(mesh);
     // Add lights
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
@@ -102,13 +100,13 @@ int main(void) {
     // tonemapper.Process("obj_test.ppm", test);
 
     // Gradient
-    std::vector<float> gradient(bvh->GetNumVars(), 0.f);
-    std::vector<float> delta(gradient.size(), 0.f);
+    std::vector<float> gradient(mesh->GetNumVars(), 0.f);
+    std::vector<float> delta(mesh->GetNumVars(), 0.f);
 
     // Number of iterations
     size_t iters = 0;
     // Energy value
-    float energy;
+    float energy = 0.f;
 
     // Try to minimize squared norm of image
     do {
@@ -151,8 +149,8 @@ int main(void) {
 
         std::cout << "Iteration: " << iters << std::endl;
         std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-        std::cout << "Gradient values: ";
-        PrintGradient(gradient);
+        // std::cout << "Gradient values: ";
+        // PrintGradient(gradient);
 
         // Update scene vars, hardcoded for the moment
         scene.GetShapes()[0]->UpdateDiffVariables(delta);

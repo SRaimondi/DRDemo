@@ -5,8 +5,9 @@
 #ifndef DRDEMO_TRIANGLE_MESH_HPP
 #define DRDEMO_TRIANGLE_MESH_HPP
 
-#include <stdint.h>
+#include <cstdint>
 #include <memory>
+#include "bvh.hpp"
 #include "shape.hpp"
 
 namespace drdemo {
@@ -70,7 +71,7 @@ namespace drdemo {
     /**
      * TriangleMesh class, hold the information data for a triangle mesh
      */
-    class TriangleMesh {
+    class TriangleMesh : public Shape {
     private:
         // Friend class Triangle for practice
         friend class Triangle;
@@ -82,16 +83,40 @@ namespace drdemo {
         // Loaded normals
         // std::vector<Vector3F> normals; FIXME : I don't know if this makes sense since the mesh will probably change
 
-    public:
-        TriangleMesh(std::string const &file_name);
+        // List of triangles
+        std::vector<std::shared_ptr<Shape> > shapes;
+
+        // Intersection acceleration structure
+        BVH bvh;
 
         // Adds the triangles in the mesh to a vector of shape
-        void CreateTriangles(std::vector<std::shared_ptr<Shape> > &objects);
+        void CreateTriangles();
+
+    public:
+        TriangleMesh(std::string const &file_name);
 
         // Access mesh information
         inline size_t NumTriangles() const { return triangles.size(); }
 
         inline size_t NumVertices() const { return vertices.size(); }
+
+        // Shape methods
+        bool Intersect(Ray const &ray, Interaction *const interaction) const override;
+
+        bool IntersectP(Ray const &ray) const override;
+
+        BBOX BBox() const override;
+
+        Vector3F Centroid() const override;
+
+        std::string ToString() const override;
+
+        // Differentiable object methods
+        void GetDiffVariables(std::vector<Float const *> &vars) const override;
+
+        size_t GetNumVars() const noexcept override;
+
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
     };
 
 } // drdemo namespace
