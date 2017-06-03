@@ -151,11 +151,12 @@ namespace drdemo {
         }
     }
 
-    size_t Triangle::GetNumVars() const noexcept {
+    size_t Triangle::GetNumVars() const noexcept { // FIXME This is wrong!!!
         return 3 * 3; // 3 Floats per 3 vertex
     }
 
-    void Triangle::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+    void
+    Triangle::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) { // FIXME This is wrong!!!
         for (unsigned i = 0; i < 3; ++i) {
             // Get reference to vertex
             Vector3F &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];

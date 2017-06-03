@@ -270,14 +270,14 @@ namespace drdemo {
                + std::to_string(num_leafs) + " and " + std::to_string(shapes.size()) + " shapes.";
     }
 
-    void BVH::GetDiffVariables(std::vector<Float const *> &vars) const {
+    void BVH::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME
         // Loop over the list of all Shapes and request variables
         for (auto const &shape : shapes) {
             shape->GetDiffVariables(vars);
         }
     }
 
-    size_t BVH::GetNumVars() const noexcept {
+    size_t BVH::GetNumVars() const noexcept { // FIXME
         size_t total_vars = 0;
         for (auto const &shape : shapes) {
             total_vars += shape->GetNumVars();
@@ -286,7 +286,7 @@ namespace drdemo {
         return total_vars;
     }
 
-    void BVH::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+    void BVH::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) { // FIXME
         size_t used_vars = 0;
         for (auto &shape : shapes) {
             shape->UpdateDiffVariables(delta, starting_index + used_vars);

@@ -65,6 +65,9 @@ int main(void) {
      * Triangle mesh loading + simple minimization against black image
      */
 
+    // Derivatives computation class
+    Derivatives derivatives;
+
     // Try to load sphere mesh
     auto mesh = TriangleMesh("../objs/sphere.obj");
 
@@ -91,14 +94,93 @@ int main(void) {
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
 
     // Render target image
-    BoxFilterFilm test(WIDTH, HEIGHT);
-    render.RenderImage(&test, scene, camera);
+    // BoxFilterFilm test(WIDTH, HEIGHT);
+    // render.RenderImage(&test, scene, camera);
 
     // Create tone-mapper and process target image
     ClampTonemapper tonemapper;
-    tonemapper.Process("obj_test.ppm", test);
+    // tonemapper.Process("obj_test.ppm", test);
 
-    std::cout << "Tape size: " << default_tape.Size() << std::endl;
+    // Gradient
+    std::vector<float> gradient(bvh->GetNumVars(), 0.f);
+    std::vector<float> delta(gradient.size(), 0.f);
+
+    // Number of iterations
+    size_t iters = 0;
+    // Energy value
+    float energy;
+
+    // Try to minimize squared norm of image
+    do {
+        // Clear derivatives
+        derivatives.Clear();
+        // Store current variables of the tape
+        default_tape.Push();
+
+        // Render current image
+        BoxFilterFilm x(WIDTH, HEIGHT);
+        render.RenderImage(&x, scene, camera);
+
+        // Output image of current rendering
+        tonemapper.Process("iters_" + std::to_string(iters) + ".ppm", x);
+
+        // Compute difference
+        // BoxFilterFilm difference = x - raw_target;
+
+        // Compute squared norm of difference
+        Float x_2_norm = x.SquaredNorm();
+        energy = x_2_norm.GetValue();
+        std::cout << "Energy: " << energy << std::endl;
+
+        // Create difference image
+        // difference.Abs();
+        // tonemapper.Process("iters_" + std::to_string(iters) + "_difference.ppm", difference);
+
+        // Compute derivatives
+        derivatives.ComputeDerivatives(x_2_norm);
+
+        // Get differentiable variables from scene's shapes, hardcoded TODO Fix this
+        std::vector<Float const *> vars;
+        scene.GetShapes()[0]->GetDiffVariables(vars);
+
+        // Compute gradient and deltas
+        for (size_t i = 0; i < vars.size(); i++) {
+            gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
+            delta[i] = -0.000001f * gradient[i];    // Learning rate
+        }
+
+        std::cout << "Iteration: " << iters << std::endl;
+        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        std::cout << "Gradient values: ";
+        PrintGradient(gradient);
+
+        // Update scene vars, hardcoded for the moment
+        scene.GetShapes()[0]->UpdateDiffVariables(delta);
+
+        std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
+        // Pop variables
+        default_tape.Pop();
+
+        // Print tape size
+        std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
+
+        std::cout << "Sphere data" << std::endl;
+        std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
+        iters++;
+        // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
+    } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
+
+    std::cout << "Final energy: " << energy << std::endl;
+    std::cout << "Total iterations: " << iters << std::endl;
+    std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+
+    // default_tape.Disable();
+    BoxFilterFilm final(WIDTH, HEIGHT);
+
+    render.RenderImage(&final, scene, camera);
+    tonemapper.Process("final.ppm", final);
+
+
 
 
     /**
