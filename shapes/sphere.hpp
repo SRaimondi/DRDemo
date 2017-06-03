@@ -29,7 +29,7 @@ namespace drdemo {
 
         BBOX BBox() const override;
 
-        Vector3F Centroid() const override;
+        Vector3f Centroid() const override;
 
         std::string ToString() const override;
 

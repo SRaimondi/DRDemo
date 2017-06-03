@@ -103,19 +103,19 @@ namespace drdemo {
         Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
         Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
-        BBOX bbox(v0, v1);
-        bbox.ExpandTo(v2);
+        BBOX bbox(Tofloat(v0), Tofloat(v1));
+        bbox.ExpandTo(Tofloat(v2));
 
         return bbox;
     }
 
-    Vector3F Triangle::Centroid() const {
+    Vector3f Triangle::Centroid() const {
         // Get vertices from mesh
         Vector3F const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
         Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
         Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
-        return (1.f / 3.f) * (v0 + v1 + v2);
+        return (1.f / 3.f) * (Tofloat(v0) + Tofloat(v1) + Tofloat(v2));
     }
 
     std::string Triangle::ToString() const {
@@ -266,8 +266,8 @@ namespace drdemo {
         return BBOX(); // TODO
     }
 
-    Vector3F TriangleMesh::Centroid() const {
-        return drdemo::Vector3F(); // TODO
+    Vector3f TriangleMesh::Centroid() const {
+        return drdemo::Vector3f(); // TODO
     }
 
     std::string TriangleMesh::ToString() const {

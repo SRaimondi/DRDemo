@@ -98,11 +98,13 @@ namespace drdemo {
     }
 
     BBOX Sphere::BBox() const {
-        return BBOX(center - Vector3F(radius, radius, radius), center + Vector3F(radius, radius, radius));
+        Vector3f c = Tofloat(center);
+        Vector3f r = Vector3f(radius.GetValue(), radius.GetValue(), radius.GetValue());
+        return BBOX(c - r, c + r);
     }
 
-    Vector3F Sphere::Centroid() const {
-        return center;
+    Vector3f Sphere::Centroid() const {
+        return Vector3f(center.x.GetValue(), center.y.GetValue(), center.z.GetValue());;
     }
 
     std::string Sphere::ToString() const {

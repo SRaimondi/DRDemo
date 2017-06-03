@@ -8,7 +8,7 @@ namespace drdemo {
 
     // Build node data structure
     struct BVHBuildEntry {
-        BVHBuildEntry() = default;
+        BVHBuildEntry() {};
 
         BVHBuildEntry(uint32_t s, uint32_t e, uint32_t p)
                 : parent(p), start(s), end(e) {}
@@ -31,7 +31,8 @@ namespace drdemo {
         const uint32_t touched_twice = 0xfffffffd;
 
         // Push the root
-        todo[stack_ptr++] = BVHBuildEntry(0, (uint32_t) shapes.size(), 0xfffffffc);
+        todo[stack_ptr] = BVHBuildEntry(0, (uint32_t) shapes.size(), 0xfffffffc);
+        stack_ptr++;
 
         // Declare local variables for construction
         BVHFlatNode node;
@@ -87,7 +88,7 @@ namespace drdemo {
             // Find split dimensions
             uint32_t split_axis = bc.MaxDimension();
             // Split on the center of the longest axis
-            float split_coord = 0.5f * (bc.MinPoint()[split_axis] + bc.MaxPoint()[split_axis]).GetValue();
+            float split_coord = 0.5f * (bc.MinPoint()[split_axis] + bc.MaxPoint()[split_axis]);
 
             // Partition the list of shapes
             uint32_t mid = start;
@@ -121,6 +122,9 @@ namespace drdemo {
         std::cout << "Rebuilding BVH..." << std::endl;
         // Clear flat tree data and rebuild
         flat_tree.clear();
+        num_nodes = 0;
+        num_leafs = 0;
+        // Build tree again
         Build();
     }
 
@@ -140,8 +144,8 @@ namespace drdemo {
     bool BVH::Intersect(Ray const &ray, Interaction *const interaction) const {
         if (shapes.empty()) { return false; }
         // Local used interval
-        Float child_0_min, child_0_max;
-        Float child_1_min, child_1_max;
+        float child_0_min, child_0_max;
+        float child_1_min, child_1_max;
 
         // Working set stack
         BVHTraversal todo[64];
@@ -162,7 +166,7 @@ namespace drdemo {
 
             if (near > ray.t_max) { continue; }
 
-            // Check if node is a leag
+            // Check if node is a leaf
             if (node.right_offset == 0) {
                 for (uint32_t o = 0; o < node.num_prims; o++) {
                     if (shapes[node.start + o]->Intersect(ray, interaction)) {
@@ -179,16 +183,16 @@ namespace drdemo {
                     // Check which child was closer
                     if (child_0_max <= child_1_min) {
                         // Add farther child first
-                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
-                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min);
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min);
                     } else {
-                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
-                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min);
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min);
                     }
                 } else if (hit_c0) {
-                    todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                    todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min);
                 } else if (hit_c1) {
-                    todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                    todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min);
                 }
             }
         }
@@ -199,8 +203,8 @@ namespace drdemo {
     bool BVH::IntersectP(Ray const &ray) const {
         if (shapes.empty()) { return false; }
         // Local used interval
-        Float child_0_min, child_0_max;
-        Float child_1_min, child_1_max;
+        float child_0_min, child_0_max;
+        float child_1_min, child_1_max;
 
         // Working set stack
         BVHTraversal todo[64];
@@ -235,16 +239,16 @@ namespace drdemo {
                     // Check which child was closer
                     if (child_0_max <= child_1_min) {
                         // Add farther child first
-                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
-                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min);
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min);
                     } else {
-                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
-                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                        todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min);
+                        todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min);
                     }
                 } else if (hit_c0) {
-                    todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min.GetValue());
+                    todo[++stack_ptr] = BVHTraversal(ni + 1, child_0_min);
                 } else if (hit_c1) {
-                    todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min.GetValue());
+                    todo[++stack_ptr] = BVHTraversal(ni + node.right_offset, child_1_min);
                 }
             }
         }
@@ -264,7 +268,7 @@ namespace drdemo {
 
     std::string BVH::ToString() const {
         return "BVH acceleration structure with " + std::to_string(num_nodes) + " nodes, "
-               + std::to_string(num_leafs) + " and " + std::to_string(shapes.size()) + " shapes.";
+               + std::to_string(num_leafs) + " leafs and " + std::to_string(shapes.size()) + " shapes.";
     }
 
 //    void BVH::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME

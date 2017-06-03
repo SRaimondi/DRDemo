@@ -178,6 +178,11 @@ namespace drdemo {
         return Vector3<Float>(Max(v1.x, v2.x), Max(v1.y, v2.y), Max(v1.z, v2.z));
     }
 
+    // Convert Float vector to float vector
+    inline Vector3<float> Tofloat(Vector3<Float> const &v) {
+        return Vector3<float>(v.x.GetValue(), v.y.GetValue(), v.z.GetValue());
+    }
+
     // Print vector
     template<typename T>
     std::ostream &operator<<(std::ostream &os, Vector3<T> const &v) {

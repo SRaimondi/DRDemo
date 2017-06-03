@@ -28,7 +28,7 @@ namespace drdemo {
         virtual BBOX BBox() const = 0;
 
         // Compute centroid of the Shape
-        virtual Vector3F Centroid() const = 0;
+        virtual Vector3f Centroid() const = 0;
 
         // Convert shape data to string
         virtual std::string ToString() const = 0;

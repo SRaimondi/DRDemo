@@ -161,9 +161,10 @@ int main(void) {
 
         // Print tape size
         std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
+        std::cout << std::endl;
 
-        std::cout << "Sphere data" << std::endl;
-        std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
+        // std::cout << "Sphere data" << std::endl;
+        // std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
         iters++;
         // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
     } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
