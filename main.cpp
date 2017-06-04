@@ -92,12 +92,14 @@ int main(void) {
     auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
 
     // Render target image
-    // BoxFilterFilm test(WIDTH, HEIGHT);
-    // render.RenderImage(&test, scene, camera);
+    BoxFilterFilm test(WIDTH, HEIGHT);
+    render.RenderImage(&test, scene, camera);
 
     // Create tone-mapper and process target image
     ClampTonemapper tonemapper;
-    // tonemapper.Process("obj_test.ppm", test);
+    tonemapper.Process("obj_test.ppm", test);
+
+    return EXIT_SUCCESS;
 
     // Gradient
     std::vector<float> gradient(mesh->GetNumVars(), 0.f);
