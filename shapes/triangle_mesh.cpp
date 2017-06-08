@@ -271,7 +271,7 @@ namespace drdemo {
     }
 
     std::string TriangleMesh::ToString() const {
-        return std::__cxx11::string(); // TODO
+        return std::string(); // TODO
     }
 
     void TriangleMesh::GetDiffVariables(std::vector<Float const *> &vars) const {
