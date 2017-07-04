@@ -68,6 +68,6 @@ set(SOURCE_FILES
         shapes/triangle_mesh.cpp
         shapes/triangle_mesh.hpp
         accelerators/bvh.cpp
-        accelerators/bvh.hpp)
+        accelerators/bvh.hpp shapes/grid.cpp shapes/grid.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

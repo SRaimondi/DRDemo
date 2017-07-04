@@ -11,7 +11,7 @@ namespace drdemo {
 
     /**
      * Define BBOX class
-     * TODO: this class maybe could work with simple float and not need the Flaot class
+     * TODO: this class maybe could work with simple float and not need the Float class
      */
     class BBOX {
     private:

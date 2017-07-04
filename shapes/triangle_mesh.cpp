@@ -139,7 +139,7 @@ namespace drdemo {
 
     }
 
-    void Triangle::GetDiffVariables(std::vector<Float const *> &vars) const {
+    void Triangle::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME
         // Loop over all three vertices and get variables
         for (unsigned i = 0; i < 3; ++i) {
             // Get reference to vertex
