@@ -8,11 +8,17 @@
 namespace drdemo {
 
     // Small tolerance value used in the ray tracing part
-#define EPS 10e-4f
+#define EPS 10e-3f
 
     template<typename T>
     T Clamp(T val, T min, T max) {
         return (val < min ? min : (val > max ? max : val));
+    }
+
+    // Sign template
+    template<typename T>
+    inline int Sign(T v) noexcept {
+        return static_cast<int>((static_cast<T>(0) < v) - (v < static_cast<T>(0)));
     }
 
     // Convert radians to degree

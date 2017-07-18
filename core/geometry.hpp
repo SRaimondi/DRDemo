@@ -192,7 +192,7 @@ namespace drdemo {
     }
 
     /**
-     * Ray class, attribute are made public for practical reasons
+     * Ray class, attribute are made public for practice
      */
     class Ray {
     public:

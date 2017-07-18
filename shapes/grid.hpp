@@ -26,17 +26,32 @@ namespace drdemo {
         BBOX bounds;
         // Size of the voxels and inverse of width
         Vector3f width, inv_width;
-        // Signed distance values, stored at each voxel intersection
-        Float *data;
+        // Signed distance values, stored at each voxel intersection in x, y, z order
+        std::unique_ptr<Float[]> data;
 
         // Private utility methods
-        inline size_t OffsetPoint(int x, int y, int z) const {
+        inline size_t OffsetPoint(size_t x, size_t y, size_t z) const {
             return z * num_points[0] * num_points[1] + y * num_points[0] + x;
         }
 
-        inline size_t OffsetVoxel(int x, int y, int z) const {
+        inline size_t OffsetVoxel(size_t x, size_t y, size_t z) const {
             return z * (num_points[0] - 1) * (num_points[1] - 1) + y * (num_points[0] - 1) + x;
         }
+
+        // Convert 3d point to VOXEL coordinate given an axis (0: x, 1: y, 2: z)
+        inline size_t PosToVoxel(const Vector3f &p, size_t axis) const {
+            size_t v_i = static_cast<size_t>((p[axis] - bounds.MinPoint()[axis]) * inv_width[axis]);
+
+            return Clamp(v_i, static_cast<size_t>(0), num_points[axis] - 1);
+        }
+
+        // Get the indices of the eight vertices of the voxel given his coordinates
+        // The indices start from the corner with the smallest (x,y,z) coordinates and then follow the order of the grid
+        void PointsIndicesFromVoxel(size_t x, size_t y, size_t z, size_t *const indices) const;
+
+        // Compute the value of the Signed Distance Function sampled by the grid using trilinear interpolation given
+        // a point in the grid
+        Float ValueAt(const Vector3F &p) const;
 
     public:
         // Default constructor, initialises an empty grid
@@ -45,15 +60,12 @@ namespace drdemo {
         // Construct grid from values
         SignedDistanceGrid(size_t n_x, size_t n_y, size_t n_z, BBOX const &b, float const *const raw_data);
 
-        // Destructor
-        ~SignedDistanceGrid();
-
         // Access Grid point at given indices
-        inline Float const &operator()(int x, int y, int z) const {
+        inline Float const &operator()(size_t x, size_t y, size_t z) const {
             return data[OffsetPoint(x, y, z)];
         }
 
-        inline Float &operator()(int x, int y, int z) {
+        inline Float &operator()(size_t x, size_t y, size_t z) {
             return data[OffsetPoint(x, y, z)];
         }
 
