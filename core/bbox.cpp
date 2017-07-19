@@ -6,14 +6,25 @@
 
 namespace drdemo {
 
-    void BBOX::ExpandTo(Vector3f const &p) {
+    void BBOX::ExpandTo(const Vector3f &p) {
         bounds[0] = Min(bounds[0], p);
         bounds[1] = Max(bounds[1], p);
     }
 
-    void BBOX::ExpandTo(BBOX const &b) {
+    void BBOX::ExpandTo(const BBOX &b) {
         bounds[0] = Min(bounds[0], b.bounds[0]);
         bounds[1] = Max(bounds[1], b.bounds[1]);
+    }
+
+    float BBOX::Distance(const Vector3f &p) const {
+        // Compute extent
+        const Vector3f extent = Extent();
+        const Vector3f d = Vector3f(std::abs(p.x) - extent.x,
+                                    std::abs(p.y) - extent.y,
+                                    std::abs(p.z) - extent.z);
+
+        return Length(Vector3f(std::max(d.x, 0.f), std::max(d.y, 0.f), std::max(d.z, 0.f))) +
+               std::min(std::max(d.x, std::max(d.y, d.z)), 0.f);
     }
 
     unsigned BBOX::MaxDimension() const {
@@ -31,7 +42,7 @@ namespace drdemo {
         return 2.f * (extent.x * extent.y + extent.x * extent.z + extent.y * extent.z);
     }
 
-    bool BBOX::Intersect(Ray const &ray, float *const t_min, float *const t_max) const {
+    bool BBOX::Intersect(const Ray &ray, float *const t_min, float *const t_max) const {
         // Find minimum intersection
         float tx_min = (bounds[ray.sign[0]].x - ray.o.x.GetValue()) / ray.d.x.GetValue();
         float ty_min = (bounds[ray.sign[1]].y - ray.o.y.GetValue()) / ray.d.y.GetValue();

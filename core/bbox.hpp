@@ -11,11 +11,10 @@ namespace drdemo {
 
     /**
      * Define BBOX class
-     * TODO: this class maybe could work with simple float and not need the Float class
      */
     class BBOX {
     private:
-        // Vector3F bounds[2];
+        // BBOX bounds
         Vector3f bounds[2];
 
     public:
@@ -41,9 +40,19 @@ namespace drdemo {
         inline Vector3f const &MaxPoint() const { return bounds[1]; }
 
         // BBOX utility methods
-        void ExpandTo(Vector3f const &p);
+        void ExpandTo(const Vector3f &p);
 
-        void ExpandTo(BBOX const &b);
+        void ExpandTo(const BBOX &b);
+
+        // Check if a point is inside
+        inline bool Inside(const Vector3f &p) const {
+            return p.x >= bounds[0].x && p.x <= bounds[1].x &&
+                   p.y >= bounds[0].y && p.y <= bounds[1].y &&
+                   p.z >= bounds[0].z && p.z <= bounds[1].z;
+        }
+
+        // Compute the distance of a point to the BBOX
+        float Distance(const Vector3f &p) const;
 
         // Compute BBOX extent
         inline Vector3f Extent() const {
@@ -57,7 +66,7 @@ namespace drdemo {
         float Surface() const;
 
         // Compute intersection with ray
-        bool Intersect(Ray const &ray, float *const t_min, float *const t_max) const;
+        bool Intersect(const Ray &ray, float *const t_min, float *const t_max) const;
     };
 
 } // drdemo namespace

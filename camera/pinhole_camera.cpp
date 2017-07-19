@@ -27,7 +27,7 @@ namespace drdemo {
         float view_plane_y = bottom + (top - bottom) * (j + s_y) / static_cast<float>(height);
         Vector3F s = view_plane_x * u + view_plane_y * v - w;
 
-        return Ray(eye_world, s);
+        return Ray(eye_world, Normalize(s));
     }
 
 }

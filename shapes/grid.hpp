@@ -7,6 +7,11 @@
 
 #include "shape.hpp"
 
+// Define some constants used in the ray marching process
+#define MAX_STEPS 1000
+#define MIN_DIST 0.001f
+#define MAX_DIST 100.f
+
 namespace drdemo {
 
     /**
@@ -87,7 +92,6 @@ namespace drdemo {
 
         void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
     };
-
 
 } // drdemo namespace
 

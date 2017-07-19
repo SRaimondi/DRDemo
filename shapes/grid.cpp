@@ -22,6 +22,11 @@ namespace drdemo {
     Float SignedDistanceGrid::ValueAt(const Vector3F &p) const {
         // Convert position
         const Vector3f p_f = Tofloat(p);
+        // Check if we are outside the BBOX
+        if (!bounds.Inside(p_f)) {
+            return Float(bounds.Distance(p_f));
+        }
+
         // Get voxel indices
         size_t voxel_i[3];
         for (int i = 0; i < 3; i++) { voxel_i[i] = PosToVoxel(p_f, i); }
@@ -92,6 +97,32 @@ namespace drdemo {
     }
 
     bool SignedDistanceGrid::Intersect(Ray const &ray, Interaction *const interaction) const {
+        // The intersection procedure uses ray marching to check if we have an interaction with the stored surface
+
+        // Current depth
+        Float depth(0.f);
+
+        for (int steps = 0; steps < MAX_STEPS; steps++) {
+            // Compute distance from surface
+            const Float distance = ValueAt(ray(depth));
+            // Check if we are close enough to the surface
+            if (distance < MIN_DIST) {
+                // Fill interaction
+                interaction->p = ray(depth);
+                // Normal, hardcoded for the moment FIXME
+                interaction->n = Normalize(ray(depth));
+                // Interaction parameter
+                interaction->t = depth;
+                // OUtgoing direction
+                interaction->wo = -Normalize(ray.d);
+
+                return true;
+            }
+            // Increase distance
+            depth += distance / Length(ray.d);
+            // Check for end
+            if (depth > MAX_DIST) { return false; }
+        }
         return false;
     }
 
