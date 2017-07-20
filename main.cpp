@@ -456,11 +456,11 @@ int main(void) {
     scene.ClearShapes();
 
     // Create new grid
-    size_t grid_dims[3] = {100, 100, 100};
+    size_t grid_dims[3] = {10, 10, 10};
     auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
                                                      BBOX(Vector3f(2.f, 2.f, 2.f), Vector3f(-2.f, -2.f, -2.f)));
 
-    float delta_s = 4.f / 99.f;
+    float delta_s = 4.f / 9.f;
     // Initialize grid using sphere of radius 1 as SDF
     for (int x = 0; x < grid_dims[0]; x++) {
         for (int y = 0; y < grid_dims[1]; y++) {
@@ -524,6 +524,8 @@ int main(void) {
 
         std::cout << "Iteration: " << iters << std::endl;
         std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        std::cout << "Gradient values: " << std::endl;
+        PrintGradient(gradient);
 
         // Update scene vars, hardcoded for the moment
         scene.GetShapes()[0]->UpdateDiffVariables(delta);

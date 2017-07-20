@@ -6,6 +6,7 @@
 #define DRDEMO_GRID_HPP
 
 #include "shape.hpp"
+#include <memory>
 
 // Define some constants used in the ray marching process
 #define MAX_STEPS 1000
