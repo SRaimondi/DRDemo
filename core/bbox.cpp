@@ -17,14 +17,24 @@ namespace drdemo {
     }
 
     float BBOX::Distance(const Vector3f &p) const {
-        // Compute extent
-        const Vector3f extent = Extent();
-        const Vector3f d = Vector3f(std::abs(p.x) - extent.x,
-                                    std::abs(p.y) - extent.y,
-                                    std::abs(p.z) - extent.z);
+//        // Compute extent
+//        const Vector3f extent = Extent();
+//        const Vector3f d = Vector3f(std::abs(p.x) - extent.x,
+//                                    std::abs(p.y) - extent.y,
+//                                    std::abs(p.z) - extent.z);
+//
+//        return Length(Vector3f(std::max(d.x, 0.f), std::max(d.y, 0.f), std::max(d.z, 0.f))) +
+//               std::min(std::max(d.x, std::max(d.y, d.z)), 0.f);
+        float dist = 0.f;
 
-        return Length(Vector3f(std::max(d.x, 0.f), std::max(d.y, 0.f), std::max(d.z, 0.f))) +
-               std::min(std::max(d.x, std::max(d.y, d.z)), 0.f);
+        for (int i = 0; i < 3; i++) {
+            // For each axis count any excess distance outside box extents
+            float v = p[i];
+            if (v < bounds[0][i]) { dist += (bounds[0][i] - v) * (bounds[0][i] - v); }
+            if (v > bounds[1][i]) { dist += (v - bounds[1][i]) * (v - bounds[1][i]); }
+        }
+
+        return std::sqrt(dist);
     }
 
     unsigned BBOX::MaxDimension() const {

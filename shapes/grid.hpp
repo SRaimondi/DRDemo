@@ -58,6 +58,9 @@ namespace drdemo {
         // a point in the grid
         Float ValueAt(const Vector3F &p) const;
 
+        // Estimate SDF normal at given point
+        Vector3F EstimateNormal(const Vector3F &p, float eps = EPS) const;
+
     public:
         // Default constructor, initialises an empty grid
         SignedDistanceGrid(size_t n_x, size_t n_y, size_t n_z, BBOX const &b);

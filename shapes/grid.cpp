@@ -24,7 +24,9 @@ namespace drdemo {
         const Vector3f p_f = Tofloat(p);
         // Check if we are outside the BBOX
         if (!bounds.Inside(p_f)) {
-            return Float(bounds.Distance(p_f));
+            return Float(bounds.Distance(p_f) + 0.001f);
+            // TODO The 0.001 is there to make the next point go inside the Grid if the ray direction is perpendicular to
+            // the normal of the grid intersected face
         }
 
         // Get voxel indices
@@ -57,6 +59,14 @@ namespace drdemo {
         return (1.f - tz) * c0 + tz * c1;
     }
 
+    Vector3F SignedDistanceGrid::EstimateNormal(const Vector3F &p, float eps) const {
+        return Normalize(
+                Vector3F(ValueAt(p + Vector3F(eps, 0.f, 0.f)) - ValueAt(p - Vector3F(eps, 0.f, 0.f)),
+                         ValueAt(p + Vector3F(0.f, eps, 0.f)) - ValueAt(p - Vector3F(0.f, eps, 0.f)),
+                         ValueAt(p + Vector3F(0.f, 0.f, eps)) - ValueAt(p - Vector3F(0.f, 0.f, eps)))
+        );
+    }
+
     SignedDistanceGrid::SignedDistanceGrid(size_t n_x, size_t n_y, size_t n_z, BBOX const &b)
             : data(new Float[n_x * n_y * n_z]) {
         // Set number of points along each dimension
@@ -69,7 +79,7 @@ namespace drdemo {
         // Compute voxel width
         Vector3f extent = bounds.Extent();
         for (int axis = 0; axis < 3; ++axis) {
-            width[axis] = extent[axis] / static_cast<float>(num_points[axis]);
+            width[axis] = extent[axis] / static_cast<float>(num_points[axis] - 1);
             inv_width[axis] = (width[axis] == 0.f) ? 0.f : 1.f / width[axis];
         }
     }
@@ -87,7 +97,7 @@ namespace drdemo {
         // Compute voxel width
         Vector3f extent = bounds.Extent();
         for (int axis = 0; axis < 3; ++axis) {
-            width[axis] = extent[axis] / static_cast<float>(num_points[axis]);
+            width[axis] = extent[axis] / static_cast<float>(num_points[axis] - 1);
             inv_width[axis] = (width[axis] == 0.f) ? 0.f : 1.f / width[axis];
         }
         // Copy values
@@ -109,17 +119,17 @@ namespace drdemo {
             if (distance < MIN_DIST) {
                 // Fill interaction
                 interaction->p = ray(depth);
-                // Normal, hardcoded for the moment FIXME
-                interaction->n = Normalize(ray(depth));
+                // Estimate normal with finite difference
+                interaction->n = EstimateNormal(interaction->p);
                 // Interaction parameter
                 interaction->t = depth;
-                // OUtgoing direction
+                // Outgoing direction
                 interaction->wo = -Normalize(ray.d);
 
                 return true;
             }
             // Increase distance
-            depth += distance / Length(ray.d);
+            depth += distance;
             // Check for end
             if (depth > MAX_DIST) { return false; }
         }
@@ -127,6 +137,21 @@ namespace drdemo {
     }
 
     bool SignedDistanceGrid::IntersectP(Ray const &ray) const {
+        // The intersection procedure uses ray marching to check if we have an interaction with the stored surface
+
+        // Current depth
+        Float depth(0.f);
+
+        for (int steps = 0; steps < MAX_STEPS; steps++) {
+            // Compute distance from surface
+            const Float distance = ValueAt(ray(depth));
+            // Check if we are close enough to the surface
+            if (distance < MIN_DIST) { return true; }
+            // Increase distance
+            depth += distance;
+            // Check for end
+            if (depth > MAX_DIST) { return false; }
+        }
         return false;
     }
 
