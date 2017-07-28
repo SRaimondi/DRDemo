@@ -164,8 +164,16 @@ namespace drdemo {
     }
 
     std::string SignedDistanceGrid::ToString() const {
-        return "Signed Distance Grid with dimension: " + std::to_string(num_points[0]) + ", " +
-               std::to_string(num_points[1]) + ", " + std::to_string(num_points[2]);
+        std::string content("(");
+        for (size_t i = 0; i < total_points; i++) {
+            content += std::to_string(data[i].GetValue());
+            if (i != total_points - 1) {
+                content += ", ";
+            }
+        }
+        content += ")";
+
+        return content;
     }
 
     void SignedDistanceGrid::GetDiffVariables(std::vector<Float const *> &vars) const {
@@ -180,10 +188,19 @@ namespace drdemo {
 
     void SignedDistanceGrid::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
         // FIXME Initial simple attempt to propagate gradient directly into the data
+        // THIS DOES NOT WORK AT ALL
         size_t used_vars = 0;
         for (size_t i = 0; i < total_points; ++i) {
             data[i].SetValue(data[i].GetValue() + delta[starting_index + used_vars++]);
         }
     }
+
+//    void SignedDistanceGrid::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+//        // FIXME Initial simple attempt to propagate gradient directly into the data
+//        size_t used_vars = 0;
+//        for (size_t i = 0; i < total_points; ++i) {
+//            data[i].SetValue(data[i].GetValue() + delta[starting_index + used_vars++]);
+//        }
+//    }
 
 } // drdemo namespace

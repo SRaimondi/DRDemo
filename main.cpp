@@ -17,7 +17,7 @@
 #define WIDTH   512
 #define HEIGHT  512
 
-#define MAX_ITERS 400
+#define MAX_ITERS 1
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -31,14 +31,14 @@ float GradNorm(std::vector<float> const &grad) {
 
 // Print gradient
 void PrintGradient(std::vector<float> const &grad) {
-    std::cout << "(";
+    std::cout << "[";
     for (size_t i = 0; i < grad.size(); ++i) {
         std::cout << grad[i];
         if (i != grad.size() - 1) {
             std::cout << ", ";
         }
     }
-    std::cout << ")" << std::endl;
+    std::cout << "]" << std::endl;
 }
 
 
@@ -413,7 +413,6 @@ int main(void) {
 //    ClampTonemapper tonemapper;
 //    tonemapper.Process("render_test.png", target);
 
-
     /**
      * SDF sphere description minimisation against target sphere image
      */
@@ -425,7 +424,7 @@ int main(void) {
     Scene scene;
 
     // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.5f)));
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.1f)));
     // Add lights
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
@@ -456,21 +455,25 @@ int main(void) {
     scene.ClearShapes();
 
     // Create new grid
-    size_t grid_dims[3] = {10, 10, 10};
+    size_t grid_dims[3] = {40, 40, 40};
     auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
                                                      BBOX(Vector3f(2.f, 2.f, 2.f), Vector3f(-2.f, -2.f, -2.f)));
 
-    float delta_s = 4.f / 9.f;
+    float delta_s = 4.f / 39.f;
     // Initialize grid using sphere of radius 1 as SDF
-    for (int x = 0; x < grid_dims[0]; x++) {
-        for (int y = 0; y < grid_dims[1]; y++) {
-            for (int z = 0; z < grid_dims[2]; z++) {
+    for (size_t x = 0; x < grid_dims[0]; x++) {
+        for (size_t y = 0; y < grid_dims[1]; y++) {
+            for (size_t z = 0; z < grid_dims[2]; z++) {
                 // Compute point coordinates
                 Vector3f p(-2.f + delta_s * x, -2.f + delta_s * y, -2.f + delta_s * z);
                 grid->operator()(x, y, z) = Length(p) - 1.f;
             }
         }
     }
+
+    // Print starting grid values
+//    std::cout << "Starting grid data: " << std::endl;
+//    std::cout << grid->ToString() << std::endl;
 
     scene.AddShape(grid);
 
@@ -530,6 +533,10 @@ int main(void) {
         // Update scene vars, hardcoded for the moment
         scene.GetShapes()[0]->UpdateDiffVariables(delta);
 
+        // Grid data
+        std::cout << "Grid data: " << std::endl;
+        std::cout << grid->ToString() << std::endl;
+
         std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
         // Pop variables
         default_tape.Pop();
@@ -550,10 +557,6 @@ int main(void) {
 
     render.RenderImage(&final, scene, camera);
     tonemapper.Process("final.png", final);
-
-    std::cout << "Final sphere data" << std::endl;
-    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
-
 
     return EXIT_SUCCESS;
 }

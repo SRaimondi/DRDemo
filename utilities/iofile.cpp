@@ -37,4 +37,13 @@ namespace drdemo {
         return true;
     }
 
+    void WriteFile(std::string const &file_name, std::string const &content) {
+        // Create file
+        std::ofstream out(file_name, std::ios::binary);
+        // Write out
+        out << content;
+        // Close file
+        out.close();
+    }
+
 } // drdemo namespace

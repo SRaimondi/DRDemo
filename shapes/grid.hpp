@@ -46,7 +46,7 @@ namespace drdemo {
 
         // Convert 3d point to VOXEL coordinate given an axis (0: x, 1: y, 2: z)
         inline size_t PosToVoxel(const Vector3f &p, size_t axis) const {
-            size_t v_i = static_cast<size_t>((p[axis] - bounds.MinPoint()[axis]) * inv_width[axis]);
+            auto v_i = static_cast<size_t>((p[axis] - bounds.MinPoint()[axis]) * inv_width[axis]);
 
             return Clamp(v_i, static_cast<size_t>(0), num_points[axis] - 1);
         }
@@ -78,6 +78,9 @@ namespace drdemo {
             return data[OffsetPoint(x, y, z)];
         }
 
+        // Acces size of the voxels
+        inline Vector3f const &GetVoxelsSize() const { return width; }
+
         // Shape methods
         bool Intersect(Ray const &ray, Interaction *const interaction) const override;
 
@@ -94,8 +97,25 @@ namespace drdemo {
 
         size_t GetNumVars() const noexcept override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
     };
+
+
+    /**
+     * Reinitialization equation utilities
+     */
+
+    // Compute squared norm of the gradient using forward finite difference method
+    float GradNorm2(const SignedDistanceGrid &grid, size_t x, size_t y, size_t z);
+
+    // Compute sign grid
+    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid);
+
+    // Compute right part of PDF
+    float RightTermPDE(const SignedDistanceGrid &grid, const float *sign_grid, size_t x, size_t y, size_t z);
+
+    // Reinitialize SDF
+    void ReinitializeSDF(const SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
 
 } // drdemo namespace
 
