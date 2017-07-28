@@ -17,7 +17,7 @@
 #define WIDTH   512
 #define HEIGHT  512
 
-#define MAX_ITERS 1
+#define MAX_ITERS 200
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -455,15 +455,16 @@ int main(void) {
     scene.ClearShapes();
 
     // Create new grid
-    size_t grid_dims[3] = {40, 40, 40};
+    int grid_dims[3] = {100, 100, 100};
     auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
                                                      BBOX(Vector3f(2.f, 2.f, 2.f), Vector3f(-2.f, -2.f, -2.f)));
 
-    float delta_s = 4.f / 39.f;
+    // FIXME Hardcoded for testing
+    float delta_s = 4.f / 99.f;
     // Initialize grid using sphere of radius 1 as SDF
-    for (size_t x = 0; x < grid_dims[0]; x++) {
-        for (size_t y = 0; y < grid_dims[1]; y++) {
-            for (size_t z = 0; z < grid_dims[2]; z++) {
+    for (int x = 0; x < grid_dims[0]; x++) {
+        for (int y = 0; y < grid_dims[1]; y++) {
+            for (int z = 0; z < grid_dims[2]; z++) {
                 // Compute point coordinates
                 Vector3f p(-2.f + delta_s * x, -2.f + delta_s * y, -2.f + delta_s * z);
                 grid->operator()(x, y, z) = Length(p) - 1.f;
@@ -527,15 +528,15 @@ int main(void) {
 
         std::cout << "Iteration: " << iters << std::endl;
         std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-        std::cout << "Gradient values: " << std::endl;
-        PrintGradient(gradient);
+        // std::cout << "Gradient values: " << std::endl;
+        // PrintGradient(gradient);
 
         // Update scene vars, hardcoded for the moment
         scene.GetShapes()[0]->UpdateDiffVariables(delta);
 
         // Grid data
-        std::cout << "Grid data: " << std::endl;
-        std::cout << grid->ToString() << std::endl;
+        // std::cout << "Grid data: " << std::endl;
+        // std::cout << grid->ToString() << std::endl;
 
         std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
         // Pop variables

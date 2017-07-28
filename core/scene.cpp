@@ -6,8 +6,6 @@
 
 namespace drdemo {
 
-    Scene::Scene() {}
-
     void Scene::AddShape(std::shared_ptr<Shape> const &shape) {
         shapes.push_back(shape);
     }
@@ -20,7 +18,7 @@ namespace drdemo {
         // Hit flag
         bool hit = false;
         // Loop over all shapes and look for closest interaction
-        for (auto shape : shapes) {
+        for (auto const &shape : shapes) {
             if (shape->Intersect(ray, interaction)) {
                 hit = true;
             }
@@ -30,7 +28,7 @@ namespace drdemo {
     }
 
     bool Scene::IntersectP(Ray const &ray) const {
-        for (auto shape : shapes) {
+        for (auto const &shape : shapes) {
             if (shape->IntersectP(ray)) { return true; }
         }
 

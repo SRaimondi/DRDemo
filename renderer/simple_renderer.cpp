@@ -23,6 +23,9 @@ namespace drdemo {
 
         for (size_t i = 0; i < film->Width(); i++) {
             for (size_t j = 0; j < film->Height(); j++) {
+//                if (i == 196 && j == 225) {
+//                    int x = 0;
+//                }
                 // Generate ray
                 ray = camera.GenerateRay(i, j, s_x, s_y);
                 // Compute incoming radiance

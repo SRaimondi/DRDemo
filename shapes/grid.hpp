@@ -25,9 +25,9 @@ namespace drdemo {
     class SignedDistanceGrid : public Shape {
     private:
         // Number of points for each axis (number of voxels is the value for a given axis minus 1)
-        size_t num_points[3];
+        int num_points[3];
         // Total points
-        size_t total_points;
+        int total_points;
         // Bounds of the Grid
         BBOX bounds;
         // Size of the voxels and inverse of width
@@ -36,24 +36,35 @@ namespace drdemo {
         std::unique_ptr<Float[]> data;
 
         // Private utility methods
-        inline size_t OffsetPoint(size_t x, size_t y, size_t z) const {
+        inline int OffsetPoint(int x, int y, int z) const {
+            // Check for boundaries condition
+            if (x == num_points[0]) { x = 0; }
+            else if (x == -1) { x = num_points[0] - 1; }
+
+            if (y == num_points[1]) { y = 0; }
+            else if (y == -1) { y = num_points[1] - 1; }
+
+            if (z == num_points[2]) { z = 0; }
+            else if (z == -1) { z = num_points[2] - 1; }
+
             return z * num_points[0] * num_points[1] + y * num_points[0] + x;
         }
 
-        inline size_t OffsetVoxel(size_t x, size_t y, size_t z) const {
+        inline int OffsetVoxel(int x, int y, int z) const {
             return z * (num_points[0] - 1) * (num_points[1] - 1) + y * (num_points[0] - 1) + x;
         }
 
         // Convert 3d point to VOXEL coordinate given an axis (0: x, 1: y, 2: z)
-        inline size_t PosToVoxel(const Vector3f &p, size_t axis) const {
-            auto v_i = static_cast<size_t>((p[axis] - bounds.MinPoint()[axis]) * inv_width[axis]);
+        inline int PosToVoxel(const Vector3f &p, int axis) const {
+            auto v_i = static_cast<int>((p[axis] - bounds.MinPoint()[axis]) * inv_width[axis]);
 
-            return Clamp(v_i, static_cast<size_t>(0), num_points[axis] - 1);
+            // return v_i;
+            return Clamp(v_i, 0, num_points[axis] - 2);
         }
 
         // Get the indices of the eight vertices of the voxel given his coordinates
         // The indices start from the corner with the smallest (x,y,z) coordinates and then follow the order of the grid
-        void PointsIndicesFromVoxel(size_t x, size_t y, size_t z, size_t *const indices) const;
+        void PointsIndicesFromVoxel(int x, int y, int z, int *indices) const;
 
         // Compute the value of the Signed Distance Function sampled by the grid using trilinear interpolation given
         // a point in the grid
@@ -64,22 +75,32 @@ namespace drdemo {
 
     public:
         // Default constructor, initialises an empty grid
-        SignedDistanceGrid(size_t n_x, size_t n_y, size_t n_z, BBOX const &b);
+        SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b);
 
         // Construct grid from values
-        SignedDistanceGrid(size_t n_x, size_t n_y, size_t n_z, BBOX const &b, float const *const raw_data);
+        SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b, float const *raw_data);
 
         // Access Grid point at given indices
-        inline Float const &operator()(size_t x, size_t y, size_t z) const {
+        inline Float const &operator()(int x, int y, int z) const {
             return data[OffsetPoint(x, y, z)];
         }
 
-        inline Float &operator()(size_t x, size_t y, size_t z) {
+        inline Float &operator()(int x, int y, int z) {
             return data[OffsetPoint(x, y, z)];
         }
 
         // Acces size of the voxels
         inline Vector3f const &GetVoxelsSize() const { return width; }
+
+        // Get grid dimensions
+        inline int Size(int axis) const {
+            return num_points[axis];
+        }
+
+        // Convert 3 indices to linear
+        inline int LinearIndex(int x, int y, int z) const {
+            return OffsetPoint(x, y, z);
+        }
 
         // Shape methods
         bool Intersect(Ray const &ray, Interaction *const interaction) const override;
@@ -106,16 +127,16 @@ namespace drdemo {
      */
 
     // Compute squared norm of the gradient using forward finite difference method
-    float GradNorm2(const SignedDistanceGrid &grid, size_t x, size_t y, size_t z);
+    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z);
 
     // Compute sign grid
     void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid);
 
     // Compute right part of PDF
-    float RightTermPDE(const SignedDistanceGrid &grid, const float *sign_grid, size_t x, size_t y, size_t z);
+    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z);
 
     // Reinitialize SDF
-    void ReinitializeSDF(const SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
+    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
 
 } // drdemo namespace
 

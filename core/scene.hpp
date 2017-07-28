@@ -22,7 +22,7 @@ namespace drdemo {
         std::vector<std::shared_ptr<LightInterface> > lights;
 
     public:
-        Scene();
+        Scene() = default;
 
         // Add Shape to scene
         void AddShape(std::shared_ptr<Shape> const &shape);

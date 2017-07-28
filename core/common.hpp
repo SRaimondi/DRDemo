@@ -29,6 +29,24 @@ namespace drdemo {
     template<typename T>
     inline T DegToRad(T const &deg) { return (deg * (M_PI / 180.f)); }
 
+    // Return squared number if positive, else return zero
+    template<typename T>
+    static inline T PositiveSQ(T x) {
+        return x > (T) 0 ? x * x : (T) 0;
+    }
+
+    // Return squared number if negative, else return zero
+    template<typename T>
+    static inline T NegativeSQ(T x) {
+        return x < (T) 0 ? x * x : (T) 0;
+    }
+
+    // Lerp
+    template<typename T>
+    static inline T Lerp(T t, T a, T b) {
+        return ((T) 1 - t) * a + t * b;
+    }
+
 } // drdemo namespace
 
 #endif //DRDEMO_COMMON_HPP
