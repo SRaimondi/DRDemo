@@ -209,9 +209,9 @@ namespace drdemo {
 
     float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z) {
         // Compute derivatives using finite difference
-        const float grad_x = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) / grid.GetVoxelsSize().x;
-        const float grad_y = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) / grid.GetVoxelsSize().y;
-        const float grad_z = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) / grid.GetVoxelsSize().z;
+        const float grad_x = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) / grid.VoxelsSize().x;
+        const float grad_y = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) / grid.VoxelsSize().y;
+        const float grad_z = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) / grid.VoxelsSize().z;
 
         return grad_x * grad_x + grad_y * grad_y + grad_z * grad_z;
     }
@@ -226,8 +226,8 @@ namespace drdemo {
                     const float grad_2 = GradNorm2(grid, x, y, z);
                     // Update sign
                     sign_grid[grid.LinearIndex(x, y, z)] = sdf_v /
-                                                           std::sqrt(sdf_v * sdf_v + grad_2 * grid.GetVoxelsSize().x *
-                                                                                     grid.GetVoxelsSize().x);
+                                                           std::sqrt(sdf_v * sdf_v + grad_2 * grid.VoxelsSize().x *
+                                                                                     grid.VoxelsSize().x);
                 }
             }
         }
@@ -235,14 +235,14 @@ namespace drdemo {
 
     float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z) {
         // Compute gradient norm term using first order Upwind
-        const float dphi_dx_plus = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) / grid.GetVoxelsSize().x;
-        const float dphi_dx_minus = (grid(x, y, z).GetValue() - grid(x - 1, y, z).GetValue()) / grid.GetVoxelsSize().x;
+        const float dphi_dx_plus = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) / grid.VoxelsSize().x;
+        const float dphi_dx_minus = (grid(x, y, z).GetValue() - grid(x - 1, y, z).GetValue()) / grid.VoxelsSize().x;
 
-        const float dphi_dy_plus = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) / grid.GetVoxelsSize().y;
-        const float dphi_dy_minus = (grid(x, y, z).GetValue() - grid(x, y - 1, z).GetValue()) / grid.GetVoxelsSize().y;
+        const float dphi_dy_plus = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) / grid.VoxelsSize().y;
+        const float dphi_dy_minus = (grid(x, y, z).GetValue() - grid(x, y - 1, z).GetValue()) / grid.VoxelsSize().y;
 
-        const float dphi_dz_plus = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) / grid.GetVoxelsSize().z;
-        const float dphi_dz_minus = (grid(x, y, z).GetValue() - grid(x, y, z - 1).GetValue()) / grid.GetVoxelsSize().z;
+        const float dphi_dz_plus = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) / grid.VoxelsSize().z;
+        const float dphi_dz_minus = (grid(x, y, z).GetValue() - grid(x, y, z - 1).GetValue()) / grid.VoxelsSize().z;
 
         // Check sign and compute gradient norm
         float grad_x_sq, grad_y_sq, grad_z_sq;

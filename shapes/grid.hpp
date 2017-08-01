@@ -90,7 +90,7 @@ namespace drdemo {
         }
 
         // Acces size of the voxels
-        inline Vector3f const &GetVoxelsSize() const { return width; }
+        inline Vector3f const &VoxelsSize() const { return width; }
 
         // Get grid dimensions
         inline int Size(int axis) const {

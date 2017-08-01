@@ -17,7 +17,7 @@
 #define WIDTH   512
 #define HEIGHT  512
 
-#define MAX_ITERS 200
+#define MAX_ITERS 100
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
