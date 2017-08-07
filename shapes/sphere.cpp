@@ -138,4 +138,12 @@ namespace drdemo {
         if (radius.GetValue() < 0.f) { radius.SetValue(0.f); }
     }
 
+    void Sphere::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+        // Order is supposed to be sphere's center (x,y,z) and radius
+        center.x.SetValue(vals[starting_index]);
+        center.y.SetValue(vals[starting_index + 1]);
+        center.z.SetValue(vals[starting_index + 2]);
+        radius.SetValue(vals[starting_index + 3]);
+    }
+
 } // drdemo namespace

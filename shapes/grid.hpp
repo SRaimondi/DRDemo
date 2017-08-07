@@ -89,8 +89,10 @@ namespace drdemo {
             return data[OffsetPoint(x, y, z)];
         }
 
-        // Acces size of the voxels
-        inline Vector3f const &VoxelsSize() const { return width; }
+        // Access size of the voxels
+        inline Vector3f const &VoxelSize() const { return width; }
+
+        inline Vector3f const &InvVoxelSize() const { return inv_width; }
 
         // Get grid dimensions
         inline int Size(int axis) const {
@@ -103,7 +105,7 @@ namespace drdemo {
         }
 
         // Shape methods
-        bool Intersect(Ray const &ray, Interaction *const interaction) const override;
+        bool Intersect(Ray const &ray, Interaction *interaction) const override;
 
         bool IntersectP(Ray const &ray) const override;
 
@@ -119,6 +121,8 @@ namespace drdemo {
         size_t GetNumVars() const noexcept override;
 
         void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
+
+        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
     };
 
 

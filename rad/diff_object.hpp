@@ -14,8 +14,6 @@ namespace drdemo {
      */
     class DiffObjectInterface {
     public:
-        virtual ~DiffObjectInterface() {}
-
         // Return a list of references to the differentiable variables in the object
         virtual void GetDiffVariables(std::vector<Float const *> &vars) const = 0;
 
@@ -24,7 +22,10 @@ namespace drdemo {
 
         // Update values of differentiable variables in the object, starting index tells the object
         // from where to start to get the deltas
-        virtual void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) = 0;
+        virtual void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) = 0;
+
+        // Set value of the differentiable variables of the object
+        virtual void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) = 0;
     };
 
 } // drdemo namespace

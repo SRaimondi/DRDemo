@@ -15,8 +15,7 @@ namespace drdemo {
      */
     class ToneMapperInterface {
     public:
-        virtual ~ToneMapperInterface() {}
-
+        // Process film and produce final .png image
         virtual void Process(std::string const &file_name, Film const &film) const = 0;
     };
 

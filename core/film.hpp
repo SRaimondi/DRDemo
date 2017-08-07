@@ -22,8 +22,6 @@ namespace drdemo {
     public:
         Film(size_t w, size_t h);
 
-        virtual ~Film();
-
         // Access width and height
         inline size_t Width() const noexcept { return width; }
 

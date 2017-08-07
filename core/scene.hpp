@@ -47,7 +47,7 @@ namespace drdemo {
         void ClearLights() { lights.clear(); }
 
         // Intersect Ray with Scene
-        bool Intersect(Ray const &ray, Interaction *const interaction) const;
+        bool Intersect(Ray const &ray, Interaction *interaction) const;
 
         bool IntersectP(Ray const &ray) const;
     };

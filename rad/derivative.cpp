@@ -43,9 +43,8 @@ namespace drdemo {
         if (it == var_derivatives_map.end()) {
             std::cout << "Could not find given output variable!" << std::endl;
             return 0.f;
-        } else {
-            return it->second[x.NodeIndex()];
         }
+        return it->second[x.NodeIndex()];
     }
 
 } // drdemo namespace

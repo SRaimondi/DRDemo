@@ -15,11 +15,9 @@ namespace drdemo {
      */
     class LightInterface {
     public:
-        virtual ~LightInterface() {}
-
         // Sample incoming light at a given Interaction, returns incoming radiance and fills sampling parameters
         virtual Spectrum
-        SampleLi(Interaction const &interaction, float u0, float u1, Vector3F *const wi, Float *pdf) const = 0;
+        SampleLi(Interaction const &interaction, float u0, float u1, Vector3F *wi, Float *pdf) const = 0;
     };
 
 } // drdemo namespace

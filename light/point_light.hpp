@@ -23,7 +23,7 @@ namespace drdemo {
         PointLight(Vector3F const &p, Spectrum const &i);
 
         Spectrum SampleLi(Interaction const &interaction, float u0, float u1,
-                          Vector3F *const wi, Float *pdf) const override;
+                          Vector3F *wi, Float *pdf) const override;
     };
 
 } // drdemo namespace

@@ -16,10 +16,8 @@ namespace drdemo {
      */
     class Shape : public DiffObjectInterface {
     public:
-        virtual ~Shape() {}
-
         // Compute intersection between a Ray and the shape
-        virtual bool Intersect(Ray const &ray, Interaction *const interaction) const = 0;
+        virtual bool Intersect(Ray const &ray, Interaction *interaction) const = 0;
 
         // Check for intersection between Ray and the shape
         virtual bool IntersectP(Ray const &ray) const = 0;

@@ -16,10 +16,8 @@ namespace drdemo {
      */
     class RendererInterface {
     public:
-        virtual ~RendererInterface() {}
-
         // Render scene given a Film, a Scene and a Camera
-        virtual void RenderImage(Film *const film, Scene const &scene, CameraInterface const &camera) const = 0;
+        virtual void RenderImage(Film *film, Scene const &scene, CameraInterface const &camera) const = 0;
     };
 
 } // drdemo namespace

@@ -50,7 +50,7 @@ namespace drdemo {
         Triangle(TriangleMesh &mesh, uint32_t t_i);
 
         // Shape methods
-        bool Intersect(Ray const &ray, Interaction *const interaction) const override;
+        bool Intersect(Ray const &ray, Interaction *interaction) const override;
 
         bool IntersectP(Ray const &ray) const override;
 
@@ -65,7 +65,9 @@ namespace drdemo {
 
         size_t GetNumVars() const noexcept override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
+
+        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
     };
 
     /**
@@ -93,7 +95,7 @@ namespace drdemo {
         void CreateTriangles();
 
     public:
-        TriangleMesh(std::string const &file_name);
+        explicit TriangleMesh(std::string const &file_name);
 
         // Access mesh information
         inline size_t NumTriangles() const { return triangles.size(); }
@@ -101,7 +103,7 @@ namespace drdemo {
         inline size_t NumVertices() const { return vertices.size(); }
 
         // Shape methods
-        bool Intersect(Ray const &ray, Interaction *const interaction) const override;
+        bool Intersect(Ray const &ray, Interaction *interaction) const override;
 
         bool IntersectP(Ray const &ray) const override;
 
@@ -116,7 +118,9 @@ namespace drdemo {
 
         size_t GetNumVars() const noexcept override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
+
+        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
     };
 
 } // drdemo namespace

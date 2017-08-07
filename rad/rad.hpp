@@ -48,7 +48,7 @@ namespace drdemo {
 
     public:
         // Tape default constructor
-        Tape(size_t starting_size = 1000);
+        explicit Tape(size_t starting_size = 1000);
 
         // Enable / Disable tape
         // TODO This is not working, use Push / Pop
@@ -119,7 +119,7 @@ namespace drdemo {
         // Construct Float given index on tape and value
         Float(size_t index, float v) noexcept;
 
-        Float(Float const &other) noexcept;
+        Float(Float const &other) = default;
 
         // Assignment operator, default is to create an alias of the variable, not pushing a new one on the stack
         Float &operator=(Float const &other);

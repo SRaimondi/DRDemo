@@ -19,9 +19,9 @@ namespace drdemo {
         const std::shared_ptr<const SurfaceIntegratorInterace> surface_integrator;
 
     public:
-        SimpleRenderer(std::shared_ptr<const SurfaceIntegratorInterace> const &s_i);
+        explicit SimpleRenderer(std::shared_ptr<const SurfaceIntegratorInterace> const &s_i);
 
-        void RenderImage(Film *const film, Scene const &scene, CameraInterface const &camera) const override;
+        void RenderImage(Film *film, Scene const &scene, CameraInterface const &camera) const override;
     };
 
 } // dredemo namespace

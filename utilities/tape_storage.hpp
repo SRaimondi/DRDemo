@@ -32,13 +32,13 @@ namespace drdemo {
         TapeStorage(TapeStorage<T> const &other);
 
         // Move constructor
-        TapeStorage(TapeStorage<T> &&other);
+        TapeStorage(TapeStorage<T> &&other) noexcept;
 
         // Assignment operator
         TapeStorage &operator=(TapeStorage<T> const &other);
 
         // Move operator
-        TapeStorage &operator=(TapeStorage<T> &&other);
+        TapeStorage &operator=(TapeStorage<T> &&other) noexcept;
 
         // Destructor
         ~TapeStorage();
@@ -83,7 +83,7 @@ namespace drdemo {
     }
 
     template<typename T>
-    TapeStorage<T>::TapeStorage(TapeStorage<T> &&other)
+    TapeStorage<T>::TapeStorage(TapeStorage<T> &&other) noexcept
             : max_size(other.max_size), size(other.size) {
         // Acquire memory ownership
         data = other.data;
@@ -107,7 +107,7 @@ namespace drdemo {
     }
 
     template<typename T>
-    TapeStorage<T> &TapeStorage<T>::operator=(TapeStorage<T> &&other) {
+    TapeStorage<T> &TapeStorage<T>::operator=(TapeStorage<T> &&other) noexcept {
         if (this != &other) {
             assert(max_size == other.max_size);
             size = other.size;
@@ -135,7 +135,7 @@ namespace drdemo {
         if (size == max_size) {
             // Double the tape capacity
             max_size *= 2;
-            T *new_data = new T[max_size];
+            auto new_data = new T[max_size];
             // Copy current data into new data
             std::copy(data, data + size, new_data);
             // Free old data
@@ -160,7 +160,7 @@ namespace drdemo {
             // Set new max size to size
             max_size = size;
             // Allocate new space for Tape
-            T *new_data = new T[max_size];
+            auto new_data = new T[max_size];
             // Copy data
             std::copy(data, data + size, new_data);
             // Free old data

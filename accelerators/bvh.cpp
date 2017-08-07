@@ -8,7 +8,7 @@ namespace drdemo {
 
     // Build node data structure
     struct BVHBuildEntry {
-        BVHBuildEntry() {};
+        BVHBuildEntry() = default;
 
         BVHBuildEntry(uint32_t s, uint32_t e, uint32_t p)
                 : parent(p), start(s), end(e) {}
@@ -116,7 +116,7 @@ namespace drdemo {
     }
 
     BVH::BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size)
-            : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s), flat_tree() {}
+            : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s) {}
 
     void BVH::Rebuild() {
         std::cout << "Rebuilding BVH..." << std::endl;

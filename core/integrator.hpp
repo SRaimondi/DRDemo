@@ -14,8 +14,7 @@ namespace drdemo {
      * Define Integrator interface
      */
     class IntegratorInterface {
-    public:
-        virtual ~IntegratorInterface() {}
+
     };
 
     /**
@@ -23,8 +22,6 @@ namespace drdemo {
      */
     class SurfaceIntegratorInterace : public IntegratorInterface {
     public:
-        virtual ~SurfaceIntegratorInterace() {}
-
         // Compute incoming radiance for given ray
         virtual Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, size_t depth) const = 0;
     };

@@ -24,7 +24,7 @@ namespace drdemo {
             bounds[1] = Vector3f(-INFINITY, -INFINITY, -INFINITY);
         }
 
-        inline BBOX(Vector3f const &p) {
+        inline explicit BBOX(Vector3f const &p) {
             bounds[0] = p;
             bounds[1] = p;
         }
@@ -66,7 +66,7 @@ namespace drdemo {
         float Surface() const;
 
         // Compute intersection with ray
-        bool Intersect(const Ray &ray, float *const t_min, float *const t_max) const;
+        bool Intersect(const Ray &ray, float *t_min, float *t_max) const;
     };
 
 } // drdemo namespace

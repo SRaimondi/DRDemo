@@ -57,7 +57,7 @@ void PrintGradient(std::vector<float> const &grad) {
 //    return 0.26f * (x[0] * x[0] + x[1] * x[1]) - 0.48f * x[0] * x[1];
 //}
 
-int main(void) {
+int main() {
 
     // Set namespace used
     using namespace drdemo;
@@ -532,7 +532,7 @@ int main(void) {
         // PrintGradient(gradient);
 
         // Update scene vars, hardcoded for the moment
-        scene.GetShapes()[0]->UpdateDiffVariables(delta);
+        scene.GetShapes()[0]->UpdateDiffVariables(delta, 0);
 
         // Grid data
         // std::cout << "Grid data: " << std::endl;

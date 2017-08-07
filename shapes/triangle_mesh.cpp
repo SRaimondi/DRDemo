@@ -167,6 +167,17 @@ namespace drdemo {
         }
     }
 
+    void Triangle::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+        for (unsigned i = 0; i < 3; ++i) {
+            // Get reference to vertex
+            Vector3F &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
+            // Update vertex values
+            v.x.SetValue(vals[starting_index + 3 * i]);
+            v.y.SetValue(vals[starting_index + 3 * i + 1]);
+            v.z.SetValue(vals[starting_index + 3 * i + 2]);
+        }
+    }
+
     void TriangleMesh::CreateTriangles() {
         for (size_t t = 0; t < triangles.size(); ++t) {
             shapes.push_back(std::make_shared<Triangle>(*this, t));
@@ -177,16 +188,17 @@ namespace drdemo {
             : bvh(shapes) {
         // Loaded file lines
         std::vector<std::string> loaded_file;
-        if (ReadFile(file_name.c_str(), loaded_file)) {
+        if (ReadFile(file_name, loaded_file)) {
             // Loop over all lines loaded and read the input data
-            for (auto line_it = loaded_file.begin(); line_it != loaded_file.end(); line_it++) {
+            for (auto &line_it : loaded_file) {
                 // Check if line is a comment
-                if (line_it->compare(0, 1, "#") == 0) {
+                if (line_it.compare(0, 1, "#") == 0) {
                     continue;
-                } else if (line_it->compare(0, 2, "v ") == 0) {
+                }
+                if (line_it.compare(0, 2, "v ") == 0) {
                     // Read vertex data
                     float x, y, z;
-                    sscanf(line_it->c_str(), "v %f %f %f", &x, &y, &z);
+                    sscanf(line_it.c_str(), "v %f %f %f", &x, &y, &z);
                     vertices.push_back(Vector3F(x, y, z));
                 } /* else if (line_it->compare(0, 3, "vt ") == 0) {
                     // Read uv data
@@ -199,29 +211,29 @@ namespace drdemo {
                     float x, y, z;
                     sscanf(line_it->c_str(), "vn %f %f %f", &x, &y, &z);
                     normals.push_back(Normalize(Vector3f(x, y, z)));
-                } */ else if (line_it->compare(0, 1, "f") == 0) {
+                } */ else if (line_it.compare(0, 1, "f") == 0) {
                     // Read face data
                     uint32_t v0, v1, v2;
                     uint32_t n0, n1, n2;
                     uint32_t uv0, uv1, uv2;
 
                     // Check if face is just composed of vertices
-                    if (sscanf(line_it->c_str(), "f %u %u %u", &v0, &v1, &v2) == 3) {
+                    if (sscanf(line_it.c_str(), "f %u %u %u", &v0, &v1, &v2) == 3) {
                         // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1));
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                         // Check if face contains vertices and textures coordinates
-                    } else if (sscanf(line_it->c_str(), "f %u/%u %u/%u %u/%u", &v0, &uv0, &v1, &uv1, &v2, &uv2) == 6) {
+                    } else if (sscanf(line_it.c_str(), "f %u/%u %u/%u %u/%u", &v0, &uv0, &v1, &uv1, &v2, &uv2) == 6) {
                         // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, 0, 0, 0, uv0 - 1, uv1 - 1, uv2 - 1));
                         // TODO: Only load vertices
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                         // Check if face contains textures coordinate, vertices and normals
-                    } else if (sscanf(line_it->c_str(), "f %u/%u/%u %u/%u/%u %u/%u/%u", &v0, &uv0, &n0, &v1, &uv1, &n1,
+                    } else if (sscanf(line_it.c_str(), "f %u/%u/%u %u/%u/%u %u/%u/%u", &v0, &uv0, &n0, &v1, &uv1, &n1,
                                       &v2, &uv2, &n2) == 9) {
                         // TODO: Only load vertices
                         // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1, uv0 - 1, uv1 - 1, uv2 - 1));
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                         // Check if face contains normals and vertices only
-                    } else if (sscanf(line_it->c_str(), "f %u//%u %u//%u %u//%u", &v0, &n0, &v1, &n1, &v2, &n2) == 6) {
+                    } else if (sscanf(line_it.c_str(), "f %u//%u %u//%u %u//%u", &v0, &n0, &v1, &n1, &v2, &n2) == 6) {
                         // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1));
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                     } else {
@@ -294,6 +306,19 @@ namespace drdemo {
             v.x.SetValue(v.x.GetValue() + delta[starting_index + used_vars++]);
             v.y.SetValue(v.y.GetValue() + delta[starting_index + used_vars++]);
             v.z.SetValue(v.z.GetValue() + delta[starting_index + used_vars++]);
+        }
+
+        // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment
+        bvh.Rebuild();
+    }
+
+    void TriangleMesh::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+        size_t used_vars = 0;
+        for (auto &v : vertices) {
+            // Update vertex values
+            v.x.SetValue(vals[starting_index + used_vars++]);
+            v.y.SetValue(vals[starting_index + used_vars++]);
+            v.z.SetValue(vals[starting_index + used_vars++]);
         }
 
         // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment

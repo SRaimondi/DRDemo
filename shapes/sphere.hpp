@@ -23,7 +23,7 @@ namespace drdemo {
         Sphere(Vector3F const &c, Float const &r);
 
         // Shape methods
-        bool Intersect(Ray const &ray, Interaction *const interaction) const override;
+        bool Intersect(Ray const &ray, Interaction *interaction) const override;
 
         bool IntersectP(Ray const &ray) const override;
 
@@ -38,7 +38,9 @@ namespace drdemo {
 
         size_t GetNumVars() const noexcept override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index = 0) override;
+        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
+
+        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
     };
 
 } // drdemo namespace

@@ -14,8 +14,6 @@ namespace drdemo {
      */
     class CameraInterface {
     public:
-        virtual ~CameraInterface() {}
-
         // Generate a ray given a pixel coordinates and a sample coordinates
         virtual Ray GenerateRay(size_t i, size_t j, float s_x, float s_y) const = 0;
     };

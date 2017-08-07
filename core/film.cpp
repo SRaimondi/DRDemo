@@ -9,6 +9,4 @@ namespace drdemo {
     Film::Film(size_t w, size_t h)
             : width(w), height(h) {}
 
-    Film::~Film() {}
-
 } // drdemo namespace

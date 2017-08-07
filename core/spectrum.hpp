@@ -17,7 +17,7 @@ namespace drdemo {
         Float r, g, b;
 
         // Constructors
-        Spectrum() : r(), g(), b() {}
+        Spectrum() = default;
 
         // TODO Review this, might cause some problems
 //        explicit Spectrum(Float const &v)

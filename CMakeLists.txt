@@ -72,6 +72,6 @@ set(SOURCE_FILES
         shapes/grid.cpp
         shapes/grid.hpp
         core/lodepng.cpp
-        core/lodepng.hpp)
+        core/lodepng.hpp minimization/scalar_function.hpp minimization/scalar_function.cpp)
 
 add_executable(DRDemo ${SOURCE_FILES})
