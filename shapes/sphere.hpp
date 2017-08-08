@@ -38,9 +38,9 @@ namespace drdemo {
 
         size_t GetNumVars() const noexcept override;
 
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
+        void UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) override;
 
-        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
+        void SetDiffVariables(const std::vector<float> &vals, size_t starting_index) override;
     };
 
 } // drdemo namespace

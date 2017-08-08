@@ -33,15 +33,11 @@ namespace drdemo {
         // Access list of shapes
         inline std::vector<std::shared_ptr<Shape> > const &GetShapes() const { return shapes; }
 
-        // std::vector<std::shared_ptr<Shape> > &GetShapes() { return shapes; }
-
         // Clear list of shapes
         void ClearShapes() { shapes.clear(); }
 
         // Access list of lights
         inline std::vector<std::shared_ptr<LightInterface> > const &GetLights() const { return lights; }
-
-        // std::vector<std::shared_ptr<LightInterface> > &GetLights() { return lights; }
 
         // Clear list of lights
         void ClearLights() { lights.clear(); }

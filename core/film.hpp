@@ -37,7 +37,7 @@ namespace drdemo {
         virtual Float SquaredNorm() const = 0;
 
         // Convert Film to flat r, g, b data
-        virtual Vector<float> Raw() const = 0;
+        virtual std::vector<float> Raw() const = 0;
 
         // Compute absolute value of the film
         virtual void Abs() = 0;

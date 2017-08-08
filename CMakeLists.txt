@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 project(DRDemo)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 # Set DEBUG build mode flags
@@ -72,6 +72,10 @@ set(SOURCE_FILES
         shapes/grid.cpp
         shapes/grid.hpp
         core/lodepng.cpp
-        core/lodepng.hpp minimization/scalar_function.hpp minimization/scalar_function.cpp)
+        core/lodepng.hpp
+        minimization/scalar_function.hpp
+        minimization/scalar_function.cpp
+        minimization/multi_view_energy.cpp
+        minimization/multi_view_energy.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

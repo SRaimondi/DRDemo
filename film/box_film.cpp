@@ -54,7 +54,7 @@ namespace drdemo {
         return difference;
     }
 
-    BoxFilterFilm BoxFilterFilm::operator-(Vector<float> const &raw_other) const {
+    BoxFilterFilm BoxFilterFilm::operator-(const std::vector<float> &raw_other) const {
         BoxFilterFilm difference(width, height);
 
         // Compute difference
@@ -84,8 +84,9 @@ namespace drdemo {
         return squared_norm;
     }
 
-    Vector<float> BoxFilterFilm::Raw() const {
-        Vector<float> raw_data = Vector<float>(width * height * 3);
+    std::vector<float> BoxFilterFilm::Raw() const {
+        std::vector<float> raw_data(width *height
+        *3);
 
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; ++i) {

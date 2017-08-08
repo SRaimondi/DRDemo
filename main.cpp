@@ -12,12 +12,11 @@
 #include <simple_renderer.hpp>
 #include <clamp_tonemapper.hpp>
 #include <box_film.hpp>
-#include <grid.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
 
-#define MAX_ITERS 100
+#define MAX_ITERS 512
 
 // Compute gradient norm, considering the gradient as a float vector
 float GradNorm(std::vector<float> const &grad) {
@@ -240,135 +239,135 @@ int main() {
 //    std::cout << std::endl;
 
 
-//    /**
-//     * Geometric sphere description minimisation against target sphere image
-//     */
-//
-//    // Derivatives computation class
-//    Derivatives derivatives;
-//
-//    // Disable tape to render target image
-//    // default_tape.Disable();
-//
-//    // Create scene
-//    Scene scene;
-//
-//    // Add sphere
-//    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
-//    // Add lights
-//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-//
-//    // Create camera
-//    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
-//
-//    // Create renderer
-//    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
-//
-//    // Push status of tape before rendering target image
-//    default_tape.Push();
-//
-//    // Render target image
-//    BoxFilterFilm target(WIDTH, HEIGHT);
-//    render.RenderImage(&target, scene, camera);
-//
-//    // Convert image to raw
-//    Vector<float> raw_target = target.Raw();
-//
-//    // Create tone-mapper and process target image
-//    ClampTonemapper tonemapper;
-//    tonemapper.Process("target.png", target);
-//
-//    // Re-enable tape to compute derivatives
-//    // default_tape.Enable();
-//
-//    // Remove from tape rendering variables
-//    default_tape.Pop();
-//
-//    // Change sphere position to center and try to match the images
-//    scene.ClearShapes();
-//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
-//
-//    // Gradient
-//    std::vector<float> gradient(4, 0.f);
-//    std::vector<float> delta(4, 0.f);
-//
-//    // Get differentiable variables from scene's shapes
-//    std::vector<Float const *> vars;
-//    scene.GetShapes()[0]->GetDiffVariables(vars);
-//
-//    // Number of iterations
-//    size_t iters = 0;
-//    // Energy value
-//    float energy;
-//
-//    // Try to minimize squared norm of image
-//    do {
-//        // Clear derivatives
-//        derivatives.Clear();
-//        // Store current variables of the tape
-//        default_tape.Push();
-//
-//        // Render current image
-//        BoxFilterFilm x(WIDTH, HEIGHT);
-//        render.RenderImage(&x, scene, camera);
-//
-//        // Output image of current rendering
-//        tonemapper.Process("iters_" + std::to_string(iters) + ".png", x);
-//
-//        // Compute difference
-//        BoxFilterFilm difference = x - raw_target;
-//
-//        // Compute squared norm of difference
-//        Float x_2_norm = difference.SquaredNorm();
-//        energy = x_2_norm.GetValue();
-//        std::cout << "Energy: " << energy << std::endl;
-//
-//        // Create difference image
-//        difference.Abs();
-//        tonemapper.Process("iters_" + std::to_string(iters) + "_difference.ppm", difference);
-//
-//        // Compute derivatives
-//        derivatives.ComputeDerivatives(x_2_norm);
-//
-//        // Compute gradient and deltas
-//        for (size_t i = 0; i < vars.size(); i++) {
-//            gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
-//            delta[i] = -0.000001f * gradient[i];    // Learning rate
-//        }
-//
-//        std::cout << "Iteration: " << iters << std::endl;
-//        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-//        std::cout << "Gradient values: ";
-//        PrintGradient(gradient);
-//
-//        // Update scene vars, hardcoded for the moment
-//        scene.GetShapes()[0]->UpdateDiffVariables(delta);
-//
-//        std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
-//        // Pop variables
-//        default_tape.Pop();
-//
-//        // Print tape size
-//        std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
-//
-//        std::cout << "Sphere data" << std::endl;
-//        std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
-//        iters++;
-//        // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
-//    } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
-//
-//    std::cout << "Final energy: " << energy << std::endl;
-//    std::cout << "Total iterations: " << iters << std::endl;
-//    std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-//
-//    // default_tape.Disable();
-//    BoxFilterFilm final(WIDTH, HEIGHT);
-//
-//    render.RenderImage(&final, scene, camera);
-//    tonemapper.Process("final.png", final);
-//
-//    std::cout << "Final sphere data" << std::endl;
-//    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
+    /**
+     * Geometric sphere description minimisation against target sphere image
+     */
+
+    // Derivatives computation class
+    Derivatives derivatives;
+
+    // Disable tape to render target image
+    // default_tape.Disable();
+
+    // Create scene
+    Scene scene;
+
+    // Add sphere
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
+    // Add lights
+    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+
+    // Create camera
+    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+
+    // Create renderer
+    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
+
+    // Push status of tape before rendering target image
+    default_tape.Push();
+
+    // Render target image
+    BoxFilterFilm target(WIDTH, HEIGHT);
+    render.RenderImage(&target, scene, camera);
+
+    // Convert image to raw
+    std::vector<float> raw_target = target.Raw();
+
+    // Create tone-mapper and process target image
+    ClampTonemapper tonemapper;
+    tonemapper.Process("target.png", target);
+
+    // Re-enable tape to compute derivatives
+    // default_tape.Enable();
+
+    // Remove from tape rendering variables
+    default_tape.Pop();
+
+    // Change sphere position to center and try to match the images
+    scene.ClearShapes();
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
+
+    // Gradient
+    std::vector<float> gradient(4, 0.f);
+    std::vector<float> delta(4, 0.f);
+
+    // Get differentiable variables from scene's shapes
+    std::vector<Float const *> vars;
+    scene.GetShapes()[0]->GetDiffVariables(vars);
+
+    // Number of iterations
+    size_t iters = 0;
+    // Energy value
+    float energy;
+
+    // Try to minimize squared norm of image
+    do {
+        // Clear derivatives
+        derivatives.Clear();
+        // Store current variables of the tape
+        default_tape.Push();
+
+        // Render current image
+        BoxFilterFilm x(WIDTH, HEIGHT);
+        render.RenderImage(&x, scene, camera);
+
+        // Output image of current rendering
+        tonemapper.Process("iters_" + std::to_string(iters) + ".png", x);
+
+        // Compute difference
+        BoxFilterFilm difference = x - raw_target;
+
+        // Compute squared norm of difference
+        Float x_2_norm = difference.SquaredNorm();
+        energy = x_2_norm.GetValue();
+        std::cout << "Energy: " << energy << std::endl;
+
+        // Create difference image
+        difference.Abs();
+        tonemapper.Process("iters_" + std::to_string(iters) + "_difference.ppm", difference);
+
+        // Compute derivatives
+        derivatives.ComputeDerivatives(x_2_norm);
+
+        // Compute gradient and deltas
+        for (size_t i = 0; i < vars.size(); i++) {
+            gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
+            delta[i] = -0.000001f * gradient[i];    // Learning rate
+        }
+
+        std::cout << "Iteration: " << iters << std::endl;
+        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+        std::cout << "Gradient values: ";
+        PrintGradient(gradient);
+
+        // Update scene vars, hardcoded for the moment
+        scene.GetShapes()[0]->UpdateDiffVariables(delta, 0);
+
+        std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
+        // Pop variables
+        default_tape.Pop();
+
+        // Print tape size
+        std::cout << "Tape size after pop: " << default_tape.Size() << std::endl;
+
+        std::cout << "Sphere data" << std::endl;
+        std::cout << scene.GetShapes()[0]->ToString() << std::endl << std::endl;
+        iters++;
+        // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
+    } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
+
+    std::cout << "Final energy: " << energy << std::endl;
+    std::cout << "Total iterations: " << iters << std::endl;
+    std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+
+    // default_tape.Disable();
+    BoxFilterFilm final(WIDTH, HEIGHT);
+
+    render.RenderImage(&final, scene, camera);
+    tonemapper.Process("final.png", final);
+
+    std::cout << "Final sphere data" << std::endl;
+    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
 
 //    /*
 //     * Signed distance grid rendering test
@@ -413,151 +412,151 @@ int main() {
 //    ClampTonemapper tonemapper;
 //    tonemapper.Process("render_test.png", target);
 
-    /**
-     * SDF sphere description minimisation against target sphere image
-     */
-
-    // Derivatives computation class
-    Derivatives derivatives;
-
-    // Create scene
-    Scene scene;
-
-    // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.1f)));
-    // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-
-    // Create camera
-    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
-
-    // Create renderer
-    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
-
-    // Push status of tape before rendering target image
-    default_tape.Push();
-
-    // Render target image
-    BoxFilterFilm target(WIDTH, HEIGHT);
-    render.RenderImage(&target, scene, camera);
-
-    // Convert image to raw
-    Vector<float> raw_target = target.Raw();
-
-    // Create tone-mapper and process target image
-    ClampTonemapper tonemapper;
-    tonemapper.Process("target.png", target);
-
-    // Remove from tape rendering variables
-    default_tape.Pop();
-
-    // Change sphere position to center and try to match the images
-    scene.ClearShapes();
-
-    // Create new grid
-    int grid_dims[3] = {100, 100, 100};
-    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
-                                                     BBOX(Vector3f(2.f, 2.f, 2.f), Vector3f(-2.f, -2.f, -2.f)));
-
-    // FIXME Hardcoded for testing
-    float delta_s = 4.f / 99.f;
-    // Initialize grid using sphere of radius 1 as SDF
-    for (int x = 0; x < grid_dims[0]; x++) {
-        for (int y = 0; y < grid_dims[1]; y++) {
-            for (int z = 0; z < grid_dims[2]; z++) {
-                // Compute point coordinates
-                Vector3f p(-2.f + delta_s * x, -2.f + delta_s * y, -2.f + delta_s * z);
-                grid->operator()(x, y, z) = Length(p) - 1.f;
-            }
-        }
-    }
-
-    // Print starting grid values
-//    std::cout << "Starting grid data: " << std::endl;
-//    std::cout << grid->ToString() << std::endl;
-
-    scene.AddShape(grid);
-
-    // Gradient
-    std::vector<float> gradient(grid->GetNumVars(), 0.f);
-    std::vector<float> delta(grid->GetNumVars(), 0.f);
-
-    // Get differentiable variables from scene's shapes
-    std::vector<Float const *> vars;
-    scene.GetShapes()[0]->GetDiffVariables(vars);
-
-    // Number of iterations
-    size_t iters = 0;
-    // Energy value
-    float energy;
-
-    // Try to minimize squared norm of image
-    do {
-        // Clear derivatives
-        derivatives.Clear();
-        // Store current variables of the tape
-        default_tape.Push();
-
-        // Render current image
-        BoxFilterFilm x(WIDTH, HEIGHT);
-        render.RenderImage(&x, scene, camera);
-
-        // Output image of current rendering
-        tonemapper.Process("iters_" + std::to_string(iters) + ".png", x);
-
-        // Compute difference
-        BoxFilterFilm difference = x - raw_target;
-
-        // Compute squared norm of difference
-        Float x_2_norm = difference.SquaredNorm();
-        energy = x_2_norm.GetValue();
-        std::cout << "Energy: " << energy << std::endl;
-
-        // Create difference image
-        difference.Abs();
-        tonemapper.Process("iters_" + std::to_string(iters) + "_difference.ppm", difference);
-
-        // Compute derivatives
-        derivatives.ComputeDerivatives(x_2_norm);
-
-        // Compute gradient and deltas
-        for (size_t i = 0; i < vars.size(); i++) {
-            gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
-            delta[i] = -0.0001f * gradient[i];    // Learning rate
-        }
-
-        std::cout << "Iteration: " << iters << std::endl;
-        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-        // std::cout << "Gradient values: " << std::endl;
-        // PrintGradient(gradient);
-
-        // Update scene vars, hardcoded for the moment
-        scene.GetShapes()[0]->UpdateDiffVariables(delta, 0);
-
-        // Grid data
-        // std::cout << "Grid data: " << std::endl;
-        // std::cout << grid->ToString() << std::endl;
-
-        std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
-        // Pop variables
-        default_tape.Pop();
-
-        // Print tape size
-        std::cout << "Tape size after pop: " << default_tape.Size() << std::endl << std::endl;
-
-        iters++;
-        // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
-    } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
-
-    std::cout << "Final energy: " << energy << std::endl;
-    std::cout << "Total iterations: " << iters << std::endl;
-    std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
-
-    // default_tape.Disable();
-    BoxFilterFilm final(WIDTH, HEIGHT);
-
-    render.RenderImage(&final, scene, camera);
-    tonemapper.Process("final.png", final);
+//    /**
+//     * SDF sphere description minimisation against target sphere image
+//     */
+//
+//    // Derivatives computation class
+//    Derivatives derivatives;
+//
+//    // Create scene
+//    Scene scene;
+//
+//    // Add sphere
+//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.1f)));
+//    // Add lights
+//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+//
+//    // Create camera
+//    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+//
+//    // Create renderer
+//    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
+//
+//    // Push status of tape before rendering target image
+//    default_tape.Push();
+//
+//    // Render target image
+//    BoxFilterFilm target(WIDTH, HEIGHT);
+//    render.RenderImage(&target, scene, camera);
+//
+//    // Convert image to raw
+//    std::vector<float> raw_target = target.Raw();
+//
+//    // Create tone-mapper and process target image
+//    ClampTonemapper tonemapper;
+//    tonemapper.Process("target.png", target);
+//
+//    // Remove from tape rendering variables
+//    default_tape.Pop();
+//
+//    // Change sphere position to center and try to match the images
+//    scene.ClearShapes();
+//
+//    // Create new grid
+//    int grid_dims[3] = {100, 100, 100};
+//    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
+//                                                     BBOX(Vector3f(2.f, 2.f, 2.f), Vector3f(-2.f, -2.f, -2.f)));
+//
+//    // FIXME Hardcoded for testing
+//    float delta_s = 4.f / 99.f;
+//    // Initialize grid using sphere of radius 1 as SDF
+//    for (int x = 0; x < grid_dims[0]; x++) {
+//        for (int y = 0; y < grid_dims[1]; y++) {
+//            for (int z = 0; z < grid_dims[2]; z++) {
+//                // Compute point coordinates
+//                Vector3f p(-2.f + delta_s * x, -2.f + delta_s * y, -2.f + delta_s * z);
+//                grid->operator()(x, y, z) = Length(p) - 1.f;
+//            }
+//        }
+//    }
+//
+//    // Print starting grid values
+////    std::cout << "Starting grid data: " << std::endl;
+////    std::cout << grid->ToString() << std::endl;
+//
+//    scene.AddShape(grid);
+//
+//    // Gradient
+//    std::vector<float> gradient(grid->GetNumVars(), 0.f);
+//    std::vector<float> delta(grid->GetNumVars(), 0.f);
+//
+//    // Get differentiable variables from scene's shapes
+//    std::vector<Float const *> vars;
+//    scene.GetShapes()[0]->GetDiffVariables(vars);
+//
+//    // Number of iterations
+//    size_t iters = 0;
+//    // Energy value
+//    float energy;
+//
+//    // Try to minimize squared norm of image
+//    do {
+//        // Clear derivatives
+//        derivatives.Clear();
+//        // Store current variables of the tape
+//        default_tape.Push();
+//
+//        // Render current image
+//        BoxFilterFilm x(WIDTH, HEIGHT);
+//        render.RenderImage(&x, scene, camera);
+//
+//        // Output image of current rendering
+//        tonemapper.Process("iters_" + std::to_string(iters) + ".png", x);
+//
+//        // Compute difference
+//        BoxFilterFilm difference = x - raw_target;
+//
+//        // Compute squared norm of difference
+//        Float x_2_norm = difference.SquaredNorm();
+//        energy = x_2_norm.GetValue();
+//        std::cout << "Energy: " << energy << std::endl;
+//
+//        // Create difference image
+//        difference.Abs();
+//        tonemapper.Process("iters_" + std::to_string(iters) + "_difference.ppm", difference);
+//
+//        // Compute derivatives
+//        derivatives.ComputeDerivatives(x_2_norm);
+//
+//        // Compute gradient and deltas
+//        for (size_t i = 0; i < vars.size(); i++) {
+//            gradient[i] = derivatives.Dwrt(x_2_norm, *vars[i]);
+//            delta[i] = -0.0001f * gradient[i];    // Learning rate
+//        }
+//
+//        std::cout << "Iteration: " << iters << std::endl;
+//        std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+//        // std::cout << "Gradient values: " << std::endl;
+//        // PrintGradient(gradient);
+//
+//        // Update scene vars, hardcoded for the moment
+//        scene.GetShapes()[0]->UpdateDiffVariables(delta, 0);
+//
+//        // Grid data
+//        // std::cout << "Grid data: " << std::endl;
+//        // std::cout << grid->ToString() << std::endl;
+//
+//        std::cout << "Tape size before pop: " << default_tape.Size() << std::endl;
+//        // Pop variables
+//        default_tape.Pop();
+//
+//        // Print tape size
+//        std::cout << "Tape size after pop: " << default_tape.Size() << std::endl << std::endl;
+//
+//        iters++;
+//        // Stop when gradient is almost zero, "energy" is almost zero or maximum iterations reached
+//    } while (GradNorm(gradient) > 0.001f && energy > 0.01f && iters < MAX_ITERS);
+//
+//    std::cout << "Final energy: " << energy << std::endl;
+//    std::cout << "Total iterations: " << iters << std::endl;
+//    std::cout << "Gradient norm: " << GradNorm(gradient) << std::endl;
+//
+//    // default_tape.Disable();
+//    BoxFilterFilm final(WIDTH, HEIGHT);
+//
+//    render.RenderImage(&final, scene, camera);
+//    tonemapper.Process("final.png", final);
 
     return EXIT_SUCCESS;
 }

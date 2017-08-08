@@ -299,7 +299,7 @@ namespace drdemo {
         return vertices.size() * 3;
     }
 
-    void TriangleMesh::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+    void TriangleMesh::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
         size_t used_vars = 0;
         for (auto &v : vertices) {
             // Update vertex values
@@ -312,7 +312,7 @@ namespace drdemo {
         bvh.Rebuild();
     }
 
-    void TriangleMesh::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+    void TriangleMesh::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {
         size_t used_vars = 0;
         for (auto &v : vertices) {
             // Update vertex values

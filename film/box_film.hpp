@@ -29,11 +29,11 @@ namespace drdemo {
         BoxFilterFilm operator-(BoxFilterFilm const &other) const;
 
         // Compute difference between this film and other film's raw data
-        BoxFilterFilm operator-(Vector<float> const &raw_other) const;
+        BoxFilterFilm operator-(const std::vector<float> &raw_other) const;
 
         Float SquaredNorm() const override;
 
-        Vector<float> Raw() const override;
+        std::vector<float> Raw() const override;
 
         void Abs() override;
     };

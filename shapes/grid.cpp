@@ -197,7 +197,7 @@ namespace drdemo {
 //        }
 //    }
 
-    void SignedDistanceGrid::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+    void SignedDistanceGrid::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
         // Propagate gradient inside the grid
         size_t used_vars = 0;
         for (int i = 0; i < total_points; ++i) {
@@ -207,7 +207,7 @@ namespace drdemo {
         ReinitializeSDF(*this, 0.001f, 10000, 0.005f, 100.f);
     }
 
-    void SignedDistanceGrid::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+    void SignedDistanceGrid::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {
         size_t used_vars = 0;
         for (int i = 0; i < total_points; ++i) {
             data[i].SetValue(vals[starting_index + used_vars++]);

@@ -128,7 +128,7 @@ namespace drdemo {
         return 4;
     }
 
-    void Sphere::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) {
+    void Sphere::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
         // Order is supposed to be sphere's center (x,y,z) and radius
         center.x.SetValue(center.x.GetValue() + delta[starting_index]);
         center.y.SetValue(center.y.GetValue() + delta[starting_index + 1]);
@@ -138,7 +138,7 @@ namespace drdemo {
         if (radius.GetValue() < 0.f) { radius.SetValue(0.f); }
     }
 
-    void Sphere::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+    void Sphere::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {
         // Order is supposed to be sphere's center (x,y,z) and radius
         center.x.SetValue(vals[starting_index]);
         center.y.SetValue(vals[starting_index + 1]);
