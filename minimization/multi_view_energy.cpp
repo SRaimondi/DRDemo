@@ -78,4 +78,8 @@ namespace drdemo {
         }
     }
 
+    size_t MultiViewEnergy::InputDim() const {
+        return diff_variables.size();
+    }
+
 } // drdemo namespace
