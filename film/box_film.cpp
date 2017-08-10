@@ -85,8 +85,7 @@ namespace drdemo {
     }
 
     std::vector<float> BoxFilterFilm::Raw() const {
-        std::vector<float> raw_data(width *height
-        *3);
+        std::vector<float> raw_data(width * height * 3);
 
         for (size_t j = 0; j < height; ++j) {
             for (size_t i = 0; i < width; ++i) {
