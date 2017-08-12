@@ -25,7 +25,7 @@ namespace drdemo {
      * Note that this class only provides the gradient for the Shapes in the Scene. It does not provide access to the
      * Cameras and the Light differentiable variables
      */
-    class MultiViewEnergy : ScalarFunctionInterface {
+    class MultiViewEnergy : public ScalarFunctionInterface {
     private:
         // Reference to the Scene to use in the rendering
         const Scene &target_scene;

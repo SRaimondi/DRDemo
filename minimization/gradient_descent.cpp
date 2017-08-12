@@ -21,7 +21,7 @@ namespace drdemo {
         // Number of iterations
         size_t iters = 0;
 
-        // Minimise function
+        // Minimize function
         do {
             // Push current status of the automatic differentiation tape
             default_tape.Push();

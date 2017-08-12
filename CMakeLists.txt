@@ -20,7 +20,8 @@ include_directories(
         integrator
         light
         utilities
-        tests)
+        tests
+        minimization)
 
 set(SOURCE_FILES
         main.cpp
