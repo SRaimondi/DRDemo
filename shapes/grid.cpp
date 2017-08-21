@@ -25,7 +25,7 @@ namespace drdemo {
         // Check if we are outside the BBOX
         if (!bounds.Inside(p_f)) {
             return Float(bounds.Distance(p_f) + 0.001f);
-            // TODO The 0.001 is there to make the next point go inside the Grid if the ray direction is perpendicular to
+            // FIXME The 0.001 is there to make the next point go inside the Grid if the ray direction is perpendicular to
             // the normal of the grid intersected face
         }
 
@@ -59,6 +59,71 @@ namespace drdemo {
         const Float tz = (p.z - voxel_min.z) * inv_width.z;
 
         return (1.f - tz) * c0 + tz * c1;
+    }
+
+    Vector3F SignedDistanceGrid::NormalAt(const Vector3F &p) const {
+        // Convert position
+        const Vector3f p_f = Tofloat(p);
+        // Get voxel indices
+        int voxel_i[3];
+        for (int i = 0; i < 3; i++) {
+            voxel_i[i] = PosToVoxel(p_f, i);
+        }
+        // Get point indices for the given voxel
+        int indices[8];
+        PointsIndicesFromVoxel(voxel_i[0], voxel_i[1], voxel_i[2], indices);
+
+        // Compute minimum point of voxel
+        const Vector3f voxel_min(bounds.MinPoint().x + voxel_i[0] * width.x,
+                                 bounds.MinPoint().y + voxel_i[1] * width.y,
+                                 bounds.MinPoint().z + voxel_i[2] * width.z);
+
+        int x, y, z;
+        // Compute normal at the 8 vertices of the voxel
+        IndicesFromLinear(indices[0], x, y, z);
+        const Vector3F n0 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[1], x, y, z);
+        const Vector3F n1 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[2], x, y, z);
+        const Vector3F n2 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[3], x, y, z);
+        const Vector3F n3 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[4], x, y, z);
+        const Vector3F n4 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[5], x, y, z);
+        const Vector3F n5 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[6], x, y, z);
+        const Vector3F n6 = NormalAtPoint(x, y, z);
+        IndicesFromLinear(indices[7], x, y, z);
+        const Vector3F n7 = NormalAtPoint(x, y, z);
+
+        // Interpolate normals
+        const Float tx = (p.x - voxel_min.x) * inv_width.x;
+        const Vector3F n01 = (1.f - tx) * n0 + tx * n1;
+        const Vector3F n23 = (1.f - tx) * n2 + tx * n3;
+        const Vector3F n45 = (1.f - tx) * n4 + tx * n5;
+        const Vector3F n67 = (1.f - tx) * n6 + tx * n7;
+
+        // Interpolate along y
+        const Float ty = (p.y - voxel_min.y) * inv_width.y;
+        const Vector3F nf1 = (1.f - ty) * n01 + ty * n23;
+        const Vector3F nf2 = (1.f - ty) * n45 + ty * n67;
+
+        // Return final value interpolated along z
+        const Float tz = (p.z - voxel_min.z) * inv_width.z;
+
+        return (1.f - tz) * nf1 + tz * nf2;
+    }
+
+    Vector3F SignedDistanceGrid::NormalAtPoint(int x, int y, int z) const {
+        // TODO Maybe we could use some higher order scheme?
+        // Compute normal at given grid point using forward difference method
+
+        return Vector3F(
+                (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x, y, z)]) * inv_width.x,
+                (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y, z)]) * inv_width.y,
+                (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z)]) * inv_width.z
+        );
     }
 
     Vector3F SignedDistanceGrid::EstimateNormal(const Vector3F &p, float eps) const {
@@ -121,10 +186,18 @@ namespace drdemo {
             if (distance < MIN_DIST) {
                 // Fill interaction
                 interaction->p = ray(depth);
+
                 // Estimate normal with finite difference
-                interaction->n = EstimateNormal(interaction->p);
+                // interaction->n = EstimateNormal(interaction->p);
+                interaction->n = Normalize(NormalAt(interaction->p));
+                // interaction->n = NormalAt(ray(depth));
+//                if (Length(interaction->n).GetValue() - 1.f > 0.001f) {
+//                    std::cout << "Normal length: " << Length(interaction->n).GetValue() << std::endl;
+//                }
+
                 // Interaction parameter
                 interaction->t = depth;
+
                 // Outgoing direction
                 interaction->wo = -Normalize(ray.d);
 
@@ -139,7 +212,7 @@ namespace drdemo {
     }
 
     bool SignedDistanceGrid::IntersectP(Ray const &ray) const {
-        // The intersection procedure uses ray marching to check if we have an interaction with the stored surface
+        // The intersection procedure uses ray marching to check if we have a hit with the surface
 
         // Current depth
         Float depth(0.f);
@@ -198,13 +271,16 @@ namespace drdemo {
 //    }
 
     void SignedDistanceGrid::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
+        // Second attempt, trying to correct the SDF after propagating directly the gradient into it
+
+
         // Propagate gradient inside the grid
         size_t used_vars = 0;
         for (int i = 0; i < total_points; ++i) {
             data[i].SetValue(data[i].GetValue() + delta[starting_index + used_vars++]);
         }
         // Reinitialise the grid to be a SDF after gradient update
-        ReinitializeSDF(*this, 0.001f, 10000, 0.005f, 100.f);
+        ReinitializeSDF(*this, 0.0001f, 1000, 0.005f, 100.f);
     }
 
     void SignedDistanceGrid::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {
@@ -233,8 +309,7 @@ namespace drdemo {
                     const float grad_2 = GradNorm2(grid, x, y, z);
                     // Update sign
                     sign_grid[grid.LinearIndex(x, y, z)] = sdf_v /
-                                                           std::sqrt(sdf_v * sdf_v + grad_2 * grid.VoxelSize().x *
-                                                                                     grid.VoxelSize().x);
+                                                           std::sqrt(sdf_v * sdf_v + grad_2 * EPS * EPS);
                 }
             }
         }
@@ -253,6 +328,7 @@ namespace drdemo {
 
         // Check sign and compute gradient norm
         float grad_x_sq, grad_y_sq, grad_z_sq;
+
         if (sign_grid[grid.LinearIndex(x, y, z)] > 0.f) {
             grad_x_sq = std::max(PositiveSQ(dphi_dx_minus), NegativeSQ(dphi_dx_plus));
             grad_y_sq = std::max(PositiveSQ(dphi_dy_minus), NegativeSQ(dphi_dy_plus));
@@ -272,6 +348,7 @@ namespace drdemo {
         std::cout << "Reinitializing SDF..." << std::endl;
         // Allocate space for storing the sign grid
         auto sign_grid = new float[grid.GetNumVars()];
+
         // Compute initial sign grid
         ComputeSignGrid(grid, sign_grid);
 
@@ -315,6 +392,9 @@ namespace drdemo {
 
             // Update sign grid
             ComputeSignGrid(grid, sign_grid);
+//            if (iters != 0 && iters % 100 == 0) {
+//                std::cout << iters << " iterations..." << std::endl;
+//            }
             iters++;
         }
 

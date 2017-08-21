@@ -6,13 +6,13 @@
 
 namespace drdemo {
 
-    void GradientDescent::MinimizeFunction(ScalarFunctionInterface &f,
-                                           float step,
-                                           size_t max_iters,
-                                           float tol,
-                                           bool verbose) {
+    void GradientDescent::Minimize(ScalarFunctionInterface &f,
+                                   float step,
+                                   size_t max_iters,
+                                   float tol,
+                                   bool verbose) {
         // Allocate vector passed to the function as updates and gradient
-        std::vector<float> gradient;
+        std::vector<float> gradient(f.InputDim());
         std::vector<float> deltas(f.InputDim(), 0.f);
         // Current value of the function
         float f_val;
@@ -47,9 +47,12 @@ namespace drdemo {
 
             // Print information if verbose is true
             if (verbose) {
+                // Print current iteration, function value and gradient norm
                 std::cout << "Iteration: " << iters << std::endl;
                 std::cout << "Function value: " << f_val << std::endl;
                 std::cout << "Gradient norm: " << grad_norm << std::endl;
+                // Print gradient
+                PrintGradient(gradient);
                 std::cout << std::endl;
             }
 

@@ -38,14 +38,14 @@ namespace drdemo {
         // Private utility methods
         inline int OffsetPoint(int x, int y, int z) const {
             // Check for boundaries condition
-            if (x == num_points[0]) { x = 0; }
-            else if (x == -1) { x = num_points[0] - 1; }
+            if (x >= num_points[0]) { x -= num_points[0]; }
+            else if (x < 0) { x += num_points[0]; }
 
-            if (y == num_points[1]) { y = 0; }
-            else if (y == -1) { y = num_points[1] - 1; }
+            if (y >= num_points[1]) { y -= num_points[1]; }
+            else if (y < 0) { y += num_points[1]; }
 
-            if (z == num_points[2]) { z = 0; }
-            else if (z == -1) { z = num_points[2] - 1; }
+            if (z >= num_points[2]) { z -= num_points[2]; }
+            else if (z < 0) { z += num_points[2]; }
 
             return z * num_points[0] * num_points[1] + y * num_points[0] + x;
         }
@@ -69,6 +69,12 @@ namespace drdemo {
         // Compute the value of the Signed Distance Function sampled by the grid using trilinear interpolation given
         // a point in the grid
         Float ValueAt(const Vector3F &p) const;
+
+        // Compute normal at given point inside the SDF using triliner interpolation
+        Vector3F NormalAt(const Vector3F &p) const;
+
+        // Compute the normal at a given grid point
+        Vector3F NormalAtPoint(int x, int y, int z) const;
 
         // Estimate SDF normal at given point
         Vector3F EstimateNormal(const Vector3F &p, float eps = EPS) const;
@@ -102,6 +108,19 @@ namespace drdemo {
         // Convert 3 indices to linear
         inline int LinearIndex(int x, int y, int z) const {
             return OffsetPoint(x, y, z);
+        }
+
+        // Convert linear index to 3 indices
+        // TODO Check this again, should be correct
+        inline void IndicesFromLinear(int linear_index, int &x, int &y, int &z) const {
+            // Compute z index
+            z = linear_index / (num_points[0] * num_points[1]);
+            linear_index -= z * (num_points[0] * num_points[1]);
+            // Compute y index
+            y = linear_index / num_points[0];
+            linear_index -= y * num_points[0];
+            // Last index
+            x = linear_index;
         }
 
         // Shape methods

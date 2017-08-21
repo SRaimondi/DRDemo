@@ -11,35 +11,37 @@
 #include <direct_integrator.hpp>
 #include <simple_renderer.hpp>
 #include <box_film.hpp>
+#include <grid.hpp>
+#include <clamp_tonemapper.hpp>
 #include "minimization/multi_view_energy.hpp"
 #include "minimization/gradient_descent.hpp"
 
 #define WIDTH   512
 #define HEIGHT  512
 
-#define MAX_ITERS 125
+#define MAX_ITERS 5
 
-// Compute gradient norm, considering the gradient as a float vector
-float GradNorm(std::vector<float> const &grad) {
-    float norm = 0.f;
-    for (auto const &e : grad) {
-        norm += e * e;
-    }
-
-    return std::sqrt(norm);
-}
-
-// Print gradient
-void PrintGradient(std::vector<float> const &grad) {
-    std::cout << "[";
-    for (size_t i = 0; i < grad.size(); ++i) {
-        std::cout << grad[i];
-        if (i != grad.size() - 1) {
-            std::cout << ", ";
-        }
-    }
-    std::cout << "]" << std::endl;
-}
+//// Compute gradient norm, considering the gradient as a float vector
+//float GradNorm(std::vector<float> const &grad) {
+//    float norm = 0.f;
+//    for (auto const &e : grad) {
+//        norm += e * e;
+//    }
+//
+//    return std::sqrt(norm);
+//}
+//
+//// Print gradient
+//void PrintGradient(std::vector<float> const &grad) {
+//    std::cout << "[";
+//    for (size_t i = 0; i < grad.size(); ++i) {
+//        std::cout << grad[i];
+//        if (i != grad.size() - 1) {
+//            std::cout << ", ";
+//        }
+//    }
+//    std::cout << "]" << std::endl;
+//}
 
 
 //// Spherical function, minimization test
@@ -240,10 +242,10 @@ int main() {
 //    std::cout << std::endl;
 
 
-//    /**
-//     * Geometric sphere description minimisation against target sphere image
-//     */
-//
+    /**
+     * Geometric sphere description minimisation against target sphere image
+     */
+
 //    // Derivatives computation class
 //    Derivatives derivatives;
 //
@@ -370,27 +372,37 @@ int main() {
 //    std::cout << "Final sphere data" << std::endl;
 //    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
 
-//    /*
-//     * Signed distance grid rendering test
-//     */
-//
-//    // Create new grid
-//    size_t grid_dims[3] = {100, 100, 100};
-//    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
-//                                                     BBOX(Vector3f(2.f, 2.f, 2.f), Vector3f(-2.f, -2.f, -2.f)));
-//
-//    float delta = 4.f / 99.f;
-//    // Initialize grid using sphere of radius 1 as SDF
-//    for (int x = 0; x < grid_dims[0]; x++) {
-//        for (int y = 0; y < grid_dims[1]; y++) {
-//            for (int z = 0; z < grid_dims[2]; z++) {
-//                // Compute point coordinates
-//                Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
-//                grid->operator()(x, y, z) = Length(p) - 1.f;
-//            }
-//        }
-//    }
-//
+    /*
+     * Signed distance grid rendering test
+     */
+
+    // Create new grid
+    size_t grid_dims[3] = {50, 50, 50};
+    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
+                                                     BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
+
+    float delta = 4.f / static_cast<float>(grid_dims[0] - 1);
+
+    // Ellipse description
+    float a = 1.f;
+    float b = 1.f;
+    float c = 1.f;
+
+    // Initialize grid using sphere of radius 1 as SDF
+    for (int z = 0; z < grid_dims[2]; z++) {
+        for (int y = 0; y < grid_dims[1]; y++) {
+            for (int x = 0; x < grid_dims[0]; x++) {
+                // Compute point coordinates
+                Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
+                // Use ellipse equation
+                grid->operator()(x, y, z) = Length(p) - 1.f;
+            }
+        }
+    }
+
+    // Make it a SDF
+    // ReinitializeSDF(*grid.get(), 0.0001f, 10000, 0.001f, 100.f);
+
 //    // Create scene
 //    Scene scene;
 //
@@ -412,6 +424,66 @@ int main() {
 //    // Create tone-mapper and process target image
 //    ClampTonemapper tonemapper;
 //    tonemapper.Process("render_test.png", target);
+
+
+    // Create scene
+    Scene scene;
+
+    // Add sphere
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
+    // Add lights
+    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+
+    // Create cameras
+    std::vector<std::shared_ptr<const CameraInterface> > cameras;
+    // Add first camera
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//    // Add second camera
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+
+    cameras.push_back(
+            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+                                                  WIDTH, HEIGHT));
+
+    // Create renderer
+    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
+
+    // Push status of tape before rendering target image
+    default_tape.Push();
+
+    // Render target images
+    BoxFilterFilm target(WIDTH, HEIGHT);
+    std::vector<std::vector<float> > raw_views;
+    // Render views
+    for (auto const &camera : cameras) {
+        render->RenderImage(&target, scene, *camera);
+        raw_views.push_back(target.Raw());
+    }
+
+    // Remove from tape rendering variables
+    default_tape.Pop();
+
+    // Use SDF
+    scene.ClearShapes();
+    scene.AddShape(grid);
+
+    render->RenderImage(&target, scene, *cameras[0]);
+    ClampTonemapper tonemapper;
+    tonemapper.Process("start.png", target);
+
+    // Create multi-view energy
+    auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+
+    // Minimise energy
+    GradientDescent::Minimize(energy, 0.000001f, MAX_ITERS, 0.5f, true);
+
+    render->RenderImage(&target, scene, *cameras[0]);
+    tonemapper.Process("final.png", target);
+
 
 //    /**
 //     * SDF sphere description minimisation against target sphere image
@@ -561,61 +633,60 @@ int main() {
 
 
 
-    /**
-     * Geometric sphere description multi-view test
-     */
-
-    // Create scene
-    Scene scene;
-
-    // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
-    // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-
-    // Create cameras
-    std::vector<std::shared_ptr<const CameraInterface> > cameras;
-    // Add first camera
-    cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-    // Add second camera
-    cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-
-    // Create renderer
-    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
-
-    // Push status of tape before rendering target image
-    default_tape.Push();
-
-    // Render target images
-    BoxFilterFilm target(WIDTH, HEIGHT);
-    render->RenderImage(&target, scene, *cameras[0]);
-    // Convert images to raw
-    std::vector<std::vector<float> > raw_views;
-    raw_views.push_back(target.Raw());
-    render->RenderImage(&target, scene, *cameras[1]);
-
-    // Convert images to raw
-    raw_views.push_back(target.Raw());
-
-    // Remove from tape rendering variables
-    default_tape.Pop();
-
-    // Change sphere position to center and try to match the images
-    scene.ClearShapes();
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
-
-    // Create multiview energy
-    auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
-
-    // Minimise enery
-    GradientDescent::MinimizeFunction(energy, 0.000001f, MAX_ITERS, 0.5f, true);
-
-    std::cout << "Final sphere data" << std::endl;
-    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
+//    /**
+//     * Geometric sphere description multi-view test
+//     */
+//
+//    // Create scene
+//    Scene scene;
+//
+//    // Add sphere
+//    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
+//    // Add lights
+//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+//
+//    // Create cameras
+//    std::vector<std::shared_ptr<const CameraInterface> > cameras;
+//    // Add first camera
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//    // Add second camera
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//
+//    // Create renderer
+//    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
+//
+//    // Push status of tape before rendering target image
+//    default_tape.Push();
+//
+//    // Render target images
+//    BoxFilterFilm target(WIDTH, HEIGHT);
+//    std::vector<std::vector<float> > raw_views;
+//    // Render views
+//    for (auto const& camera : cameras) {
+//        render->RenderImage(&target, scene, *camera);
+//        raw_views.push_back(target.Raw());
+//    }
+//
+//
+//    // Remove from tape rendering variables
+//    default_tape.Pop();
+//
+//    // Change sphere position to center and try to match the images
+//    scene.ClearShapes();
+//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
+//
+//    // Create multi-view energy
+//    auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+//
+//    // Minimise energy
+//    GradientDescent::Minimize(energy, 0.000001f, MAX_ITERS, 0.5f, true);
+//
+//    std::cout << "Final sphere data" << std::endl;
+//    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
 
     return EXIT_SUCCESS;
 }

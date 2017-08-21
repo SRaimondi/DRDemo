@@ -40,7 +40,7 @@ namespace drdemo {
             energy += difference_norm;
         }
 
-        return energy;
+        return energy / static_cast<float>(target_views.size());
     }
 
     std::vector<float> MultiViewEnergy::ComputeGradient(const Float &out) const {

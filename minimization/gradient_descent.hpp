@@ -17,11 +17,11 @@ namespace drdemo {
         // Minimize given ScalarFunction given a step size, a maximum number of iterations,
         // a tolerance for the gradient norm.
         // The last argument tells if the routine should print information about the minimization process at every step
-        static void MinimizeFunction(ScalarFunctionInterface &f,
-                                     float step,
-                                     size_t max_iters,
-                                     float tol,
-                                     bool verbose = false);
+        static void Minimize(ScalarFunctionInterface &f,
+                             float step,
+                             size_t max_iters,
+                             float tol,
+                             bool verbose = false);
     };
 
 } // drdemo namespace

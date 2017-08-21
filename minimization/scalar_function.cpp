@@ -20,4 +20,15 @@ namespace drdemo {
         return std::sqrt(GradientNorm2(gradient));
     }
 
+    void PrintGradient(const std::vector<float> &gradient) {
+        std::cout << "[";
+        for (int i = 0; i < gradient.size(); i++) {
+            std::cout << gradient[i];
+            if (i != gradient.size() - 1) {
+                std::cout << " ";
+            }
+        }
+        std::cout << "]" << std::endl;
+    }
+
 } // drdemo namespace

@@ -37,6 +37,9 @@ namespace drdemo {
     // Gradient norm
     float GradientNorm(const std::vector<float> &gradient);
 
+    // Print gradient
+    void PrintGradient(const std::vector<float> &gradient);
+
 } // drdemo namespace
 
 #endif //DRDEMO_SCALAR_FUNCTION_HPP
