@@ -13,13 +13,13 @@
 #include <box_film.hpp>
 #include <grid.hpp>
 #include <clamp_tonemapper.hpp>
-#include "minimization/multi_view_energy.hpp"
+#include <reconstruction_energy.hpp>
 #include "minimization/gradient_descent.hpp"
 
 #define WIDTH   512
 #define HEIGHT  512
 
-#define MAX_ITERS 5
+#define MAX_ITERS 100
 
 //// Compute gradient norm, considering the gradient as a float vector
 //float GradNorm(std::vector<float> const &grad) {
@@ -132,7 +132,7 @@ int main() {
 //        // BoxFilterFilm difference = x - raw_target;
 //
 //        // Compute squared norm of difference
-//        Float x_2_norm = x.SquaredNorm();
+//        Float x_2_norm = x.Norm();
 //        energy = x_2_norm.GetValue();
 //        std::cout << "Energy: " << energy << std::endl;
 //
@@ -321,7 +321,7 @@ int main() {
 //        BoxFilterFilm difference = x - raw_target;
 //
 //        // Compute squared norm of difference
-//        Float x_2_norm = difference.SquaredNorm();
+//        Float x_2_norm = difference.Norm();
 //        energy = x_2_norm.GetValue();
 //        std::cout << "Energy: " << energy << std::endl;
 //
@@ -377,16 +377,11 @@ int main() {
      */
 
     // Create new grid
-    size_t grid_dims[3] = {50, 50, 50};
+    size_t grid_dims[3] = {20, 20, 20};
     auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
                                                      BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
 
     float delta = 4.f / static_cast<float>(grid_dims[0] - 1);
-
-    // Ellipse description
-    float a = 1.f;
-    float b = 1.f;
-    float c = 1.f;
 
     // Initialize grid using sphere of radius 1 as SDF
     for (int z = 0; z < grid_dims[2]; z++) {
@@ -395,7 +390,7 @@ int main() {
                 // Compute point coordinates
                 Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
                 // Use ellipse equation
-                grid->operator()(x, y, z) = Length(p) - 1.f;
+                grid->operator()(x, y, z) = Length(p) - 1.2f;
             }
         }
     }
@@ -430,24 +425,29 @@ int main() {
     Scene scene;
 
     // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
     // Add lights
     scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
-    // Create cameras
+    // Create target_cameras
     std::vector<std::shared_ptr<const CameraInterface> > cameras;
+
     // Add first camera
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
-//    // Add second camera
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
+    cameras.push_back(
+            std::make_shared<const PinholeCamera>(Vector3F(3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+                                                  WIDTH, HEIGHT));
+    // Add second camera
+    cameras.push_back(
+            std::make_shared<const PinholeCamera>(Vector3F(-3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+                                                  WIDTH, HEIGHT));
 
     cameras.push_back(
             std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
                                                   WIDTH, HEIGHT));
+
+//    target_cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
 
     // Create renderer
     auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
@@ -457,6 +457,12 @@ int main() {
 
     // Render target images
     BoxFilterFilm target(WIDTH, HEIGHT);
+
+    // Create target image
+    render->RenderImage(&target, scene, *cameras[2]);
+    ClampTonemapper tonemapper;
+    tonemapper.Process("target.png", target);
+
     std::vector<std::vector<float> > raw_views;
     // Render views
     for (auto const &camera : cameras) {
@@ -464,24 +470,26 @@ int main() {
         raw_views.push_back(target.Raw());
     }
 
-    // Remove from tape rendering variables
-    default_tape.Pop();
-
     // Use SDF
     scene.ClearShapes();
     scene.AddShape(grid);
 
-    render->RenderImage(&target, scene, *cameras[0]);
-    ClampTonemapper tonemapper;
+    render->RenderImage(&target, scene, *cameras[2]);
     tonemapper.Process("start.png", target);
 
+    // Remove from tape rendering variables
+    default_tape.Pop();
+
     // Create multi-view energy
-    auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+    // auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+
+    // Test with new energy
+    auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
 
     // Minimise energy
-    GradientDescent::Minimize(energy, 0.000001f, MAX_ITERS, 0.5f, true);
+    GradientDescent::Minimize(energy, 0.0002f, MAX_ITERS, 30.f, true);
 
-    render->RenderImage(&target, scene, *cameras[0]);
+    render->RenderImage(&target, scene, *cameras[2]);
     tonemapper.Process("final.png", target);
 
 
@@ -581,7 +589,7 @@ int main() {
 //        BoxFilterFilm difference = x - raw_target;
 //
 //        // Compute squared norm of difference
-//        Float x_2_norm = difference.SquaredNorm();
+//        Float x_2_norm = difference.Norm();
 //        energy = x_2_norm.GetValue();
 //        std::cout << "Energy: " << energy << std::endl;
 //
@@ -645,14 +653,14 @@ int main() {
 //    // Add lights
 //    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 //
-//    // Create cameras
-//    std::vector<std::shared_ptr<const CameraInterface> > cameras;
+//    // Create target_cameras
+//    std::vector<std::shared_ptr<const CameraInterface> > target_cameras;
 //    // Add first camera
-//    cameras.push_back(
+//    target_cameras.push_back(
 //            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
 //                                                  WIDTH, HEIGHT));
 //    // Add second camera
-//    cameras.push_back(
+//    target_cameras.push_back(
 //            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
 //                                                  WIDTH, HEIGHT));
 //
@@ -666,7 +674,7 @@ int main() {
 //    BoxFilterFilm target(WIDTH, HEIGHT);
 //    std::vector<std::vector<float> > raw_views;
 //    // Render views
-//    for (auto const& camera : cameras) {
+//    for (auto const& camera : target_cameras) {
 //        render->RenderImage(&target, scene, *camera);
 //        raw_views.push_back(target.Raw());
 //    }
@@ -680,7 +688,7 @@ int main() {
 //    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
 //
 //    // Create multi-view energy
-//    auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+//    auto energy = MultiViewEnergy(scene, raw_views, target_cameras, render, WIDTH, HEIGHT);
 //
 //    // Minimise energy
 //    GradientDescent::Minimize(energy, 0.000001f, MAX_ITERS, 0.5f, true);

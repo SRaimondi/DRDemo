@@ -73,9 +73,6 @@ namespace drdemo {
         // Compute normal at given point inside the SDF using triliner interpolation
         Vector3F NormalAt(const Vector3F &p) const;
 
-        // Compute the normal at a given grid point
-        Vector3F NormalAtPoint(int x, int y, int z) const;
-
         // Estimate SDF normal at given point
         Vector3F EstimateNormal(const Vector3F &p, float eps = EPS) const;
 
@@ -94,6 +91,9 @@ namespace drdemo {
         inline Float &operator()(int x, int y, int z) {
             return data[OffsetPoint(x, y, z)];
         }
+
+        // Compute the normal at a given grid point
+        Vector3F NormalAtPoint(int x, int y, int z) const;
 
         // Access size of the voxels
         inline Vector3f const &VoxelSize() const { return width; }

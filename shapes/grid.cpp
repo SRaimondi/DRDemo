@@ -117,6 +117,7 @@ namespace drdemo {
 
     Vector3F SignedDistanceGrid::NormalAtPoint(int x, int y, int z) const {
         // TODO Maybe we could use some higher order scheme?
+        // FIXME This needs to be VERY CAREFULLY designed now
         // Compute normal at given grid point using forward difference method
 
         return Vector3F(
@@ -280,7 +281,7 @@ namespace drdemo {
             data[i].SetValue(data[i].GetValue() + delta[starting_index + used_vars++]);
         }
         // Reinitialise the grid to be a SDF after gradient update
-        ReinitializeSDF(*this, 0.0001f, 1000, 0.005f, 100.f);
+        // ReinitializeSDF(*this, 0.0001f, 10000, 0.005f, 100.f);
     }
 
     void SignedDistanceGrid::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {

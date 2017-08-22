@@ -79,6 +79,8 @@ set(SOURCE_FILES
         minimization/multi_view_energy.cpp
         minimization/multi_view_energy.hpp
         minimization/gradient_descent.cpp
-        minimization/gradient_descent.hpp)
+        minimization/gradient_descent.hpp
+        minimization/reconstruction_energy.cpp
+        minimization/reconstruction_energy.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

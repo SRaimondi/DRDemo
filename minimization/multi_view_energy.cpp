@@ -2,7 +2,7 @@
 // Created by Simone Raimondi on 08.08.17.
 //
 
-#include <box_film.hpp>
+#include "box_film.hpp"
 #include "multi_view_energy.hpp"
 
 namespace drdemo {
@@ -11,8 +11,8 @@ namespace drdemo {
                                      const std::vector<std::shared_ptr<const CameraInterface> > &c,
                                      const std::shared_ptr<RendererInterface> &r,
                                      size_t w, size_t h)
-            : target_scene(scene), target_views(views), cameras(c), renderer(r), width(w), height(h) {
-        // Check that the size of the target render and the cameras is the same
+            : target_scene(scene), target_views(views), cameras(c), renderer(r), width(w), height(h), evalutations(0) {
+        // Check that the size of the target render and the target_cameras is the same
         assert(target_views.size() == cameras.size());
 
         // Get pointer to all the differentiable variables of the Shapes in the scene
@@ -25,7 +25,7 @@ namespace drdemo {
         // Final energy, sum of all the single rendering differences
         Float energy;
 
-        // Loop over all target cameras
+        // Loop over all target target_cameras
         for (size_t target_index = 0; target_index < cameras.size(); ++target_index) {
             // Film to render the image on
             BoxFilterFilm render(width, height);
@@ -39,6 +39,9 @@ namespace drdemo {
             // Sum current rendering difference to total energy
             energy += difference_norm;
         }
+
+        // Increase number of evaluations
+        evalutations++;
 
         return energy / static_cast<float>(target_views.size());
     }

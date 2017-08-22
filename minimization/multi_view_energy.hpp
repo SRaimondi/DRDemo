@@ -5,6 +5,7 @@
 #ifndef DRDEMO_MULTI_VIEW_ENERGY_HPP
 #define DRDEMO_MULTI_VIEW_ENERGY_HPP
 
+#include <clamp_tonemapper.hpp>
 #include "renderer.hpp"
 #include "derivative.hpp"
 #include "scene.hpp"
@@ -14,7 +15,7 @@
 namespace drdemo {
 
     /**
-     * This file contains the main class of the project
+     * This file contains the implementation of a scalar function as a multi-view energy computation
      * It takes a Scene, a list of target images and the respective cameras
      *
      * It then computes the energy as the sum of all the differences between the current view rendering
@@ -43,6 +44,11 @@ namespace drdemo {
 
         // Target render resolution
         const size_t width, height;
+
+        // Tonemapper to create images
+        ClampTonemapper tonemapper;
+        // Current number of function evaluations
+        mutable size_t evalutations;
 
     public:
         // Constructor

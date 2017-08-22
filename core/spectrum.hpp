@@ -90,7 +90,7 @@ namespace drdemo {
         return Spectrum(t * s.r, t * s.g, t * s.b);
     }
 
-    // Norm of color
+    // Squared "Norm" of color
     inline Float Norm(Spectrum const &s) {
         return s.r * s.r + s.g * s.g + s.b * s.b;
     }
