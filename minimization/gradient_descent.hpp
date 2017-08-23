@@ -23,9 +23,11 @@ namespace drdemo {
                              float step,
                              size_t max_iters,
                              float grad_tol,
+                             bool verbose = false,
+                             bool use_target_val = false,
                              float target_f_val = 0.f,
-                             float target_f_val_tol = INFINITY,
-                             bool verbose = false);
+                             float target_f_val_tol = 0.f
+        );
     };
 
     /**
@@ -51,9 +53,10 @@ namespace drdemo {
                              float grad_tol,
                              float c,
                              float rho,
+                             bool verbose = false,
+                             bool use_target_val = false,
                              float target_f_val = 0.f,
-                             float target_f_val_tol = INFINITY,
-                             bool verbose = false
+                             float target_f_val_tol = 0.f
         );
     };
 

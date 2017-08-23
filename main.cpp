@@ -18,10 +18,10 @@
 #include <multi_view_energy.hpp>
 #include "minimization/gradient_descent.hpp"
 
-#define WIDTH   400
-#define HEIGHT  400
+#define WIDTH   256
+#define HEIGHT  256
 
-#define MAX_ITERS 300
+#define MAX_ITERS 30
 
 //// Spherical function, minimization test
 //drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
@@ -51,7 +51,7 @@ int main() {
 //    Derivatives derivatives;
 //
 //    // Try to load sphere mesh
-//    auto mesh = std::make_shared<TriangleMesh>("../objs/sphere.obj");
+//    auto mesh = std::make_shared<TriangleMesh>("../objs/cube.obj");
 //
 //    // Get list of triangles
 //    // std::vector<std::shared_ptr<Shape> > triangles;
@@ -69,7 +69,7 @@ int main() {
 //    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 //
 //    // Create camera
-//    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+//    auto camera = PinholeCamera(Vector3F(5.f, 5.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
 //
 //    // Create renderer
 //    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
@@ -356,7 +356,7 @@ int main() {
      */
 
     // Create new grid
-    int grid_dims[3] = {20, 20, 20};
+    int grid_dims[3] = {30, 30, 30};
     auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
                                                      BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
 
@@ -374,102 +374,74 @@ int main() {
         }
     }
 
-    // Make it a SDF
-    // ReinitializeSDF(*grid.get(), 0.0001f, 10000, 0.001f, 100.f);
 
-//    // Create scene
-//    Scene scene;
-//
-//    // Add grid
-//    scene.AddShape(grid);
-//    // Add lights
-//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-//
-//    // Create camera
-//    auto camera = PinholeCamera(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
-//
-//    // Create renderer
-//    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
-//
-//    // Render target image
-//    BoxFilterFilm target(WIDTH, HEIGHT);
-//    render.RenderImage(&target, scene, camera);
-//
-//    // Create tone-mapper and process target image
-//    ClampTonemapper tonemapper;
-//    tonemapper.Process("render_test.png", target);
+    // Create scene
+    Scene scene;
 
+    // Add sphere
+    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
+    // Add lights
+    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
-//    // Create scene
-//    Scene scene;
-//
-//    // Add sphere
-//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
-//    // Add lights
-//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-//
-//    // Create target_cameras
-//    std::vector<std::shared_ptr<const CameraInterface> > cameras;
-//
-//    // Add first camera
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
-//    // Add second camera
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(-3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
-//
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
-//
-////    target_cameras.push_back(
-////            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-////                                                  WIDTH, HEIGHT));
-//
-//    // Create renderer
-//    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
-//
-//    // Push status of tape before rendering target image
-//    default_tape.Push();
-//
-//    // Render target images
-//    BoxFilterFilm target(WIDTH, HEIGHT);
-//
-//    // Create target image
-//    render->RenderImage(&target, scene, *cameras[2]);
-//    ClampTonemapper tonemapper;
-//    tonemapper.Process("target.png", target);
-//
-//    std::vector<std::vector<float> > raw_views;
-//    // Render views
-//    for (auto const &camera : cameras) {
-//        render->RenderImage(&target, scene, *camera);
-//        raw_views.push_back(target.Raw());
-//    }
-//
-//    // Use SDF
-//    scene.ClearShapes();
-//    scene.AddShape(grid);
-//
-//    render->RenderImage(&target, scene, *cameras[2]);
-//    tonemapper.Process("start.png", target);
-//
-//    // Remove from tape rendering variables
-//    default_tape.Pop();
-//
-//    // Create multi-view energy
-//    // auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
-//
-//    // Test with new energy
-//    auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
-//
-//    // Minimise energy
-//    GradientDescent::Minimize(energy, 0.0002f, MAX_ITERS, 1.f, true);
-//
-//    render->RenderImage(&target, scene, *cameras[2]);
-//    tonemapper.Process("final.png", target);
+    // Create target_cameras
+    std::vector<std::shared_ptr<const CameraInterface> > cameras;
+
+    // Add first camera
+    cameras.push_back(
+            std::make_shared<const PinholeCamera>(Vector3F(3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+                                                  WIDTH, HEIGHT));
+    // Add second camera
+    cameras.push_back(
+            std::make_shared<const PinholeCamera>(Vector3F(-3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+                                                  WIDTH, HEIGHT));
+
+    cameras.push_back(
+            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+                                                  WIDTH, HEIGHT));
+
+    // Create renderer
+    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
+
+    // Push status of tape before rendering target image
+    default_tape.Push();
+
+    // Render target images
+    BoxFilterFilm target(WIDTH, HEIGHT);
+
+    // Create target image
+    render->RenderImage(&target, scene, *cameras[2]);
+    ClampTonemapper tonemapper;
+    tonemapper.Process("target.png", target);
+
+    std::vector<std::vector<float> > raw_views;
+    // Render views
+    for (auto const &camera : cameras) {
+        render->RenderImage(&target, scene, *camera);
+        raw_views.push_back(target.Raw());
+    }
+
+    // Use SDF
+    scene.ClearShapes();
+    scene.AddShape(grid);
+
+    render->RenderImage(&target, scene, *cameras[2]);
+    tonemapper.Process("start.png", target);
+
+    // Remove from tape rendering variables
+    default_tape.Pop();
+
+    // Create multi-view energy
+    // auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+
+    // Test with new energy
+    auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
+
+    // Minimise energy
+    // GradientDescent::Minimize(energy, 0.0002f, MAX_ITERS, 1.f, true);
+    GradientDescentBT::Minimize(energy, MAX_ITERS, 1.f, 0.5f, 0.8f, true, true, 50.f, 10.f);
+
+    render->RenderImage(&target, scene, *cameras[2]);
+    tonemapper.Process("final.png", target);
 
 
 //    /**
@@ -620,60 +592,60 @@ int main() {
 
 
 
-    /**
-     * Geometric sphere description multi-view test
-     */
-
-    // Create scene
-    Scene scene;
-
-    // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
-    // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-
-    // Create target_cameras
-    std::vector<std::shared_ptr<const CameraInterface> > target_cameras;
-    // Add first camera
-    target_cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-    // Add second camera
-    target_cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-
-    // Create renderer
-    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
-
-    // Push status of tape before rendering target image
-    default_tape.Push();
-
-    // Render target images
-    BoxFilterFilm target(WIDTH, HEIGHT);
-    std::vector<std::vector<float> > raw_views;
-    // Render views
-    for (auto const &camera : target_cameras) {
-        render->RenderImage(&target, scene, *camera);
-        raw_views.push_back(target.Raw());
-    }
-
-    // Remove from tape rendering variables
-    default_tape.Pop();
-
-    // Change sphere position to center and try to match the images
-    scene.ClearShapes();
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
-
-    // Create multi-view energy
-    auto energy = MultiViewEnergy(scene, raw_views, target_cameras, render, WIDTH, HEIGHT);
-
-    // Minimise energy
-    // GradientDescent::Minimize(energy, 0.000001f, MAX_ITERS, 1.f, true);
-    GradientDescentBT::Minimize(energy, MAX_ITERS, 1.f, 0.5f, 0.8f, 0.f, 10.f, true);
-
-    std::cout << "Final sphere data" << std::endl;
-    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
+//    /**
+//     * Geometric sphere description multi-view test
+//     */
+//
+//    // Create scene
+//    Scene scene;
+//
+//    // Add sphere
+//    scene.AddShape(std::make_shared<Sphere>(Vector3F(1.f, 0.f, 0.f), Float(2.f)));
+//    // Add lights
+//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+//
+//    // Create target_cameras
+//    std::vector<std::shared_ptr<const CameraInterface> > target_cameras;
+//    // Add first camera
+//    target_cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//    // Add second camera
+//    target_cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(-1.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//
+//    // Create renderer
+//    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
+//
+//    // Push status of tape before rendering target image
+//    default_tape.Push();
+//
+//    // Render target images
+//    BoxFilterFilm target(WIDTH, HEIGHT);
+//    std::vector<std::vector<float> > raw_views;
+//    // Render views
+//    for (auto const &camera : target_cameras) {
+//        render->RenderImage(&target, scene, *camera);
+//        raw_views.push_back(target.Raw());
+//    }
+//
+//    // Remove from tape rendering variables
+//    default_tape.Pop();
+//
+//    // Change sphere position to center, reduce radius and try to match the images
+//    scene.ClearShapes();
+//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.f)));
+//
+//    // Create multi-view energy
+//    auto energy = MultiViewEnergy(scene, raw_views, target_cameras, render, WIDTH, HEIGHT);
+//
+//    // Minimise energy
+//    // GradientDescent::Minimize(energy, 0.000001f, MAX_ITERS, 1.f, true);
+//    GradientDescentBT::Minimize(energy, MAX_ITERS, 1.f, 0.5f, 0.8f, true, true, 0.f, 8.f);
+//
+//    std::cout << "Final sphere data" << std::endl;
+//    std::cout << scene.GetShapes()[0]->ToString() << std::endl;
 
     return EXIT_SUCCESS;
 }
