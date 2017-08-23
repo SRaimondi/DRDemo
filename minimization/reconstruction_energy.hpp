@@ -65,6 +65,8 @@ namespace drdemo {
 
         std::vector<float> ComputeGradient(const Float &out) const override;
 
+        std::vector<float> GetStatus() const override;
+
         void UpdateStatus(const std::vector<float> &deltas) override;
 
         void SetStatus(const std::vector<float> &new_status) override;

@@ -22,6 +22,9 @@ namespace drdemo {
         // Compute gradient of the function, with respect to the given output variable
         virtual std::vector<float> ComputeGradient(const Float &out) const = 0;
 
+        // Get value off the internal function status
+        virtual std::vector<float> GetStatus() const = 0;
+
         // Update the internal state of the function given deltas (x_i = x_i + delta_i)
         virtual void UpdateStatus(const std::vector<float> &deltas) = 0;
 

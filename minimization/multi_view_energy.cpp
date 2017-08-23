@@ -85,4 +85,14 @@ namespace drdemo {
         return diff_variables.size();
     }
 
+    std::vector<float> MultiViewEnergy::GetStatus() const {
+        // Status is just the current value of all the value we can differentiate with respect to
+        std::vector<float> status(diff_variables.size(), 0.f);
+        for (size_t i = 0; i < status.size(); i++) {
+            status[i] = diff_variables[i]->GetValue();
+        }
+
+        return status;
+    }
+
 } // drdemo namespace

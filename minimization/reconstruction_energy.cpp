@@ -97,7 +97,18 @@ namespace drdemo {
     }
 
     void ReconstructionEnergy::SetStatus(const std::vector<float> &new_status) {
+        // Only set the status of the grid
         grid->SetDiffVariables(new_status, 0);
+    }
+
+    std::vector<float> ReconstructionEnergy::GetStatus() const {
+        // Status is just the current value of all the gird values we can differentiate with respect to
+        std::vector<float> status(diff_variables.size(), 0.f);
+        for (size_t i = 0; i < status.size(); i++) {
+            status[i] = diff_variables[i]->GetValue();
+        }
+
+        return status;
     }
 
 } // drdemo namespace

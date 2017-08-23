@@ -120,11 +120,34 @@ namespace drdemo {
         // FIXME This needs to be VERY CAREFULLY designed now
         // Compute normal at given grid point using forward difference method
 
-        return Vector3F(
-                (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x, y, z)]) * inv_width.x,
-                (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y, z)]) * inv_width.y,
-                (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z)]) * inv_width.z
-        );
+        Float dx, dy, dz;
+
+        // Check if we are at the boundaries, use backward difference method if we are at the boundaries
+        if (x == num_points[0] - 1) {
+            dx = (data[LinearIndex(x, y, z)] - data[LinearIndex(x - 1, y, z)]) * inv_width.x;
+        } else {
+            dx = (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x, y, z)]) * inv_width.x;
+        }
+
+        if (y == num_points[1] - 1) {
+            dy = (data[LinearIndex(x, y, z)] - data[LinearIndex(x, y - 1, z)]) * inv_width.y;
+        } else {
+            dy = (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y, z)]) * inv_width.y;
+        }
+
+        if (z == num_points[2] - 1) {
+            dz = (data[LinearIndex(x, y, z)] - data[LinearIndex(x, y, z - 1)]) * inv_width.z;
+        } else {
+            dz = (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z)]) * inv_width.z;
+        }
+
+//        return Vector3F(
+//                (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x, y, z)]) * inv_width.x,
+//                (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y, z)]) * inv_width.y,
+//                (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z)]) * inv_width.z
+//        );
+
+        return Vector3F(dx, dy, dz);
     }
 
     Vector3F SignedDistanceGrid::EstimateNormal(const Vector3F &p, float eps) const {
@@ -190,7 +213,7 @@ namespace drdemo {
 
                 // Estimate normal with finite difference
                 // interaction->n = EstimateNormal(interaction->p);
-                interaction->n = Normalize(NormalAt(interaction->p));
+                interaction->n = NormalAt(interaction->p);
                 // interaction->n = NormalAt(ray(depth));
 //                if (Length(interaction->n).GetValue() - 1.f > 0.001f) {
 //                    std::cout << "Normal length: " << Length(interaction->n).GetValue() << std::endl;

@@ -27,13 +27,13 @@ namespace drdemo {
         // Vertices indices
         uint32_t v[3];
         // Normal indices
-        // uint32_t n[3];
+        uint32_t n[3];
 
         // Default constructor
         TriangleIndices() = default;
 
-        TriangleIndices(uint32_t v0, uint32_t v1, uint32_t v2 /*,
-                        uint32_t n0 = 0, uint32_t n1 = 0, uint32_t n2 = 0 */ );
+        TriangleIndices(uint32_t v0, uint32_t v1, uint32_t v2,
+                        uint32_t n0 = 0, uint32_t n1 = 0, uint32_t n2 = 0);
     };
 
     /**
@@ -72,6 +72,8 @@ namespace drdemo {
 
     /**
      * TriangleMesh class, hold the information data for a triangle mesh
+     *
+     * This is now used to load a mesh and render it as target
      */
     class TriangleMesh : public Shape {
     private:
@@ -83,7 +85,7 @@ namespace drdemo {
         // Loaded vertices
         std::vector<Vector3F> vertices;
         // Loaded normals
-        // std::vector<Vector3F> normals; FIXME : I don't know if this makes sense since the mesh will probably change
+        std::vector<Vector3F> normals;
 
         // List of triangles
         std::vector<std::shared_ptr<Shape> > shapes;

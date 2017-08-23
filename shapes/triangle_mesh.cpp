@@ -7,16 +7,16 @@
 
 namespace drdemo {
 
-    TriangleIndices::TriangleIndices(uint32_t v0, uint32_t v1, uint32_t v2 /* ,
-                                     uint32_t n0, uint32_t n1, uint32_t n2 */) {
+    TriangleIndices::TriangleIndices(uint32_t v0, uint32_t v1, uint32_t v2,
+                                     uint32_t n0, uint32_t n1, uint32_t n2) {
         // Set vertices indices
         v[0] = v0;
         v[1] = v1;
         v[2] = v2;
         // Set normal indices
-        /* n[0] = n0;
+        n[0] = n0;
         n[1] = n1;
-        n[2] = n2; */
+        n[2] = n2;
     }
 
     Triangle::Triangle(TriangleMesh &mesh, uint32_t t_i)
@@ -58,7 +58,14 @@ namespace drdemo {
 
         // Fill interaction
         interaction->p = ray(t);
-        interaction->n = Normalize(Cross(e1, e2));
+
+        if (mesh.normals.empty()) {
+            interaction->n = Normalize(Cross(e1, e2));
+        } else {
+            interaction->n = Normalize((1.f - b1 - b2) * mesh.normals[mesh.triangles[triangle_index].n[0]] +
+                                       b1 * mesh.normals[mesh.triangles[triangle_index].n[1]] +
+                                       b2 * mesh.normals[mesh.triangles[triangle_index].n[2]]);
+        }
         interaction->t = t;
         interaction->wo = Normalize(-ray.d);
 
@@ -200,18 +207,18 @@ namespace drdemo {
                     float x, y, z;
                     sscanf(line_it.c_str(), "v %f %f %f", &x, &y, &z);
                     vertices.push_back(Vector3F(x, y, z));
-                } /* else if (line_it->compare(0, 3, "vt ") == 0) {
+                } /* else if (line_it.compare(0, 3, "vt ") == 0) {
                     // Read uv data
                     float u, v;
-                    sscanf(line_it->c_str(), "vt %f %f", &u, &v);
+                    sscanf(line_it.c_str(), "vt %f %f", &u, &v);
                     uvs.push_back(u);
                     uvs.push_back(v);
-                } else if (line_it->compare(0, 3, "vn ") == 0) {
+                } */ else if (line_it.compare(0, 3, "vn ") == 0) {
                     // Read normal data
                     float x, y, z;
-                    sscanf(line_it->c_str(), "vn %f %f %f", &x, &y, &z);
-                    normals.push_back(Normalize(Vector3f(x, y, z)));
-                } */ else if (line_it.compare(0, 1, "f") == 0) {
+                    sscanf(line_it.c_str(), "vn %f %f %f", &x, &y, &z);
+                    normals.push_back(Normalize(Vector3F(x, y, z)));
+                } else if (line_it.compare(0, 1, "f") == 0) {
                     // Read face data
                     uint32_t v0, v1, v2;
                     uint32_t n0, n1, n2;
@@ -223,19 +230,14 @@ namespace drdemo {
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                         // Check if face contains vertices and textures coordinates
                     } else if (sscanf(line_it.c_str(), "f %u/%u %u/%u %u/%u", &v0, &uv0, &v1, &uv1, &v2, &uv2) == 6) {
-                        // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, 0, 0, 0, uv0 - 1, uv1 - 1, uv2 - 1));
-                        // TODO: Only load vertices
                         triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
                         // Check if face contains textures coordinate, vertices and normals
                     } else if (sscanf(line_it.c_str(), "f %u/%u/%u %u/%u/%u %u/%u/%u", &v0, &uv0, &n0, &v1, &uv1, &n1,
                                       &v2, &uv2, &n2) == 9) {
-                        // TODO: Only load vertices
-                        // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1, uv0 - 1, uv1 - 1, uv2 - 1));
-                        triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
+                        triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1));
                         // Check if face contains normals and vertices only
                     } else if (sscanf(line_it.c_str(), "f %u//%u %u//%u %u//%u", &v0, &n0, &v1, &n1, &v2, &n2) == 6) {
-                        // triangles.push_back(MeshTriangle(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1));
-                        triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1));
+                        triangles.push_back(TriangleIndices(v0 - 1, v1 - 1, v2 - 1, n0 - 1, n1 - 1, n2 - 1));
                     } else {
                         std::cerr << "Can not read face format!" << std::endl;
                     }
@@ -250,6 +252,7 @@ namespace drdemo {
             // Fit vectors
             triangles.shrink_to_fit();
             vertices.shrink_to_fit();
+            normals.shrink_to_fit();
 
             // Print out some data about the loaded mesh
             std::cout << "Loaded triangle mesh with " << triangles.size() << " triangles and "
@@ -260,9 +263,6 @@ namespace drdemo {
 
             // Build BVH
             bvh.Build();
-
-            // normals.shrink_to_fit();
-            // uvs.shrink_to_fit();
         }
     }
 
