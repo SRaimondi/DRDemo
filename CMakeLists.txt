@@ -81,6 +81,6 @@ set(SOURCE_FILES
         minimization/gradient_descent.cpp
         minimization/gradient_descent.hpp
         minimization/reconstruction_energy.cpp
-        minimization/reconstruction_energy.hpp)
+        minimization/reconstruction_energy.hpp tests/geom_sphere.cpp tests/geom_sphere.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -15,18 +15,13 @@ namespace drdemo {
     class GradientDescent {
     public:
         // Minimize given ScalarFunction given a step size, a maximum number of iterations,
-        // a tolerance for the gradient norm.
-        // Next are a target function value and a tolerance on that, this can be used if we know the target value and we are happy with
-        // a value near it in a certain margin.
+        // a tolerance for the gradient norm and one for the step size, if it becomes to small, we stop
         // The last argument tells if the routine should print information about the minimization process at every step
         static void Minimize(ScalarFunctionInterface &f,
                              float step,
                              size_t max_iters,
                              float grad_tol,
-                             bool verbose = false,
-                             bool use_target_val = false,
-                             float target_f_val = 0.f,
-                             float target_f_val_tol = 0.f
+                             bool verbose = false
         );
     };
 
@@ -53,10 +48,8 @@ namespace drdemo {
                              float grad_tol,
                              float c,
                              float rho,
-                             bool verbose = false,
-                             bool use_target_val = false,
-                             float target_f_val = 0.f,
-                             float target_f_val_tol = 0.f
+                             float step_tol,
+                             bool verbose = false
         );
     };
 

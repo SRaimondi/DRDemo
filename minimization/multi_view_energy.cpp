@@ -43,7 +43,7 @@ namespace drdemo {
         // Increase number of evaluations
         evalutations++;
 
-        return energy / static_cast<float>(target_views.size());
+        return energy;
     }
 
     std::vector<float> MultiViewEnergy::ComputeGradient(const Float &out) const {

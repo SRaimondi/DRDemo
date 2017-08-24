@@ -10,10 +10,7 @@ namespace drdemo {
                                    float step,
                                    size_t max_iters,
                                    float grad_tol,
-                                   bool verbose,
-                                   bool use_target_val,
-                                   float target_f_val,
-                                   float target_f_val_tol) {
+                                   bool verbose) {
         // Allocate vector passed to the function as updates and gradient
         std::vector<float> gradient(f.InputDim(), 0.f);
         std::vector<float> deltas(f.InputDim(), 0.f);
@@ -57,11 +54,6 @@ namespace drdemo {
                 // Print gradient
                 PrintGradient(gradient);
                 std::cout << std::endl;
-            }
-
-            // Check if we are targeting a certain value
-            if (use_target_val && std::abs(f_val - target_f_val) < target_f_val_tol) {
-                break;
             }
 
             // Increase number of iterations
@@ -147,10 +139,8 @@ namespace drdemo {
                                      float grad_tol,
                                      float c,
                                      float rho,
-                                     bool verbose,
-                                     bool use_target_val,
-                                     float target_f_val,
-                                     float target_f_val_tol) {
+                                     float step_tol,
+                                     bool verbose) {
         // Allocate vector passed to the function as updates and gradient
         std::vector<float> gradient(f.InputDim(), 0.f);
         std::vector<float> deltas(f.InputDim(), 0.f);
@@ -160,6 +150,8 @@ namespace drdemo {
         float grad_norm;
         // Number of iterations
         size_t iters = 0;
+        // Step size
+        float alpha;
 
         // Minimize function
         do {
@@ -176,7 +168,7 @@ namespace drdemo {
 
             // Compute step size
             std::cout << "Computing step size..." << std::endl;
-            const float alpha = ComputeStepSize(f, result, gradient, c, rho);
+            alpha = ComputeStepSize(f, result, gradient, c, rho);
 
             // Compute updates for the function
             for (size_t i = 0; i < deltas.size(); ++i) {
@@ -200,14 +192,9 @@ namespace drdemo {
                 std::cout << std::endl;
             }
 
-            // Check if we are targeting a certain value
-            if (use_target_val && std::abs(f_val - target_f_val) < target_f_val_tol) {
-                break;
-            }
-
             // Increase number of iterations
             iters++;
-        } while (grad_norm > grad_tol && iters < max_iters);
+        } while (grad_norm > grad_tol && alpha > step_tol && iters < max_iters);
     }
 
 } // drdemo namespace

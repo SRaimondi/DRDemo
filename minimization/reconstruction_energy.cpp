@@ -51,7 +51,7 @@ namespace drdemo {
             E_images += difference_norm;
         }
 
-        // Second energy term that contians the sum of the squared norms of the normals minus 1 (each one)
+        // Second energy term that contains the sum of the squared norms of the normals minus 1 (each one)
         Float E_normals;
 
         // Loop over all points of the grid, compute the normal and sum up
@@ -69,11 +69,11 @@ namespace drdemo {
         // Increase number of evaluations
         evalutations++;
 
-        std::cout << "Images energy: " << (E_images / static_cast<float>(target_views.size())) << std::endl;
-        std::cout << "Normal energy: " << lambda * E_normals << std::endl;
+//        std::cout << "Images energy: " << E_images << std::endl;
+//        std::cout << "Normal energy: " << lambda * E_normals << std::endl;
 
-        // Return final energy = E_images / n + E_normals
-        return (E_images / static_cast<float>(target_views.size())) + lambda * E_normals;
+        // Return final energy = E_images + lambda * E_normals
+        return E_images + lambda * E_normals;
     }
 
     std::vector<float> ReconstructionEnergy::ComputeGradient(const Float &out) const {

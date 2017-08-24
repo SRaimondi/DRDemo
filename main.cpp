@@ -16,12 +16,13 @@
 #include <reconstruction_energy.hpp>
 #include <triangle_mesh.hpp>
 #include <multi_view_energy.hpp>
+#include <geom_sphere.hpp>
 #include "minimization/gradient_descent.hpp"
 
 #define WIDTH   256
 #define HEIGHT  256
 
-#define MAX_ITERS 30
+#define MAX_ITERS 10
 
 //// Spherical function, minimization test
 //drdemo::Float Spherical(std::vector<drdemo::Float> const &x) {
@@ -43,6 +44,9 @@ int main() {
     // Set namespace used
     using namespace drdemo;
 
+    // Geometric sphere test
+    GeometricSphereTest();
+
     /**
      * Triangle mesh loading + simple minimization against black image
      */
@@ -51,7 +55,7 @@ int main() {
 //    Derivatives derivatives;
 //
 //    // Try to load sphere mesh
-//    auto mesh = std::make_shared<TriangleMesh>("../objs/cube.obj");
+//    auto mesh = std::make_shared<TriangleMesh>("../objs/monkey.obj");
 //
 //    // Get list of triangles
 //    // std::vector<std::shared_ptr<Shape> > triangles;
@@ -66,10 +70,10 @@ int main() {
 //    // Add sphere
 //    scene.AddShape(mesh);
 //    // Add lights
-//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.6f, 0.8f, 1.f), Spectrum(0.9f)));
 //
 //    // Create camera
-//    auto camera = PinholeCamera(Vector3F(5.f, 5.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+//    auto camera = PinholeCamera(Vector3F(-5.f, 5.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
 //
 //    // Create renderer
 //    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
@@ -354,94 +358,94 @@ int main() {
     /*
      * Signed distance grid rendering test
      */
+//
+//    // Create new grid
+//    int grid_dims[3] = {20, 20, 20};
+//    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
+//                                                     BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
+//
+//    float delta = 4.f / static_cast<float>(grid_dims[0] - 1);
+//
+//    // Initialize grid using sphere of radius 1 as SDF
+//    for (int z = 0; z < grid_dims[2]; z++) {
+//        for (int y = 0; y < grid_dims[1]; y++) {
+//            for (int x = 0; x < grid_dims[0]; x++) {
+//                // Compute point coordinates
+//                Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
+//                // Use ellipse equation
+//                grid->operator()(x, y, z) = Length(p) - 1.f;
+//            }
+//        }
+//    }
 
-    // Create new grid
-    int grid_dims[3] = {30, 30, 30};
-    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
-                                                     BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
 
-    float delta = 4.f / static_cast<float>(grid_dims[0] - 1);
-
-    // Initialize grid using sphere of radius 1 as SDF
-    for (int z = 0; z < grid_dims[2]; z++) {
-        for (int y = 0; y < grid_dims[1]; y++) {
-            for (int x = 0; x < grid_dims[0]; x++) {
-                // Compute point coordinates
-                Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
-                // Use ellipse equation
-                grid->operator()(x, y, z) = Length(p) - 1.f;
-            }
-        }
-    }
-
-
-    // Create scene
-    Scene scene;
-
-    // Add sphere
-    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
-    // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-
-    // Create target_cameras
-    std::vector<std::shared_ptr<const CameraInterface> > cameras;
-
-    // Add first camera
-    cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-    // Add second camera
-    cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(-3.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-
-    cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-
-    // Create renderer
-    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
-
-    // Push status of tape before rendering target image
-    default_tape.Push();
-
-    // Render target images
-    BoxFilterFilm target(WIDTH, HEIGHT);
-
-    // Create target image
-    render->RenderImage(&target, scene, *cameras[2]);
-    ClampTonemapper tonemapper;
-    tonemapper.Process("target.png", target);
-
-    std::vector<std::vector<float> > raw_views;
-    // Render views
-    for (auto const &camera : cameras) {
-        render->RenderImage(&target, scene, *camera);
-        raw_views.push_back(target.Raw());
-    }
-
-    // Use SDF
-    scene.ClearShapes();
-    scene.AddShape(grid);
-
-    render->RenderImage(&target, scene, *cameras[2]);
-    tonemapper.Process("start.png", target);
-
-    // Remove from tape rendering variables
-    default_tape.Pop();
-
-    // Create multi-view energy
-    // auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
-
-    // Test with new energy
-    auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
-
-    // Minimise energy
-    // GradientDescent::Minimize(energy, 0.0002f, MAX_ITERS, 1.f, true);
-    GradientDescentBT::Minimize(energy, MAX_ITERS, 1.f, 0.5f, 0.8f, true, true, 50.f, 10.f);
-
-    render->RenderImage(&target, scene, *cameras[2]);
-    tonemapper.Process("final.png", target);
+//    // Create scene
+//    Scene scene;
+//
+//    // Add sphere
+//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
+//    // Add lights
+//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
+//
+//    // Create target_cameras
+//    std::vector<std::shared_ptr<const CameraInterface> > cameras;
+//
+//    // Add first camera
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//    // Add second camera
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//
+//    // Create renderer
+//    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
+//
+//    // Push status of tape before rendering target image
+//    default_tape.Push();
+//
+//    // Render target images
+//    BoxFilterFilm target(WIDTH, HEIGHT);
+//
+//    // Create target image
+//    render->RenderImage(&target, scene, *cameras[2]);
+//    ClampTonemapper tonemapper;
+//    tonemapper.Process("target.png", target);
+//
+//    std::vector<std::vector<float> > raw_views;
+//    // Render views
+//    for (auto const &camera : cameras) {
+//        render->RenderImage(&target, scene, *camera);
+//        raw_views.push_back(target.Raw());
+//    }
+//
+//    // Use SDF
+//    scene.ClearShapes();
+//    scene.AddShape(grid);
+//
+//    render->RenderImage(&target, scene, *cameras[2]);
+//    tonemapper.Process("start.png", target);
+//
+//    // Remove from tape rendering variables
+//    default_tape.Pop();
+//
+//    // Create multi-view energy
+//    // auto energy = MultiViewEnergy(scene, raw_views, cameras, render, WIDTH, HEIGHT);
+//
+//    // Test with new energy
+//    auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
+//
+//    // Minimise energy
+//    // GradientDescent::Minimize(energy, 0.0002f, MAX_ITERS, 1.f, true);
+//    GradientDescentBT::Minimize(energy, MAX_ITERS, 50.f, 0.5f, 0.8f, true, true, 100.f, 50.f);
+//
+//    render->RenderImage(&target, scene, *cameras[2]);
+//    tonemapper.Process("final.png", target);
 
 
 //    /**
