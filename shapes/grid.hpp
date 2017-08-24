@@ -100,6 +100,13 @@ namespace drdemo {
 
         inline Vector3f const &InvVoxelSize() const { return inv_width; }
 
+        // Compute coordinates of points at given indices
+        inline Vector3f CoordsAt(int x, int y, int z) const {
+            return Vector3f(bounds.MinPoint().x + x * width.x,
+                            bounds.MinPoint().y + y * width.y,
+                            bounds.MinPoint().z + z * width.z);
+        }
+
         // Get grid dimensions
         inline int Size(int axis) const {
             return num_points[axis];

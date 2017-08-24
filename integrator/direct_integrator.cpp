@@ -18,7 +18,7 @@ namespace drdemo {
         for (auto const &light : scene.GetLights()) {
             Vector3F wi;
             Float pdf;
-            Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
+            const Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
             L += Li * Abs(Dot(interaction.n, wi)) / pdf;
         }
 

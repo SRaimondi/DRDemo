@@ -17,6 +17,7 @@
 #include <triangle_mesh.hpp>
 #include <multi_view_energy.hpp>
 #include <geom_sphere.hpp>
+#include <sdf_sphere.hpp>
 #include "minimization/gradient_descent.hpp"
 
 #define WIDTH   256
@@ -45,7 +46,10 @@ int main() {
     using namespace drdemo;
 
     // Geometric sphere test
-    GeometricSphereTest();
+    // GeometricSphereTest();
+
+    // Radius sphere SDF test
+    RadiusSphereTest(10, 1.5f);
 
     /**
      * Triangle mesh loading + simple minimization against black image
