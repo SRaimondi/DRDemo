@@ -3,25 +3,11 @@
 //
 
 #include <scene.hpp>
-#include <derivative.hpp>
-#include <sphere.hpp>
 
-#include <directional_light.hpp>
-#include <pinhole_camera.hpp>
-#include <direct_integrator.hpp>
-#include <simple_renderer.hpp>
-#include <box_film.hpp>
-#include <grid.hpp>
-#include <clamp_tonemapper.hpp>
-#include <reconstruction_energy.hpp>
-#include <triangle_mesh.hpp>
-#include <multi_view_energy.hpp>
-#include <geom_sphere.hpp>
 #include <sdf_sphere.hpp>
-#include "minimization/gradient_descent.hpp"
 
-#define WIDTH   256
-#define HEIGHT  256
+#define WIDTH   512
+#define HEIGHT  512
 
 #define MAX_ITERS 10
 
@@ -49,7 +35,13 @@ int main() {
     // GeometricSphereTest();
 
     // Radius sphere SDF test
-    RadiusSphereTest(10, 1.5f);
+    // RadiusSphereTest(15, 1.f, 1.2f);
+
+    // Move sphere test
+    // MoveSphereTest(11);
+
+    // Ellipse render test
+    OBJRenderTest(5, "../objs/ellipse.obj");
 
     /**
      * Triangle mesh loading + simple minimization against black image
@@ -58,8 +50,8 @@ int main() {
 //    // Derivatives computation class
 //    Derivatives derivatives;
 //
-//    // Try to load sphere mesh
-//    auto mesh = std::make_shared<TriangleMesh>("../objs/monkey.obj");
+    // Try to load sphere mesh
+//    auto mesh = std::make_shared<TriangleMesh>("../objs/cube.obj");
 //
 //    // Get list of triangles
 //    // std::vector<std::shared_ptr<Shape> > triangles;
@@ -77,7 +69,7 @@ int main() {
 //    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.6f, 0.8f, 1.f), Spectrum(0.9f)));
 //
 //    // Create camera
-//    auto camera = PinholeCamera(Vector3F(-5.f, 5.f, 10.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
+//    auto camera = PinholeCamera(Vector3F(3.06f, 2.5f, 3.06f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f, WIDTH, HEIGHT);
 //
 //    // Create renderer
 //    auto render = SimpleRenderer(std::make_shared<DirectIntegrator>());
@@ -362,7 +354,7 @@ int main() {
     /*
      * Signed distance grid rendering test
      */
-//
+
 //    // Create new grid
 //    int grid_dims[3] = {20, 20, 20};
 //    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
@@ -381,27 +373,30 @@ int main() {
 //            }
 //        }
 //    }
-
-
+//
+//
 //    // Create scene
 //    Scene scene;
 //
+//    // Add grid
+//    scene.AddShape(grid);
+//
 //    // Add sphere
-//    scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
+//    // scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
 //    // Add lights
 //    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 //
 //    // Create target_cameras
 //    std::vector<std::shared_ptr<const CameraInterface> > cameras;
 //
-//    // Add first camera
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
-//    // Add second camera
-//    cameras.push_back(
-//            std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-//                                                  WIDTH, HEIGHT));
+////    // Add first camera
+////    cameras.push_back(
+////            std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+////                                                  WIDTH, HEIGHT));
+////    // Add second camera
+////    cameras.push_back(
+////            std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+////                                                  WIDTH, HEIGHT));
 //
 //    cameras.push_back(
 //            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
@@ -410,17 +405,17 @@ int main() {
 //    // Create renderer
 //    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
 //
-//    // Push status of tape before rendering target image
-//    default_tape.Push();
+////    // Push status of tape before rendering target image
+////    default_tape.Push();
 //
 //    // Render target images
 //    BoxFilterFilm target(WIDTH, HEIGHT);
 //
 //    // Create target image
-//    render->RenderImage(&target, scene, *cameras[2]);
+//    render->RenderImage(&target, scene, *cameras[0]);
 //    ClampTonemapper tonemapper;
-//    tonemapper.Process("target.png", target);
-//
+//    tonemapper.Process("render_test.png", target);
+
 //    std::vector<std::vector<float> > raw_views;
 //    // Render views
 //    for (auto const &camera : cameras) {

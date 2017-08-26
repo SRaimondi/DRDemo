@@ -54,7 +54,7 @@ namespace drdemo {
         // Second energy term that contains the sum of the squared norms of the normals minus 1 (each one)
         Float E_normals;
 
-        // Loop over all points of the grid, compute the normal and sum up
+        // Loop over all internal points of the grid, compute the normal and sum up
         for (int z = 0; z < grid->Size(2); z++) {
             for (int y = 0; y < grid->Size(1); y++) {
                 for (int x = 0; x < grid->Size(0); x++) {

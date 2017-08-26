@@ -81,19 +81,26 @@ namespace drdemo {
         int x, y, z;
         // Compute normal at the 8 vertices of the voxel
         IndicesFromLinear(indices[0], x, y, z);
-        const Vector3F n0 = NormalAtPoint(x, y, z);
+        const Vector3F n0 = NormalAtPoint(x, y, z);   // Use backward difference
+
         IndicesFromLinear(indices[1], x, y, z);
         const Vector3F n1 = NormalAtPoint(x, y, z);
+
         IndicesFromLinear(indices[2], x, y, z);
-        const Vector3F n2 = NormalAtPoint(x, y, z);
+        const Vector3F n2 = NormalAtPoint(x, y, z);   // Use backward difference
+
         IndicesFromLinear(indices[3], x, y, z);
         const Vector3F n3 = NormalAtPoint(x, y, z);
+
         IndicesFromLinear(indices[4], x, y, z);
-        const Vector3F n4 = NormalAtPoint(x, y, z);
+        const Vector3F n4 = NormalAtPoint(x, y, z);   // Use backward difference
+
         IndicesFromLinear(indices[5], x, y, z);
         const Vector3F n5 = NormalAtPoint(x, y, z);
+
         IndicesFromLinear(indices[6], x, y, z);
-        const Vector3F n6 = NormalAtPoint(x, y, z);
+        const Vector3F n6 = NormalAtPoint(x, y, z);   // Use backward difference
+
         IndicesFromLinear(indices[7], x, y, z);
         const Vector3F n7 = NormalAtPoint(x, y, z);
 
@@ -115,30 +122,62 @@ namespace drdemo {
         return (1.f - tz) * nf1 + tz * nf2;
     }
 
-    Vector3F SignedDistanceGrid::NormalAtPoint(int x, int y, int z) const {
-        // TODO Maybe we could use some higher order scheme?
-        // FIXME This needs to be VERY CAREFULLY designed now
-        // Compute normal at given grid point using forward difference method
-
+    Vector3F SignedDistanceGrid::NormalAtPoint(int x, int y, int z /* , bool bd */) const {
         Float dx, dy, dz;
 
+        // The normal computation uses central difference, we assume that the normal is never computed at the boundaries of the grid
+//        const Float dx = (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x - 1, y, z)]) * inv_width.x / 2.f;
+//        const Float dy = (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y - 1, z)]) * inv_width.y / 2.f;
+//        const Float dz = (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z - 1)]) * inv_width.z / 2.f;
+//
+//        // In a SDF, the normal might be degenerated. In that case, we simply choose it pointing in the x direction
+//        const float norm2 = dx.GetValue() * dx.GetValue() + dy.GetValue() * dy.GetValue() + dz.GetValue() * dz.GetValue();
+//        if (norm2 < 1e-5f) { return Vector3F(1.f, 0.f, 0.f); }
+//
+//        return Vector3F(dx, dy, dz);
+
         // Check if we are at the boundaries, use backward difference method if we are at the boundaries
+
+        // Compute x derivative
         if (x == num_points[0] - 1) {
-            dx = (data[LinearIndex(x, y, z)] - data[LinearIndex(x - 1, y, z)]) * inv_width.x;
+            // Use backward second order to compute derivative
+            dx = (1.5f * data[LinearIndex(x, y, z)] - 2.f * data[LinearIndex(x - 1, y, z)] +
+                  0.5f * data[LinearIndex(x - 2, y, z)]) * inv_width.x;
+        } else if (x == 0) {
+            // Use forward second order difference
+            dx = (-1.5f * data[LinearIndex(x, y, z)] + 2.f * data[LinearIndex(x + 1, y, z)] -
+                  0.5f * data[LinearIndex(x + 2, y, z)]) * inv_width.x;
         } else {
-            dx = (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x, y, z)]) * inv_width.x;
+            // Use central difference
+            dx = (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x - 1, y, z)]) * inv_width.x / 2.f;
         }
 
+        // Compute y derivative
         if (y == num_points[1] - 1) {
-            dy = (data[LinearIndex(x, y, z)] - data[LinearIndex(x, y - 1, z)]) * inv_width.y;
+            // Use backward second order to compute derivative
+            dy = (1.5f * data[LinearIndex(x, y, z)] - 2.f * data[LinearIndex(x, y - 1, z)] +
+                  0.5f * data[LinearIndex(x, y - 2, z)]) * inv_width.y;
+        } else if (y == 0) {
+            // Use forward second order difference
+            dy = (-1.5f * data[LinearIndex(x, y, z)] + 2.f * data[LinearIndex(x, y + 1, z)] -
+                  0.5f * data[LinearIndex(x, y + 2, z)]) * inv_width.y;
         } else {
-            dy = (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y, z)]) * inv_width.y;
+            // Use central difference
+            dy = (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y - 1, z)]) * inv_width.y / 2.f;
         }
 
+        // Compute z derivative
         if (z == num_points[2] - 1) {
-            dz = (data[LinearIndex(x, y, z)] - data[LinearIndex(x, y, z - 1)]) * inv_width.z;
+            // Use backward second order to compute derivative
+            dz = (1.5f * data[LinearIndex(x, y, z)] - 2.f * data[LinearIndex(x, y, z - 1)] +
+                  0.5f * data[LinearIndex(x, y, z - 2)]) * inv_width.z;
+        } else if (z == 0) {
+            // Use forward second order difference
+            dz = (-1.5f * data[LinearIndex(x, y, z)] + 2.f * data[LinearIndex(x, y, z + 1)] -
+                  0.5f * data[LinearIndex(x, y, z + 2)]) * inv_width.z;
         } else {
-            dz = (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z)]) * inv_width.z;
+            // Use central difference
+            dz = (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z - 1)]) * inv_width.z / 2.f;
         }
 
 //        return Vector3F(
@@ -150,13 +189,13 @@ namespace drdemo {
         return Vector3F(dx, dy, dz);
     }
 
-    Vector3F SignedDistanceGrid::EstimateNormal(const Vector3F &p, float eps) const {
-        return Normalize(
-                Vector3F(ValueAt(p + Vector3F(eps, 0.f, 0.f)) - ValueAt(p - Vector3F(eps, 0.f, 0.f)),
-                         ValueAt(p + Vector3F(0.f, eps, 0.f)) - ValueAt(p - Vector3F(0.f, eps, 0.f)),
-                         ValueAt(p + Vector3F(0.f, 0.f, eps)) - ValueAt(p - Vector3F(0.f, 0.f, eps)))
-        );
-    }
+//    Vector3F SignedDistanceGrid::EstimateNormal(const Vector3F &p, float eps) const {
+//        return Normalize(
+//                Vector3F(ValueAt(p + Vector3F(eps, 0.f, 0.f)) - ValueAt(p - Vector3F(eps, 0.f, 0.f)),
+//                         ValueAt(p + Vector3F(0.f, eps, 0.f)) - ValueAt(p - Vector3F(0.f, eps, 0.f)),
+//                         ValueAt(p + Vector3F(0.f, 0.f, eps)) - ValueAt(p - Vector3F(0.f, 0.f, eps)))
+//        );
+//    }
 
     SignedDistanceGrid::SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b)
             : data(new Float[n_x * n_y * n_z]) {
@@ -297,7 +336,6 @@ namespace drdemo {
     void SignedDistanceGrid::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
         // Second attempt, trying to correct the SDF after propagating directly the gradient into it
 
-
         // Propagate gradient inside the grid
         size_t used_vars = 0;
         for (int i = 0; i < total_points; ++i) {
@@ -423,6 +461,7 @@ namespace drdemo {
         }
 
         std::cout << "Reinitialised SDF in " << iters << " iterations." << std::endl;
+        std::cout << "Max dphi_dt: " << max_dt << std::endl;
 
         // Free sign grid and sdf_dt
         delete[] sign_grid;

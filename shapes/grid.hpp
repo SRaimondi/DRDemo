@@ -66,15 +66,11 @@ namespace drdemo {
         // The indices start from the corner with the smallest (x,y,z) coordinates and then follow the order of the grid
         void PointsIndicesFromVoxel(int x, int y, int z, int *indices) const;
 
-        // Compute the value of the Signed Distance Function sampled by the grid using trilinear interpolation given
-        // a point in the grid
-        Float ValueAt(const Vector3F &p) const;
-
-        // Compute normal at given point inside the SDF using triliner interpolation
+        // Compute normal at given point inside the SDF using trilinear interpolation
         Vector3F NormalAt(const Vector3F &p) const;
 
         // Estimate SDF normal at given point
-        Vector3F EstimateNormal(const Vector3F &p, float eps = EPS) const;
+//        Vector3F EstimateNormal(const Vector3F &p, float eps = EPS) const;
 
     public:
         // Default constructor, initialises an empty grid
@@ -92,8 +88,12 @@ namespace drdemo {
             return data[OffsetPoint(x, y, z)];
         }
 
-        // Compute the normal at a given grid point
-        Vector3F NormalAtPoint(int x, int y, int z) const;
+        // Compute the value of the Signed Distance Function sampled by the grid using trilinear interpolation given
+        // a point in the grid
+        Float ValueAt(const Vector3F &p) const;
+
+        // Compute the normal at a given grid point, last argument is to use backward difference
+        Vector3F NormalAtPoint(int x, int y, int z /* , bool bd = false */) const;
 
         // Access size of the voxels
         inline Vector3f const &VoxelSize() const { return width; }
