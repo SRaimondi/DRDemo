@@ -119,14 +119,25 @@ namespace drdemo {
         auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
 
         // Minimise energy
-        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.7f, 10e-7f, true);
+
+//        std::cout << "Done with first minimization, refining grid and restarting minimization..." << std::endl;
+//        int new_dims[3] = {grid_dims[0] * 2, grid_dims[1] * 2, grid_dims[2] * 2};
+//        grid->Refine(new_dims);
+//
+//        ReinitializeSDF(*grid.get(), 0.0001f, 10000, 0.005f, 100.f);
+//
+//        // Rebind variables
+//        energy.RebindVars(); // FIXME Change how this works?
+//
+//        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.7f, 10e-7f, true);
 
         render->RenderImage(&target, scene, *cameras[0]);
         tonemapper.Process("final.png", target);
 
         // At this point, since we know what should be the exact final values in the SDF, we can compute the errors
         float final_error = 0.f;
-        float initial_error = 0.f;
+//        float initial_error = 0.f;
         for (int z = 0; z < grid_dims[2]; z++) {
             for (int y = 0; y < grid_dims[1]; y++) {
                 for (int x = 0; x < grid_dims[0]; x++) {
@@ -134,17 +145,17 @@ namespace drdemo {
                     const Vector3f p = grid->CoordsAt(x, y, z);
                     // Get correct value
                     const float target_value = Length(p) - target_radius;
-                    // Get inital value
+                    // Get initial value
                     const float initial_value = Length(p) - start_radius;
 
                     // Accumulate errors
-                    initial_error += std::pow(target_value - initial_value, 2.f);
+//                    initial_error += std::pow(target_value - initial_value, 2.f);
                     final_error += std::pow(target_value - grid->operator()(x, y, z).GetValue(), 2.f);
                 }
             }
         }
 
-        std::cout << "Initial error on reconstruction: " << initial_error << std::endl;
+//        std::cout << "Initial error on reconstruction: " << initial_error << std::endl;
         std::cout << "Final error on reconstruction: " << final_error << std::endl;
     }
 

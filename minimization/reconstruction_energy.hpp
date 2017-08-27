@@ -58,6 +58,9 @@ namespace drdemo {
                              float lambda,                                                  // Normal regularization parameter
                              size_t w, size_t h);                                           // Render image size
 
+        // Rebind differentibale variables
+        void RebindVars();
+
         // Scalar function methods
         size_t InputDim() const override;
 

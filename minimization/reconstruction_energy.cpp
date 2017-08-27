@@ -23,6 +23,13 @@ namespace drdemo {
         this->grid->GetDiffVariables(diff_variables);
     }
 
+    void ReconstructionEnergy::RebindVars() {
+        // Clear variables we need to compute the derivative with respect to
+        diff_variables.clear();
+        // Rebind
+        grid->GetDiffVariables(diff_variables);
+    }
+
     size_t ReconstructionEnergy::InputDim() const {
         return diff_variables.size();
     }

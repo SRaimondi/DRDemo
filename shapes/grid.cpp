@@ -256,13 +256,17 @@ namespace drdemo {
             for (int y = 0; y < new_dims[1]; y++) {
                 for (int x = 0; x < new_dims[0]; x++) {
                     // Compute point coordinates
+                    default_tape.Push();
                     const Vector3F p = Vector3F(bounds.MinPoint().x + x * new_width.x,
                                                 bounds.MinPoint().y + y * new_width.y,
                                                 bounds.MinPoint().z + z * new_width.z);
 
+                    const float val = this->ValueAt(p).GetValue();
+                    default_tape.Pop();
+
                     const int index = z * new_dims[0] * new_dims[1] + y * new_dims[0] + x;
                     // Compute value
-                    new_data[index] = this->ValueAt(p).GetValue();
+                    new_data[index] = val;
                 }
             }
         }

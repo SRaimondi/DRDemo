@@ -4,13 +4,7 @@
 
 #include <scene.hpp>
 
-#include <grid.hpp>
-#include <directional_light.hpp>
-#include <pinhole_camera.hpp>
-#include <simple_renderer.hpp>
-#include <direct_integrator.hpp>
-#include <box_film.hpp>
-#include <clamp_tonemapper.hpp>
+#include <sdf_sphere.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -41,7 +35,7 @@ int main() {
     // GeometricSphereTest();
 
     // Radius sphere SDF test
-    // RadiusSphereTest(15, 1.f, 1.2f);
+    RadiusSphereTest(20, 1.f, 1.2f);
 
     // Move sphere test
     // MoveSphereTest(11);
@@ -360,73 +354,76 @@ int main() {
     /*
      * Signed distance grid rendering test
      */
-
-    // Create new grid
-    int grid_dims[3] = {10, 10, 10};
-    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
-                                                     BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
-
-    float delta = 4.f / static_cast<float>(grid_dims[0] - 1);
-
-    // Initialize grid using sphere of radius 1 as SDF
-    for (int z = 0; z < grid_dims[2]; z++) {
-        for (int y = 0; y < grid_dims[1]; y++) {
-            for (int x = 0; x < grid_dims[0]; x++) {
-                // Compute point coordinates
-                Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
-                // Use ellipse equation
-                grid->operator()(x, y, z) = Length(p) - 1.f;
-            }
-        }
-    }
+//
+//    // Create new grid
+//    int grid_dims[3] = {10, 10, 10};
+//    auto grid = std::make_shared<SignedDistanceGrid>(grid_dims[0], grid_dims[1], grid_dims[2],
+//                                                     BBOX(Vector3f(-2.f, -2.f, -2.f), Vector3f(2.f, 2.f, 2.f)));
+//
+//    float delta = 4.f / static_cast<float>(grid_dims[0] - 1);
+//
+//    // Initialize grid using sphere of radius 1 as SDF
+//    for (int z = 0; z < grid_dims[2]; z++) {
+//        for (int y = 0; y < grid_dims[1]; y++) {
+//            for (int x = 0; x < grid_dims[0]; x++) {
+//                // Compute point coordinates
+//                Vector3f p(-2.f + delta * x, -2.f + delta * y, -2.f + delta * z);
+//                // Use ellipse equation
+//                grid->operator()(x, y, z) = Length(p) - 1.f;
+//            }
+//        }
+//    }
+//
+//    int new_dims[3] = {30, 30, 30};
+//    grid->Refine(new_dims);
 
 
 //    // Create scene
-    Scene scene;
+//    Scene scene;
+////
+////    // Add grid
+//    scene.AddShape(grid);
+////
+////    // Add sphere
+////    // scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
+////    // Add lights
+//    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 //
-//    // Add grid
-    scene.AddShape(grid);
+//    // Create target_cameras
+//    std::vector<std::shared_ptr<const CameraInterface> > cameras;
 //
-//    // Add sphere
-//    // scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(1.2f)));
-//    // Add lights
-    scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
-
-    // Create target_cameras
-    std::vector<std::shared_ptr<const CameraInterface> > cameras;
-
-////    // Add first camera
-////    cameras.push_back(
-////            std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-////                                                  WIDTH, HEIGHT));
-////    // Add second camera
-////    cameras.push_back(
-////            std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-////                                                  WIDTH, HEIGHT));
-
-    cameras.push_back(
-            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
-                                                  WIDTH, HEIGHT));
-
-    // Create renderer
-    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
-
-////    // Push status of tape before rendering target image
-////    default_tape.Push();
+//////    // Add first camera
+//////    cameras.push_back(
+//////            std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//////                                                  WIDTH, HEIGHT));
+//////    // Add second camera
+//////    cameras.push_back(
+//////            std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//////                                                  WIDTH, HEIGHT));
 //
-    // Render target images
-    BoxFilterFilm target(WIDTH, HEIGHT);
-
-    // Create target image
-    render->RenderImage(&target, scene, *cameras[0]);
-    ClampTonemapper tonemapper;
-    tonemapper.Process("render_test.png", target);
-
-    // Refine and render again
-    int new_dims[3] = {30, 30, 30};
-    grid->Refine(new_dims);
-    render->RenderImage(&target, scene, *cameras[0]);
-    tonemapper.Process("render_test_refine.png", target);
+//    cameras.push_back(
+//            std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f), 60.f,
+//                                                  WIDTH, HEIGHT));
+//
+//    // Create renderer
+//    auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
+//
+//////    // Push status of tape before rendering target image
+//////    default_tape.Push();
+////
+//    // Render target images
+//    BoxFilterFilm target(WIDTH, HEIGHT);
+//
+//    // Create target image
+//    render->RenderImage(&target, scene, *cameras[0]);
+//    ClampTonemapper tonemapper;
+//    tonemapper.Process("render_test.png", target);
+//
+//    // Refine and render again
+//    int new_dims[3] = {30, 30, 30};
+//    grid->Refine(new_dims);
+//    render->RenderImage(&target, scene, *cameras[0]);
+//    tonemapper.Process("render_test_refine.png", target);
 
 //    std::vector<std::vector<float> > raw_views;
 //    // Render views

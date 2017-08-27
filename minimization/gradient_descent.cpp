@@ -188,7 +188,7 @@ namespace drdemo {
                 std::cout << "Function value: " << f_val << std::endl;
                 std::cout << "Gradient norm: " << grad_norm << std::endl;
                 // Print gradient
-                PrintGradient(gradient);
+                // PrintGradient(gradient);         // FIXME Removed for debug
                 std::cout << std::endl;
             }
 
