@@ -33,7 +33,8 @@ namespace drdemo {
         // Size of the voxels and inverse of width
         Vector3f width, inv_width;
         // Signed distance values, stored at each voxel intersection in x, y, z order
-        std::unique_ptr<Float[]> data;
+        // std::unique_ptr<Float[]> data;
+        Float *data;
 
         // Private utility methods
         inline int OffsetPoint(int x, int y, int z) const {
@@ -78,6 +79,8 @@ namespace drdemo {
 
         // Construct grid from values
         SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b, float const *raw_data);
+
+        ~SignedDistanceGrid();
 
         // Access Grid point at given indices
         inline Float const &operator()(int x, int y, int z) const {
@@ -129,6 +132,9 @@ namespace drdemo {
             // Last index
             x = linear_index;
         }
+
+        // Refine grid to new higher resolution resolution
+        void Refine(int const *new_dims);
 
         // Shape methods
         bool Intersect(Ray const &ray, Interaction *interaction) const override;

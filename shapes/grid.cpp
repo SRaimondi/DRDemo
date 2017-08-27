@@ -236,6 +236,49 @@ namespace drdemo {
         }
     }
 
+    SignedDistanceGrid::~SignedDistanceGrid() {
+        delete[] data;
+    }
+
+    void SignedDistanceGrid::Refine(int const *const new_dims) {
+        // Allocate space for new data
+        auto new_data = new Float[new_dims[0] * new_dims[1] * new_dims[2]];
+        // Compute new voxel width
+        const Vector3f extent = bounds.Extent();
+        Vector3f new_width, new_inv_width;
+        for (int axis = 0; axis < 3; axis++) {
+            new_width[axis] = extent[axis] / static_cast<float>(new_dims[axis] - 1);
+            new_inv_width[axis] = (new_width[axis] == 0.f) ? 0.f : 1.f / new_width[axis];
+        }
+
+        // Loop over new grid dimensions, compute point coordinates and use current grid to compute value
+        for (int z = 0; z < new_dims[2]; z++) {
+            for (int y = 0; y < new_dims[1]; y++) {
+                for (int x = 0; x < new_dims[0]; x++) {
+                    // Compute point coordinates
+                    const Vector3F p = Vector3F(bounds.MinPoint().x + x * new_width.x,
+                                                bounds.MinPoint().y + y * new_width.y,
+                                                bounds.MinPoint().z + z * new_width.z);
+
+                    const int index = z * new_dims[0] * new_dims[1] + y * new_dims[0] + x;
+                    // Compute value
+                    new_data[index] = this->ValueAt(p).GetValue();
+                }
+            }
+        }
+
+        // Set grid new values
+        for (int i = 0; i < 3; i++) { num_points[i] = new_dims[i]; }
+        width = new_width;
+        inv_width = new_inv_width;
+        total_points = new_dims[0] * new_dims[1] * new_dims[2];
+
+        // Free old memory
+        delete[] data;
+        // Set pointer to new data
+        data = new_data;
+    }
+
     bool SignedDistanceGrid::Intersect(Ray const &ray, Interaction *const interaction) const {
         // The intersection procedure uses ray marching to check if we have an interaction with the stored surface
 
