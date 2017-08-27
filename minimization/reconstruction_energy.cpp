@@ -31,7 +31,7 @@ namespace drdemo {
     }
 
     size_t ReconstructionEnergy::InputDim() const {
-        return diff_variables.size();
+        return grid->GetNumVars();
     }
 
     /**
@@ -88,6 +88,13 @@ namespace drdemo {
         derivatives.Clear();
         // Compute derivatives for out variable
         derivatives.ComputeDerivatives(out);
+
+//        // Check if we need to rebind the differentiable variables
+//        if (grid->GetNumVars() != input_dim) {
+//            diff_variables.clear();
+//            grid->GetDiffVariables(diff_variables);
+//            input_dim = grid->GetNumVars();
+//        }
 
         // Create and compute gradient
         std::vector<float> gradient(diff_variables.size(), 0.f);

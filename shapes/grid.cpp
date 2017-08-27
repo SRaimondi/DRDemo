@@ -81,25 +81,25 @@ namespace drdemo {
         int x, y, z;
         // Compute normal at the 8 vertices of the voxel
         IndicesFromLinear(indices[0], x, y, z);
-        const Vector3F n0 = NormalAtPoint(x, y, z);   // Use backward difference
+        const Vector3F n0 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[1], x, y, z);
         const Vector3F n1 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[2], x, y, z);
-        const Vector3F n2 = NormalAtPoint(x, y, z);   // Use backward difference
+        const Vector3F n2 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[3], x, y, z);
         const Vector3F n3 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[4], x, y, z);
-        const Vector3F n4 = NormalAtPoint(x, y, z);   // Use backward difference
+        const Vector3F n4 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[5], x, y, z);
         const Vector3F n5 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[6], x, y, z);
-        const Vector3F n6 = NormalAtPoint(x, y, z);   // Use backward difference
+        const Vector3F n6 = NormalAtPoint(x, y, z);
 
         IndicesFromLinear(indices[7], x, y, z);
         const Vector3F n7 = NormalAtPoint(x, y, z);

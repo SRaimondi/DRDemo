@@ -121,16 +121,15 @@ namespace drdemo {
         // Minimise energy
         GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.7f, 10e-7f, true);
 
-//        std::cout << "Done with first minimization, refining grid and restarting minimization..." << std::endl;
-//        int new_dims[3] = {grid_dims[0] * 2, grid_dims[1] * 2, grid_dims[2] * 2};
-//        grid->Refine(new_dims);
-//
-//        ReinitializeSDF(*grid.get(), 0.0001f, 10000, 0.005f, 100.f);
-//
-//        // Rebind variables
-//        energy.RebindVars(); // FIXME Change how this works?
-//
-//        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.7f, 10e-7f, true);
+        std::cout << "Done with first minimization, refining grid and restarting minimization..." << std::endl;
+        int new_dims[3] = {grid_dims[0] * 2, grid_dims[1] * 2, grid_dims[2] * 2};
+        grid->Refine(new_dims);
+
+        // Rebind variables
+        energy.RebindVars();
+
+        // Minimise energy again
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-7f, true);
 
         render->RenderImage(&target, scene, *cameras[0]);
         tonemapper.Process("final.png", target);

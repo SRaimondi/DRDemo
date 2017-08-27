@@ -35,7 +35,7 @@ int main() {
     // GeometricSphereTest();
 
     // Radius sphere SDF test
-    RadiusSphereTest(20, 1.f, 1.2f);
+    RadiusSphereTest(10, 1.f, 1.2f);
 
     // Move sphere test
     // MoveSphereTest(11);
