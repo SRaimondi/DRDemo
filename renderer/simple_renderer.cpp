@@ -26,7 +26,7 @@ namespace drdemo {
                 // Generate ray
                 ray = camera.GenerateRay(i, j, s_x, s_y);
                 // Compute incoming radiance
-                Li = surface_integrator->IncomingRadiance(ray, scene, 0);
+                Li = surface_integrator->IncomingRadiance(ray, scene, camera, 0);
                 // Add sample
                 if (!film->AddSample(Li, i, j, s_x, s_y)) {
                     std::cerr << "Error adding sample to film!" << std::endl;

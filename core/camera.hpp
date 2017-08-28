@@ -16,6 +16,9 @@ namespace drdemo {
     public:
         // Generate a ray given a pixel coordinates and a sample coordinates
         virtual Ray GenerateRay(size_t i, size_t j, float s_x, float s_y) const = 0;
+
+        // Camera look direction
+        virtual Vector3F LookDir() const = 0;
     };
 
 } // drdemo namespace

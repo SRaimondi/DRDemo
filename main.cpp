@@ -3,7 +3,6 @@
 //
 
 #include <scene.hpp>
-
 #include <sdf_sphere.hpp>
 
 #define WIDTH   512
@@ -35,13 +34,17 @@ int main() {
     // GeometricSphereTest();
 
     // Radius sphere SDF test
-    RadiusSphereTest(10, 1.f, 1.2f);
+    // RadiusSphereTest(10, 1.f, 1.2f);
+
+    // RadiusSphereTestMR(5, 1.f, 1.5f, 2);
 
     // Move sphere test
     // MoveSphereTest(11);
 
     // Ellipse render test
-    // OBJRenderTest(10, "../objs/ellipse.obj");
+    // OBJRenderTestMR(5, "../objs/ellipse.obj", 2);
+    // OBJRenderTestMR(5, "../objs/sphere1_2.obj", 2);
+    OBJRenderTestMR(7, "../objs/spheres2.obj", 2);
 
     /**
      * Triangle mesh loading + simple minimization against black image

@@ -14,12 +14,16 @@ namespace drdemo {
      */
     void RadiusSphereTest(int grid_res, float start_radius, float target_radius);
 
+    void RadiusSphereTestMR(int start_grid_res, float start_radius, float target_radius, int ref_steps);
+
     void MoveSphereTest(int grid_res);
 
     /**
      * Target render of .obj
      */
     void OBJRenderTest(int grid_res, const std::string &file_name);
+
+    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps);
 
 }
 

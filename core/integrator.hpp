@@ -7,6 +7,7 @@
 
 #include "scene.hpp"
 #include "spectrum.hpp"
+#include "camera.hpp"
 
 namespace drdemo {
 
@@ -23,7 +24,8 @@ namespace drdemo {
     class SurfaceIntegratorInterace : public IntegratorInterface {
     public:
         // Compute incoming radiance for given ray
-        virtual Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, size_t depth) const = 0;
+        virtual Spectrum
+        IncomingRadiance(Ray const &ray, Scene const &scene, const CameraInterface &camera, size_t depth) const = 0;
     };
 
 } // drdemo namespace

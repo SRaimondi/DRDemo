@@ -37,6 +37,7 @@ namespace drdemo {
     /**
      * The energy here is computed as the average of the differnce between the rendered images and the target,
      * plus the sum of the squared norm of each normal minus one, since we want them to stay as close as one as possible
+     *
      * @return Final energy
      */
     Float ReconstructionEnergy::Evaluate() const {

@@ -30,4 +30,8 @@ namespace drdemo {
         return Ray(eye_world, Normalize(s));
     }
 
+    Vector3F PinholeCamera::LookDir() const {
+        return -w;
+    }
+
 }

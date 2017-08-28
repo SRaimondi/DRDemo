@@ -16,13 +16,13 @@
 namespace drdemo {
 
     /**
-     * This file contains the implmentation of a class that computes the energy term to minimize
+     * This file contains the implementation of a class that computes the energy term to minimize
      * to match our target images from our SDF
      */
     class ReconstructionEnergy : public ScalarFunctionInterface {
     private:
         // Reference to the Scene to use in the rendering, the scene should only consist of lights and a SDF grid
-        const Scene &target_scene;
+        Scene &target_scene;
         // Pointer ot the SDF grid of the scene
         std::shared_ptr<SignedDistanceGrid> grid;
         // Reference to the list of target render view

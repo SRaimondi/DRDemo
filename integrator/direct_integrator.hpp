@@ -16,7 +16,8 @@ namespace drdemo {
     public:
         DirectIntegrator() = default;
 
-        Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, size_t depth) const override;
+        Spectrum IncomingRadiance(Ray const &ray, Scene const &scene, const CameraInterface &camera,
+                                  size_t depth) const override;
     };
 
 } // drdemo namespace

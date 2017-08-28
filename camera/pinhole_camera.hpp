@@ -29,6 +29,8 @@ namespace drdemo {
                       float fov, size_t width, size_t height);
 
         Ray GenerateRay(size_t i, size_t j, float s_x, float s_y) const override;
+
+        Vector3F LookDir() const override;
     };
 
 } // drdemo namespace
