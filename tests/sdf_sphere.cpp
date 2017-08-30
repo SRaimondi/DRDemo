@@ -474,13 +474,13 @@ namespace drdemo {
         tonemapper.Process("final.png", target);
     }
 
-    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps) {
+    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps, bool normal_views) {
         // Target render size
         const size_t WIDTH = 256;
         const size_t HEIGHT = 256;
 
         // Maximum iterations
-        const size_t MAX_ITERS = 100;
+        const size_t MAX_ITERS = 200;
 
         // Load mesh
         auto mesh = std::make_shared<TriangleMesh>(file_name);
@@ -510,25 +510,41 @@ namespace drdemo {
         Scene scene;
         // Add sphere
         scene.AddShape(mesh);
-        // Add lights
-        // scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.7f)));
-        // scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(1.f, 0.f, 0.f), Spectrum(0.7f)));
 
         // Create target_cameras
         std::vector<std::shared_ptr<const CameraInterface> > cameras;
 
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, -5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
+        if (normal_views) {
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, -5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+        } else {
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(1.7678f, 3.5355f, 3.0619f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(3.0619f, -3.5355f, -1.7678f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(-1.7678f, 3.5355f, -3.0619f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(-3.0619f, -3.5355f, 1.7678f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+        }
 
         /**
          * Create renderer class with a simple direct illumination integrator

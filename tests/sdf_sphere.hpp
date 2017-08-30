@@ -23,7 +23,7 @@ namespace drdemo {
      */
     void OBJRenderTest(int grid_res, const std::string &file_name);
 
-    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps);
+    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps, bool normal_views = true);
 
 }
 

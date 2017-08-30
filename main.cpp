@@ -44,7 +44,12 @@ int main() {
     // Ellipse render test
     // OBJRenderTestMR(5, "../objs/ellipse.obj", 2);
     // OBJRenderTestMR(5, "../objs/sphere1_2.obj", 2);
-    OBJRenderTestMR(7, "../objs/spheres2.obj", 2);
+
+    // Two sphere test
+    // OBJRenderTestMR(7, "../objs/spheres2.obj", 3, false);   // See two sphere folder
+
+    // Torus test
+    OBJRenderTestMR(7, "../objs/torus.obj", 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image
