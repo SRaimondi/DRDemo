@@ -42,14 +42,18 @@ int main() {
     // MoveSphereTest(11);
 
     // Ellipse render test
-    // OBJRenderTestMR(5, "../objs/ellipse.obj", 2);
-    // OBJRenderTestMR(5, "../objs/sphere1_2.obj", 2);
+    // OBJRenderTestMR(5, "../objs/ellipse.obj", 2, CAM_CONFIG::NORMAL);
+    // OBJRenderTestMR(5, "../objs/sphere1_2.obj", 2, CAM_CONFIG::NORMAL);
 
     // Two sphere test
-    // OBJRenderTestMR(7, "../objs/spheres2.obj", 3, false);   // See two sphere folder
+    // OBJRenderTestMR(7, "../objs/spheres2.obj", 3, CAM_CONFIG::UP_DOWN);   // See two sphere folder
 
     // Torus test
-    OBJRenderTestMR(7, "../objs/torus.obj", 3);
+    // OBJRenderTestMR(7, "../objs/torus.obj", 3, CAM_CONFIG::NORMAL);
+    // OBJRenderTestMR(10, "../objs/torus.obj", 2, CAM_CONFIG::NORMAL);
+
+    // Blob test with 8 views
+    OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL);
 
     /**
      * Triangle mesh loading + simple minimization against black image

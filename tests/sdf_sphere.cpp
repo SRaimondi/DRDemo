@@ -474,7 +474,7 @@ namespace drdemo {
         tonemapper.Process("final.png", target);
     }
 
-    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps, bool normal_views) {
+    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps, const CAM_CONFIG &config) {
         // Target render size
         const size_t WIDTH = 256;
         const size_t HEIGHT = 256;
@@ -514,7 +514,7 @@ namespace drdemo {
         // Create target_cameras
         std::vector<std::shared_ptr<const CameraInterface> > cameras;
 
-        if (normal_views) {
+        if (config == CAM_CONFIG::NORMAL) {
             cameras.push_back(
                     std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
                                                           60.f, WIDTH, HEIGHT));
@@ -527,7 +527,7 @@ namespace drdemo {
             cameras.push_back(
                     std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
                                                           60.f, WIDTH, HEIGHT));
-        } else {
+        } else if (config == CAM_CONFIG::UP_DOWN) {
             cameras.push_back(
                     std::make_shared<const PinholeCamera>(Vector3F(1.7678f, 3.5355f, 3.0619f), Vector3F(),
                                                           Vector3F(0.f, 1.f, 0.f),
@@ -544,6 +544,37 @@ namespace drdemo {
                     std::make_shared<const PinholeCamera>(Vector3F(-3.0619f, -3.5355f, 1.7678f), Vector3F(),
                                                           Vector3F(0.f, 1.f, 0.f),
                                                           60.f, WIDTH, HEIGHT));
+        } else if (config == CAM_CONFIG::ALL) {
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(1.7678f, 3.5355f, 3.0619f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(3.0619f, -3.5355f, -1.7678f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, -5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(-1.7678f, 3.5355f, -3.0619f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(-3.0619f, -3.5355f, 1.7678f), Vector3F(),
+                                                          Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+        } else {
+            std::cerr << "No valid camera configuration!" << std::endl;
         }
 
         /**
@@ -566,11 +597,13 @@ namespace drdemo {
         }
 
         std::vector<std::vector<float> > raw_views;
+        default_tape.Push();
         // Render views
         for (auto const &camera : cameras) {
             render->RenderImage(&target, scene, *camera);
             raw_views.push_back(target.Raw());
         }
+        default_tape.Pop();
 
         // Use SDF
         scene.ClearShapes();

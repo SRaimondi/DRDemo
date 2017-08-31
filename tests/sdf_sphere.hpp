@@ -23,7 +23,13 @@ namespace drdemo {
      */
     void OBJRenderTest(int grid_res, const std::string &file_name);
 
-    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps, bool normal_views = true);
+    enum class CAM_CONFIG {
+        NORMAL,     // 4 views from y = 0 on the positive and negative sides of the x and z axis
+        UP_DOWN,    // 4 views starting from 30 degree on z axis, with deltas of 90 degrees
+        ALL         // All 8 vuews
+    };
+
+    void OBJRenderTestMR(int start_grid_res, const std::string &file_name, int ref_steps, const CAM_CONFIG &config);
 
 }
 

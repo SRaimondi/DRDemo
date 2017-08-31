@@ -134,7 +134,7 @@ namespace drdemo {
     void TapeStorage<T>::Append(T const &element) {
         if (size == max_size) {
             // Double the tape capacity
-            max_size *= 2;
+            max_size = static_cast<size_t>(max_size * 1.5f);
             auto new_data = new T[max_size];
             // Copy current data into new data
             std::copy(data, data + size, new_data);
