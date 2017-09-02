@@ -54,7 +54,10 @@ int main() {
 
     // Blob test with 8 views
     // OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL); // Result in the blob folder
-    OBJRenderTestMR(10, "../objs/blob.obj", 3, CAM_CONFIG::ALL);    // Result in the blob2 folder
+    // OBJRenderTestMR(10, "../objs/blob.obj", 3, CAM_CONFIG::ALL);    // Result in the blob2 folder
+
+    // Cube test
+    OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
 
     /**
      * Triangle mesh loading + simple minimization against black image
