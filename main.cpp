@@ -60,7 +60,7 @@ int main() {
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
 
     // Monkey test
-    OBJRenderTestMR(10, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey folder
+    OBJRenderTestMR(7, "../objs/monkey.obj", 4, CAM_CONFIG::ALL);     // Result in monkey folder
 
     /**
      * Triangle mesh loading + simple minimization against black image
