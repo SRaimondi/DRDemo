@@ -1,0 +1,209 @@
+C:\Users\Simon\CLionProjects\DRDemo\cmake-build-release\DRDemo.exe
+Computing step size...
+Step size: 0.000191581
+Iteration: 0
+Function value: 61729.9
+Gradient norm: 11513.1
+
+Computing step size...
+Step size: 0.000390982
+Iteration: 1
+Function value: 42972.1
+Gradient norm: 4996.46
+
+Computing step size...
+Step size: 0.000191581
+Iteration: 2
+Function value: 32050.6
+Gradient norm: 5997.06
+
+Computing step size...
+Step size: 0.000273687
+Iteration: 3
+Function value: 27425.5
+Gradient norm: 3298.86
+
+Computing step size...
+Step size: 0.000134107
+Iteration: 4
+Function value: 23723.6
+Gradient norm: 4000
+
+Computing step size...
+Step size: 0.00113989
+Iteration: 5
+Function value: 21913.6
+Gradient norm: 1555.43
+
+Computing step size...
+Step size: 4.59986e-05
+Iteration: 6
+Function value: 17142.5
+Gradient norm: 9146.58
+
+Computing step size...
+Step size: 4.59986e-05
+Iteration: 7
+Function value: 14772.6
+Gradient norm: 4284.34
+
+Computing step size...
+Step size: 3.78818e-06
+Iteration: 8
+Function value: 14281.7
+Gradient norm: 2126.96
+
+Computing step size...
+Step size: 1.29935e-06
+Iteration: 9
+Function value: 14259.3
+Gradient norm: 2047.77
+
+Computing step size...
+Step size: 3.11973e-07
+Iteration: 10
+Function value: 14253.9
+Gradient norm: 2021.53
+
+Starting with additional refinement steps...
+Computing step size...
+Step size: 5.44452e-05
+Iteration: 0
+Function value: 24026.7
+Gradient norm: 8178.97
+
+Computing step size...
+Step size: 0.000207692
+Iteration: 1
+Function value: 21959.4
+Gradient norm: 3720.67
+
+Computing step size...
+Step size: 0.000324519
+Iteration: 2
+Function value: 20349.9
+Gradient norm: 1691.61
+
+Computing step size...
+Step size: 0.000166154
+Iteration: 3
+Function value: 19758.3
+Gradient norm: 1871.37
+
+Computing step size...
+Step size: 0.000132923
+Iteration: 4
+Function value: 19428.7
+Gradient norm: 1500.93
+
+Computing step size...
+Step size: 0.00193428
+Iteration: 5
+Function value: 19284.4
+Gradient norm: 861.792
+
+Computing step size...
+Step size: 8.50707e-05
+Iteration: 6
+Function value: 18334.5
+Gradient norm: 4374.07
+
+Computing step size...
+Step size: 3.4845e-05
+Iteration: 7
+Function value: 17554.4
+Gradient norm: 2297.28
+
+Computing step size...
+Step size: 1.1418e-05
+Iteration: 8
+Function value: 17456
+Gradient norm: 1887.61
+
+Computing step size...
+Step size: 3.74145e-06
+Iteration: 9
+Function value: 17444.4
+Gradient norm: 1781.09
+
+Computing step size...
+Step size: 2.7607e-08
+Iteration: 10
+Function value: 17434.2
+Gradient norm: 1739.26
+
+Computing step size...
+Step size: 8.50707e-05
+Iteration: 0
+Function value: 35191
+Gradient norm: 7458.5
+
+Computing step size...
+Step size: 0.000207692
+Iteration: 1
+Function value: 32668.7
+Gradient norm: 3371.79
+
+Computing step size...
+Step size: 0.000405649
+Iteration: 2
+Function value: 31571
+Gradient norm: 2239.73
+
+Computing step size...
+Step size: 0.000106338
+Iteration: 3
+Function value: 30624.2
+Gradient norm: 2046.73
+
+Computing step size...
+Step size: 0.000792282
+Iteration: 4
+Function value: 30404.4
+Gradient norm: 1451.45
+
+Computing step size...
+Step size: 0.000207692
+Iteration: 5
+Function value: 29580.3
+Gradient norm: 1513.6
+
+Computing step size...
+Step size: 0.000166154
+Iteration: 6
+Function value: 29294.5
+Gradient norm: 1216.44
+
+Computing step size...
+Step size: 0.00123794
+Iteration: 7
+Function value: 29166
+Gradient norm: 1067.51
+
+Computing step size...
+Step size: 5.44452e-05
+Iteration: 8
+Function value: 28497
+Gradient norm: 1987.62
+
+Computing step size...
+Step size: 3.4845e-05
+Iteration: 9
+Function value: 28396.3
+Gradient norm: 1306.25
+
+Computing step size...
+Step size: 2.99316e-06
+Iteration: 10
+Function value: 28358
+Gradient norm: 1128.27
+
+Computing step size...
+Step size: 1.31641e-07
+Iteration: 11
+Function value: 28355.7
+Gradient norm: 1117.61
+
+Final error on reconstruction: 264.493
+
+Process finished with exit code 0
