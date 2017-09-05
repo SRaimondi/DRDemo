@@ -41,6 +41,11 @@ int main() {
     // Move sphere test
     // MoveSphereTest(11);
 
+    // Resolution difference test
+    // RadiusSphereTestMR(10, 1.f, 1.5f, 2);   // See start_10 for result
+    RadiusSphereTestMR(5, 1.f, 1.5f, 3); // See start_5 for result
+
+
     // Ellipse render test
     // OBJRenderTestMR(5, "../objs/ellipse.obj", 2, CAM_CONFIG::NORMAL);
     // OBJRenderTestMR(5, "../objs/sphere1_2.obj", 2, CAM_CONFIG::NORMAL);

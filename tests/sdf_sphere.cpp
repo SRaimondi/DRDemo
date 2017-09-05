@@ -144,7 +144,7 @@ namespace drdemo {
     }
 
     void RadiusSphereTestMR(int start_grid_res, float start_radius, float target_radius, int ref_steps) {
-// Target render size
+        // Target render size
         const size_t WIDTH = 256;
         const size_t HEIGHT = 256;
 
@@ -177,21 +177,23 @@ namespace drdemo {
 
         // Add sphere
         scene.AddShape(std::make_shared<Sphere>(Vector3F(0.f, 0.f, 0.f), Float(target_radius)));
-        // Add lights
-        scene.AddLight(std::make_shared<DirectionalLight>(Vector3F(0.f, 0.f, 1.f), Spectrum(0.9f)));
 
         // Create target_cameras
         std::vector<std::shared_ptr<const CameraInterface> > cameras;
 
-        // Add first camera
+        // Add cameras
         cameras.push_back(
                 std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f,
-                                                      WIDTH, HEIGHT));
+                                                      60.f, WIDTH, HEIGHT));
+        cameras.push_back(
+                std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                      60.f, WIDTH, HEIGHT));
         cameras.push_back(
                 std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, -5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f,
-                                                      WIDTH, HEIGHT));
+                                                      60.f, WIDTH, HEIGHT));
+        cameras.push_back(
+                std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                      60.f, WIDTH, HEIGHT));
 
 
         /**
