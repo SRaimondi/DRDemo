@@ -27,6 +27,9 @@
 
 int main() {
 
+    // TODO Create new monkey test
+    // TODO Add print of two energy terms in reconstruction energy
+
     // Set namespace used
     using namespace drdemo;
 
