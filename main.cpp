@@ -28,7 +28,6 @@
 int main() {
 
     // TODO Create new monkey test
-    // TODO Add print of two energy terms in reconstruction energy
 
     // Set namespace used
     using namespace drdemo;
@@ -46,7 +45,7 @@ int main() {
 
     // Resolution difference test
     // RadiusSphereTestMR(10, 1.f, 1.5f, 2);   // See start_10 for result
-    RadiusSphereTestMR(5, 1.f, 1.5f, 3); // See start_5 for result
+    // RadiusSphereTestMR(5, 1.f, 1.5f, 3); // See start_5 for result
 
 
     // Ellipse render test
@@ -68,7 +67,7 @@ int main() {
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
 
     // Monkey test
-    OBJRenderTestMR(7, "../objs/monkey.obj", 4, CAM_CONFIG::ALL);     // Result in monkey folder
+    OBJRenderTestMR(7, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey2 folder
 
     /**
      * Triangle mesh loading + simple minimization against black image

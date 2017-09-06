@@ -76,6 +76,10 @@ namespace drdemo {
 
         // Increase number of evaluations
         evalutations++;
+        // Store last computed values for the terms
+        image_term = E_images.GetValue();
+        normal_term = E_normals.GetValue();
+
 
 //        std::cout << "Images energy: " << E_images << std::endl;
 //        std::cout << "Normal energy: " << lambda * E_normals << std::endl;
@@ -124,6 +128,10 @@ namespace drdemo {
         }
 
         return status;
+    }
+
+    std::string ReconstructionEnergy::ToString() const {
+        return "Image term: " + std::to_string(image_term) + "\n" + "Normal term: " + std::to_string(normal_term);
     }
 
 } // drdemo namespace

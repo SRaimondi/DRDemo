@@ -30,6 +30,9 @@ namespace drdemo {
 
         // Set internal status
         virtual void SetStatus(const std::vector<float> &new_status) = 0;
+
+        // Request string description to function
+        virtual std::string ToString() const = 0;
     };
 
     // General utility function

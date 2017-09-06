@@ -48,6 +48,9 @@ namespace drdemo {
         // Current number of function evaluations
         mutable size_t evalutations;
 
+        // Last value of the image term and normal term
+        mutable float image_term, normal_term;
+
     public:
         // Constructor
         ReconstructionEnergy(Scene &scene,                                                  // Target scene
@@ -58,8 +61,13 @@ namespace drdemo {
                              float lambda,                                                  // Normal regularization parameter
                              size_t w, size_t h);                                           // Render image size
 
-        // Rebind differentibale variables
+        // Rebind differentiable variables
         void RebindVars();
+
+        // Request last value of the energy terms
+        inline float ImageTerm() const { return image_term; }
+
+        inline float NormalTerm() const { return normal_term; }
 
         // Scalar function methods
         size_t InputDim() const override;
@@ -73,6 +81,8 @@ namespace drdemo {
         void UpdateStatus(const std::vector<float> &deltas) override;
 
         void SetStatus(const std::vector<float> &new_status) override;
+
+        std::string ToString() const override;
     };
 
 } // drdemo namespace

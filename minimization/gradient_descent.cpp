@@ -166,9 +166,22 @@ namespace drdemo {
             gradient = f.ComputeGradient(result);
             grad_norm = GradientNorm(gradient);
 
+            // Print information if verbose is true
+            if (verbose) {
+                // Print current iteration, function value and gradient norm
+                std::cout << "Iteration: " << iters << std::endl;
+                std::cout << "Function value: " << f_val << std::endl;
+                // Print function information
+                std::cout << f.ToString() << std::endl;
+                std::cout << "Gradient norm: " << grad_norm << std::endl;
+                // Print gradient
+                // PrintGradient(gradient);         // FIXME Removed for debug
+            }
+
             // Compute step size
             std::cout << "Computing step size..." << std::endl;
             alpha = ComputeStepSize(f, result, gradient, c, rho);
+            std::cout << std::endl;
 
             // Compute updates for the function
             for (size_t i = 0; i < deltas.size(); ++i) {
@@ -180,17 +193,6 @@ namespace drdemo {
 
             // Pop status from default tape
             default_tape.Pop();
-
-            // Print information if verbose is true
-            if (verbose) {
-                // Print current iteration, function value and gradient norm
-                std::cout << "Iteration: " << iters << std::endl;
-                std::cout << "Function value: " << f_val << std::endl;
-                std::cout << "Gradient norm: " << grad_norm << std::endl;
-                // Print gradient
-                // PrintGradient(gradient);         // FIXME Removed for debug
-                std::cout << std::endl;
-            }
 
             // Increase number of iterations
             iters++;

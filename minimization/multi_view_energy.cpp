@@ -95,4 +95,8 @@ namespace drdemo {
         return status;
     }
 
+    std::string MultiViewEnergy::ToString() const {
+        return std::string("");
+    }
+
 } // drdemo namespace

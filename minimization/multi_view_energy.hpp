@@ -70,6 +70,8 @@ namespace drdemo {
         void UpdateStatus(const std::vector<float> &deltas) override;
 
         void SetStatus(const std::vector<float> &new_status) override;
+
+        std::string ToString() const override;
     };
 
 } // drdemo namespace
