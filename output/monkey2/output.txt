@@ -1,0 +1,1252 @@
+/home/simon/CLionProjects/DRDemo/cmake-build-release/DRDemo
+Reading file: ../objs/monkey.obj
+Done reading file!
+Unrecognized token during .obj parsing
+Unrecognized token during .obj parsing
+Unrecognized token during .obj parsing
+Loaded triangle mesh with 15744 triangles and 7958 vertices.
+BVH acceleration structure with 10507 nodes, 5254 leafs and 15744 shapes.
+Iteration: 0
+Function value: 28443.6
+Image term: 28440.707031
+Normal term: 2.932066
+Gradient norm: 19488
+Computing step size...
+Step size: 3.2199e-05
+
+Iteration: 1
+Function value: 19828.9
+Image term: 19822.951172
+Normal term: 5.973103
+Gradient norm: 7265.5
+Computing step size...
+Step size: 4.59986e-05
+
+Iteration: 2
+Function value: 18046.2
+Image term: 18036.197266
+Normal term: 9.994057
+Gradient norm: 4876.72
+Computing step size...
+Step size: 4.59986e-05
+
+Iteration: 3
+Function value: 17167.5
+Image term: 17156.521484
+Normal term: 10.982480
+Gradient norm: 4456.26
+Computing step size...
+Step size: 3.2199e-05
+
+Iteration: 4
+Function value: 16668.4
+Image term: 16656.218750
+Normal term: 12.194862
+Gradient norm: 3208.96
+Computing step size...
+Step size: 9.38748e-05
+
+Iteration: 5
+Function value: 15913.4
+Image term: 15898.055664
+Normal term: 15.389130
+Gradient norm: 4907.29
+Computing step size...
+Step size: 2.25393e-05
+
+Iteration: 6
+Function value: 15530.7
+Image term: 15514.180664
+Normal term: 16.541977
+Gradient norm: 2186.4
+Computing step size...
+Step size: 0.000191581
+
+Iteration: 7
+Function value: 14829
+Image term: 14801.548828
+Normal term: 27.494484
+Gradient norm: 3587.18
+Computing step size...
+Step size: 2.25393e-05
+
+Iteration: 8
+Function value: 14633.7
+Image term: 14605.992188
+Normal term: 27.687862
+Gradient norm: 1622.47
+Computing step size...
+Step size: 9.38748e-05
+
+Iteration: 9
+Function value: 14475.8
+Image term: 14444.400391
+Normal term: 31.424484
+Gradient norm: 1836.72
+Computing step size...
+Step size: 6.57123e-05
+
+Iteration: 10
+Function value: 14344.4
+Image term: 14309.278320
+Normal term: 35.124512
+Gradient norm: 1809.69
+Computing step size...
+Step size: 3.2199e-05
+
+Iteration: 11
+Function value: 14270.5
+Image term: 14233.931641
+Normal term: 36.616188
+Gradient norm: 1253.83
+Computing step size...
+Step size: 0.000134107
+
+Iteration: 12
+Function value: 14146.4
+Image term: 14102.926758
+Normal term: 43.465137
+Gradient norm: 1700.49
+Computing step size...
+Step size: 4.59986e-05
+
+Iteration: 13
+Function value: 14053.1
+Image term: 14006.577148
+Normal term: 46.473808
+Gradient norm: 1664.27
+Computing step size...
+Step size: 3.2199e-05
+
+Iteration: 14
+Function value: 13997.4
+Image term: 13949.558594
+Normal term: 47.827782
+Gradient norm: 1233.39
+Computing step size...
+Step size: 6.57123e-05
+
+Iteration: 15
+Function value: 13926.3
+Image term: 13874.038086
+Normal term: 52.223194
+Gradient norm: 1716.39
+Computing step size...
+Step size: 3.2199e-05
+
+Iteration: 16
+Function value: 13868.7
+Image term: 13814.544922
+Normal term: 54.194542
+Gradient norm: 1289.97
+Computing step size...
+Step size: 9.38748e-05
+
+Iteration: 17
+Function value: 13757.3
+Image term: 13694.521484
+Normal term: 62.803623
+Gradient norm: 2582.17
+Computing step size...
+Step size: 2.25393e-05
+
+Iteration: 18
+Function value: 13663.3
+Image term: 13599.235352
+Normal term: 64.062584
+Gradient norm: 1149.58
+Computing step size...
+Step size: 0.000134107
+
+Iteration: 19
+Function value: 13513.7
+Image term: 13435.021484
+Normal term: 78.641350
+Gradient norm: 1417.53
+Computing step size...
+Step size: 4.59986e-05
+
+Iteration: 20
+Function value: 13440.7
+Image term: 13362.678711
+Normal term: 77.990005
+Gradient norm: 1174.19
+Computing step size...
+Step size: 5.41169e-06
+
+Iteration: 21
+Function value: 13435.6
+Image term: 13357.590820
+Normal term: 78.033340
+Gradient norm: 1114.92
+Computing step size...
+Step size: 1.29935e-06
+
+Iteration: 22
+Function value: 13434.8
+Image term: 13356.751953
+Normal term: 78.062813
+Gradient norm: 1050.45
+Computing step size...
+Step size: 7.73099e-06
+
+Iteration: 23
+Function value: 13435.9
+Image term: 13357.634766
+Normal term: 78.216225
+Gradient norm: 936.746
+Computing step size...
+Step size: 2.25393e-05
+
+Iteration: 24
+Function value: 13422.1
+Image term: 13343.308594
+Normal term: 78.748810
+Gradient norm: 888.719
+Computing step size...
+Step size: 9.38748e-05
+
+Iteration: 25
+Function value: 13398.7
+Image term: 13318.015625
+Normal term: 80.636436
+Gradient norm: 1111.02
+Computing step size...
+Step size: 2.25393e-05
+
+Iteration: 26
+Function value: 13387
+Image term: 13305.585938
+Normal term: 81.435783
+Gradient norm: 1007.57
+Computing step size...
+Step size: 4.59986e-05
+
+Iteration: 27
+Function value: 13356.6
+Image term: 13274.209961
+Normal term: 82.377304
+Gradient norm: 1018.56
+Computing step size...
+Step size: 6.3668e-07
+
+Iteration: 28
+Function value: 13356
+Image term: 13273.628906
+Normal term: 82.397110
+Gradient norm: 1001.54
+Computing step size...
+Step size: 3.11973e-07
+
+Iteration: 29
+Function value: 13355.7
+Image term: 13273.290039
+Normal term: 82.406563
+Gradient norm: 992.646
+Computing step size...
+Step size: 1.57775e-05
+
+Iteration: 30
+Function value: 13360.9
+Image term: 13278.038086
+Normal term: 82.872124
+Gradient norm: 874.055
+Computing step size...
+Step size: 0.000191581
+
+Iteration: 31
+Function value: 13260.7
+Image term: 13173.988281
+Normal term: 86.700836
+Gradient norm: 1918.59
+Computing step size...
+Step size: 7.73099e-06
+
+Iteration: 32
+Function value: 13252.9
+Image term: 13165.960938
+Normal term: 86.896515
+Gradient norm: 1722.39
+Computing step size...
+Step size: 3.78818e-06
+
+Iteration: 33
+Function value: 13247.5
+Image term: 13160.508789
+Normal term: 86.997513
+Gradient norm: 1337.57
+Computing step size...
+Step size: 5.24333e-08
+
+Starting with additional refinement steps...
+Iteration: 0
+Function value: 15148.1
+Image term: 14915.629883
+Normal term: 232.511612
+Gradient norm: 7250.97
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 1
+Function value: 10950.9
+Image term: 10738.922852
+Normal term: 212.009247
+Gradient norm: 4188.5
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 2
+Function value: 10237.5
+Image term: 10024.738281
+Normal term: 212.748123
+Gradient norm: 3759.25
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 3
+Function value: 9811.03
+Image term: 9604.108398
+Normal term: 206.925186
+Gradient norm: 3031.39
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 4
+Function value: 9425.55
+Image term: 9216.417969
+Normal term: 209.134903
+Gradient norm: 3268.11
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 5
+Function value: 9044.43
+Image term: 8839.461914
+Normal term: 204.968979
+Gradient norm: 2053.79
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 6
+Function value: 8776.79
+Image term: 8569.385742
+Normal term: 207.406204
+Gradient norm: 2770.32
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 7
+Function value: 8452.97
+Image term: 8248.364258
+Normal term: 204.606842
+Gradient norm: 1624.83
+Computing step size...
+Step size: 0.000324519
+
+Iteration: 8
+Function value: 7887.92
+Image term: 7670.495605
+Normal term: 217.423950
+Gradient norm: 4051.11
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 9
+Function value: 7525.72
+Image term: 7314.682129
+Normal term: 211.036163
+Gradient norm: 1844.46
+Computing step size...
+Step size: 5.44452e-05
+
+Iteration: 10
+Function value: 7414.73
+Image term: 7202.208984
+Normal term: 212.525681
+Gradient norm: 2091.33
+Computing step size...
+Step size: 2.7876e-05
+
+Iteration: 11
+Function value: 7326.83
+Image term: 7115.814453
+Normal term: 211.020370
+Gradient norm: 1376.88
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 12
+Function value: 7213.48
+Image term: 6998.282227
+Normal term: 215.198196
+Gradient norm: 1885.61
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 13
+Function value: 7093.12
+Image term: 6879.621582
+Normal term: 213.503494
+Gradient norm: 1457.49
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 14
+Function value: 7008.46
+Image term: 6791.075195
+Normal term: 217.383423
+Gradient norm: 1851.72
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 15
+Function value: 6889.84
+Image term: 6673.872559
+Normal term: 215.967102
+Gradient norm: 1109.12
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 16
+Function value: 6781.21
+Image term: 6559.471191
+Normal term: 221.738647
+Gradient norm: 1775.7
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 17
+Function value: 6677.29
+Image term: 6456.978027
+Normal term: 220.311264
+Gradient norm: 1010.22
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 18
+Function value: 6597.76
+Image term: 6373.250488
+Normal term: 224.506943
+Gradient norm: 1791.05
+Computing step size...
+Step size: 2.7876e-05
+
+Iteration: 19
+Function value: 6530.77
+Image term: 6308.039062
+Normal term: 222.731430
+Gradient norm: 949.193
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 20
+Function value: 6490.3
+Image term: 6265.777344
+Normal term: 224.525101
+Gradient norm: 1046.07
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 21
+Function value: 6446.19
+Image term: 6222.566406
+Normal term: 223.627686
+Gradient norm: 1007.86
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 22
+Function value: 6419.39
+Image term: 6194.618652
+Normal term: 224.769653
+Gradient norm: 893.149
+Computing step size...
+Step size: 2.23008e-05
+
+Iteration: 23
+Function value: 6406.65
+Image term: 6182.322754
+Normal term: 224.330017
+Gradient norm: 871.403
+Computing step size...
+Step size: 2.23008e-05
+
+Iteration: 24
+Function value: 6398.83
+Image term: 6174.138672
+Normal term: 224.693253
+Gradient norm: 833.294
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 25
+Function value: 6384.67
+Image term: 6160.275879
+Normal term: 224.392532
+Gradient norm: 805.061
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 26
+Function value: 6328.2
+Image term: 6101.084473
+Normal term: 227.113922
+Gradient norm: 1694.91
+Computing step size...
+Step size: 2.23008e-05
+
+Iteration: 27
+Function value: 6280.77
+Image term: 6054.635254
+Normal term: 226.135193
+Gradient norm: 964.723
+Computing step size...
+Step size: 1.78406e-05
+
+Iteration: 28
+Function value: 6271.85
+Image term: 6045.338867
+Normal term: 226.509003
+Gradient norm: 776.24
+Computing step size...
+Step size: 7.84639e-07
+
+Iteration: 29
+Function value: 6271.25
+Image term: 6044.754395
+Normal term: 226.492554
+Gradient norm: 731.875
+Computing step size...
+Step size: 2.05688e-07
+
+Iteration: 30
+Function value: 6270.76
+Image term: 6044.272949
+Normal term: 226.488434
+Gradient norm: 727.957
+Computing step size...
+Step size: 4.3136e-08
+
+Iteration: 0
+Function value: 9652.76
+Image term: 7664.046875
+Normal term: 1988.717163
+Gradient norm: 6146.02
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 1
+Function value: 7767.75
+Image term: 5872.629883
+Normal term: 1895.119873
+Gradient norm: 3770.66
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 2
+Function value: 7105.83
+Image term: 5293.352051
+Normal term: 1812.479980
+Gradient norm: 2517.49
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 3
+Function value: 6627.12
+Image term: 4859.906250
+Normal term: 1767.215698
+Gradient norm: 2687.18
+Computing step size...
+Step size: 5.44452e-05
+
+Iteration: 4
+Function value: 6348.44
+Image term: 4612.856445
+Normal term: 1735.583984
+Gradient norm: 1488.77
+Computing step size...
+Step size: 0.000166154
+
+Iteration: 5
+Function value: 6111.66
+Image term: 4421.686035
+Normal term: 1689.971436
+Gradient norm: 1715.37
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 6
+Function value: 5974.34
+Image term: 4309.877930
+Normal term: 1664.458984
+Gradient norm: 1175.55
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 7
+Function value: 5894.09
+Image term: 4259.125000
+Normal term: 1634.963379
+Gradient norm: 1348.81
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 8
+Function value: 5795.95
+Image term: 4174.501953
+Normal term: 1621.443359
+Gradient norm: 1143.49
+Computing step size...
+Step size: 5.44452e-05
+
+Iteration: 9
+Function value: 5762.76
+Image term: 4153.621094
+Normal term: 1609.141357
+Gradient norm: 1041.36
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 10
+Function value: 5709.87
+Image term: 4120.917480
+Normal term: 1588.953247
+Gradient norm: 1047.93
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 11
+Function value: 5648.83
+Image term: 4070.402344
+Normal term: 1578.427734
+Gradient norm: 1063.98
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 12
+Function value: 5595.03
+Image term: 4029.029785
+Normal term: 1566.001099
+Gradient norm: 920.724
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 13
+Function value: 5553.8
+Image term: 4001.143311
+Normal term: 1552.655151
+Gradient norm: 1126.84
+Computing step size...
+Step size: 1.42725e-05
+
+Iteration: 14
+Function value: 5544.79
+Image term: 3995.695312
+Normal term: 1549.090332
+Gradient norm: 850.101
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 15
+Function value: 5511.16
+Image term: 3973.985107
+Normal term: 1537.176880
+Gradient norm: 834.633
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 16
+Function value: 5484.24
+Image term: 3956.326416
+Normal term: 1527.911621
+Gradient norm: 824.171
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 17
+Function value: 5456.85
+Image term: 3940.154053
+Normal term: 1516.698853
+Gradient norm: 1044.08
+Computing step size...
+Step size: 1.1418e-05
+
+Iteration: 18
+Function value: 5449.08
+Image term: 3934.653564
+Normal term: 1514.422974
+Gradient norm: 850.601
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 19
+Function value: 5418.93
+Image term: 3910.771484
+Normal term: 1508.156372
+Gradient norm: 802.529
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 20
+Function value: 5391.74
+Image term: 3893.613770
+Normal term: 1498.127319
+Gradient norm: 908.345
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 21
+Function value: 5365.56
+Image term: 3875.591309
+Normal term: 1489.963989
+Gradient norm: 850.241
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 22
+Function value: 5346.04
+Image term: 3862.423096
+Normal term: 1483.617432
+Gradient norm: 719.32
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 23
+Function value: 5315.5
+Image term: 3840.048828
+Normal term: 1475.451294
+Gradient norm: 1069.14
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 24
+Function value: 5282.09
+Image term: 3813.885254
+Normal term: 1468.207764
+Gradient norm: 889.291
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 25
+Function value: 5266.41
+Image term: 3801.912598
+Normal term: 1464.500122
+Gradient norm: 625.238
+Computing step size...
+Step size: 0.000259615
+
+Iteration: 26
+Function value: 5206.01
+Image term: 3766.264160
+Normal term: 1439.742798
+Gradient norm: 1034.26
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 27
+Function value: 5174.96
+Image term: 3739.179199
+Normal term: 1435.776611
+Gradient norm: 744.904
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 28
+Function value: 5141.13
+Image term: 3710.458496
+Normal term: 1430.668335
+Gradient norm: 884.003
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 29
+Function value: 5123.52
+Image term: 3696.466064
+Normal term: 1427.058105
+Gradient norm: 619.77
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 30
+Function value: 5107.22
+Image term: 3692.021973
+Normal term: 1415.197144
+Gradient norm: 632.268
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 31
+Function value: 5096.16
+Image term: 3685.067139
+Normal term: 1411.093506
+Gradient norm: 630.628
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 32
+Function value: 5079.28
+Image term: 3674.217285
+Normal term: 1405.058716
+Gradient norm: 1093.17
+Computing step size...
+Step size: 1.78406e-05
+
+Iteration: 33
+Function value: 5069.71
+Image term: 3667.995361
+Normal term: 1401.714844
+Gradient norm: 596.983
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 34
+Function value: 5064.1
+Image term: 3666.317383
+Normal term: 1397.778076
+Gradient norm: 593.394
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 35
+Function value: 5048.59
+Image term: 3660.050293
+Normal term: 1388.543457
+Gradient norm: 821.706
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 36
+Function value: 5031.74
+Image term: 3648.160889
+Normal term: 1383.580933
+Gradient norm: 562.381
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 37
+Function value: 5020.16
+Image term: 3641.037354
+Normal term: 1379.124268
+Gradient norm: 597.372
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 38
+Function value: 5007.47
+Image term: 3632.106934
+Normal term: 1375.367188
+Gradient norm: 541.2
+Computing step size...
+Step size: 2.7876e-05
+
+Iteration: 39
+Function value: 5001.13
+Image term: 3628.561035
+Normal term: 1372.571533
+Gradient norm: 614.891
+Computing step size...
+Step size: 5.84601e-06
+
+Iteration: 40
+Function value: 5000.45
+Image term: 3628.393066
+Normal term: 1372.057251
+Gradient norm: 487.957
+Computing step size...
+Step size: 0.000259615
+
+Iteration: 41
+Function value: 4974.07
+Image term: 3624.709717
+Normal term: 1349.357178
+Gradient norm: 937.982
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 42
+Function value: 4925.16
+Image term: 3575.095459
+Normal term: 1350.064209
+Gradient norm: 1293.24
+Computing step size...
+Step size: 6.74e-08
+
+Iteration: 0
+Function value: 16288
+Image term: 4500.121094
+Normal term: 11787.902344
+Gradient norm: 4699.94
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 1
+Function value: 15027.6
+Image term: 4151.728516
+Normal term: 10875.876953
+Gradient norm: 2820.57
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 2
+Function value: 14460.9
+Image term: 4044.887695
+Normal term: 10416.051758
+Gradient norm: 2420.76
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 3
+Function value: 14153.4
+Image term: 4045.832031
+Normal term: 10107.585938
+Gradient norm: 2067.04
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 4
+Function value: 13947.3
+Image term: 4024.971680
+Normal term: 9922.340820
+Gradient norm: 1741.07
+Computing step size...
+Step size: 0.000166154
+
+Iteration: 5
+Function value: 13678.4
+Image term: 4031.210938
+Normal term: 9647.150391
+Gradient norm: 2331.2
+Computing step size...
+Step size: 5.44452e-05
+
+Iteration: 6
+Function value: 13526.3
+Image term: 3998.272949
+Normal term: 9527.986328
+Gradient norm: 1452.43
+Computing step size...
+Step size: 0.000207692
+
+Iteration: 7
+Function value: 13313.3
+Image term: 4111.161621
+Normal term: 9202.102539
+Gradient norm: 1572.97
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 8
+Function value: 13175
+Image term: 4133.746094
+Normal term: 9041.219727
+Gradient norm: 1465.38
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 9
+Function value: 13029.7
+Image term: 4124.700684
+Normal term: 8904.990234
+Gradient norm: 1729.12
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 10
+Function value: 12921.4
+Image term: 4118.719238
+Normal term: 8802.723633
+Gradient norm: 1290.64
+Computing step size...
+Step size: 0.000166154
+
+Iteration: 11
+Function value: 12795
+Image term: 4170.807617
+Normal term: 8624.189453
+Gradient norm: 1599.97
+Computing step size...
+Step size: 3.4845e-05
+
+Iteration: 12
+Function value: 12747.4
+Image term: 4179.043945
+Normal term: 8568.386719
+Gradient norm: 1236.55
+Computing step size...
+Step size: 0.000259615
+
+Iteration: 13
+Function value: 12561.3
+Image term: 4250.202148
+Normal term: 8311.098633
+Gradient norm: 1685.07
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 14
+Function value: 12428.5
+Image term: 4212.975586
+Normal term: 8215.520508
+Gradient norm: 1351.99
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 15
+Function value: 12349.8
+Image term: 4233.187012
+Normal term: 8116.569336
+Gradient norm: 1232.78
+Computing step size...
+Step size: 0.000166154
+
+Iteration: 16
+Function value: 12224.1
+Image term: 4255.676270
+Normal term: 7968.437012
+Gradient norm: 1523.55
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 17
+Function value: 12099
+Image term: 4201.329590
+Normal term: 7897.625488
+Gradient norm: 1314.24
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 18
+Function value: 12027.1
+Image term: 4223.335938
+Normal term: 7803.812500
+Gradient norm: 1190.15
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 19
+Function value: 11934.4
+Image term: 4245.310059
+Normal term: 7689.051758
+Gradient norm: 1405.04
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 20
+Function value: 11859.3
+Image term: 4237.368164
+Normal term: 7621.915527
+Gradient norm: 1334.09
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 21
+Function value: 11769.7
+Image term: 4225.509277
+Normal term: 7544.216797
+Gradient norm: 1232.21
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 22
+Function value: 11661.8
+Image term: 4245.334961
+Normal term: 7416.468262
+Gradient norm: 1427.13
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 23
+Function value: 11583.7
+Image term: 4231.521973
+Normal term: 7352.205566
+Gradient norm: 1109.22
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 24
+Function value: 11543.3
+Image term: 4261.546387
+Normal term: 7281.748047
+Gradient norm: 1132.4
+Computing step size...
+Step size: 0.000166154
+
+Iteration: 25
+Function value: 11421.6
+Image term: 4268.290039
+Normal term: 7153.267578
+Gradient norm: 1503.36
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 26
+Function value: 11374.2
+Image term: 4272.616211
+Normal term: 7101.618652
+Gradient norm: 1295.32
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 27
+Function value: 11287.2
+Image term: 4287.809082
+Normal term: 6999.405762
+Gradient norm: 1204.09
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 28
+Function value: 11216.3
+Image term: 4311.304199
+Normal term: 6904.990723
+Gradient norm: 1356.32
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 29
+Function value: 11131
+Image term: 4301.635742
+Normal term: 6829.407227
+Gradient norm: 1295.22
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 30
+Function value: 11077.2
+Image term: 4310.719238
+Normal term: 6766.469238
+Gradient norm: 1143.15
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 31
+Function value: 10993.5
+Image term: 4349.139648
+Normal term: 6644.343750
+Gradient norm: 1716.29
+Computing step size...
+Step size: 4.35562e-05
+
+Iteration: 32
+Function value: 10928.8
+Image term: 4318.478027
+Normal term: 6610.354004
+Gradient norm: 1163.32
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 33
+Function value: 10856.7
+Image term: 4335.098633
+Normal term: 6521.581055
+Gradient norm: 1203.27
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 34
+Function value: 10762.9
+Image term: 4350.090332
+Normal term: 6412.782715
+Gradient norm: 1434.35
+Computing step size...
+Step size: 6.80565e-05
+
+Iteration: 35
+Function value: 10691.7
+Image term: 4342.233887
+Normal term: 6349.419434
+Gradient norm: 1218.93
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 36
+Function value: 10622
+Image term: 4338.626465
+Normal term: 6283.405762
+Gradient norm: 1129.77
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 37
+Function value: 10552.8
+Image term: 4368.161621
+Normal term: 6184.615723
+Gradient norm: 1171.97
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 38
+Function value: 10479.8
+Image term: 4376.566895
+Normal term: 6103.217285
+Gradient norm: 1382.33
+Computing step size...
+Step size: 5.44452e-05
+
+Iteration: 39
+Function value: 10423.1
+Image term: 4368.570801
+Normal term: 6054.504883
+Gradient norm: 1036.02
+Computing step size...
+Step size: 0.000259615
+
+Iteration: 40
+Function value: 10291.3
+Image term: 4447.622559
+Normal term: 5843.694824
+Gradient norm: 1484.6
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 41
+Function value: 10182
+Image term: 4411.037598
+Normal term: 5771.011230
+Gradient norm: 1167.7
+Computing step size...
+Step size: 0.000106338
+
+Iteration: 42
+Function value: 10101.1
+Image term: 4403.465332
+Normal term: 5697.652832
+Gradient norm: 1239.25
+Computing step size...
+Step size: 5.44452e-05
+
+Iteration: 43
+Function value: 10054.5
+Image term: 4408.787109
+Normal term: 5645.760742
+Gradient norm: 1010.97
+Computing step size...
+Step size: 0.000166154
+
+Iteration: 44
+Function value: 9974.65
+Image term: 4459.973145
+Normal term: 5514.678223
+Gradient norm: 1289.41
+Computing step size...
+Step size: 8.50707e-05
+
+Iteration: 45
+Function value: 9899.94
+Image term: 4446.490234
+Normal term: 5453.446289
+Gradient norm: 1120.42
+Computing step size...
+Step size: 0.000132923
+
+Iteration: 46
+Function value: 9811.93
+Image term: 4448.186523
+Normal term: 5363.745605
+Gradient norm: 6206.95
+Computing step size...
+Step size: 2.96428e-09
+
+
+Process finished with exit code 0
+
