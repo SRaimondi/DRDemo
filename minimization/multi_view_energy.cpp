@@ -21,7 +21,7 @@ namespace drdemo {
         }
     }
 
-    Float drdemo::MultiViewEnergy::Evaluate() const {
+    Float drdemo::MultiViewEnergy::Evaluate(bool output) const {
         // Final energy, sum of all the single rendering differences
         Float energy;
 

@@ -61,7 +61,7 @@ namespace drdemo {
         // Scalar function methods
         size_t InputDim() const override;
 
-        Float Evaluate() const override;
+        Float Evaluate(bool output) const override;
 
         std::vector<float> ComputeGradient(const Float &out) const override;
 

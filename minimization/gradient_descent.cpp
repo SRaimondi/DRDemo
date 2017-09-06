@@ -27,7 +27,7 @@ namespace drdemo {
             default_tape.Push();
 
             // Evaluate function
-            Float result = f.Evaluate();
+            Float result = f.Evaluate(true);
             f_val = result.GetValue();
 
             // Compute gradient of the function
@@ -101,7 +101,7 @@ namespace drdemo {
 
         // Value of the function at current test status
         default_tape.Push();
-        float f_eval = f.Evaluate().GetValue();
+        float f_eval = f.Evaluate(false).GetValue();
         default_tape.Pop();
 
         // Iterate to find good step size
@@ -114,7 +114,7 @@ namespace drdemo {
             // Set new status to function
             f.SetStatus(test_status);
             // Evaluate function at new status
-            f_eval = f.Evaluate().GetValue();
+            f_eval = f.Evaluate(false).GetValue();
 
             // Pop tape after
             default_tape.Pop();
@@ -159,7 +159,7 @@ namespace drdemo {
             default_tape.Push();
 
             // Evaluate function
-            Float result = f.Evaluate();
+            Float result = f.Evaluate(true);
             f_val = result.GetValue();
 
             // Compute gradient of the function

@@ -17,7 +17,7 @@ namespace drdemo {
         virtual size_t InputDim() const = 0;
 
         // Evaluate the function at his current status
-        virtual Float Evaluate() const = 0;
+        virtual Float Evaluate(bool output) const = 0;
 
         // Compute gradient of the function, with respect to the given output variable
         virtual std::vector<float> ComputeGradient(const Float &out) const = 0;

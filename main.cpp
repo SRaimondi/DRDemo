@@ -56,7 +56,7 @@ int main() {
     // OBJRenderTestMR(7, "../objs/spheres2.obj", 3, CAM_CONFIG::UP_DOWN);   // See two sphere folder
 
     // Torus test
-    // OBJRenderTestMR(7, "../objs/torus.obj", 3, CAM_CONFIG::NORMAL);
+    OBJRenderTestMR(7, "../objs/torus.obj", 3, CAM_CONFIG::NORMAL);      // Result in torus folder
     // OBJRenderTestMR(10, "../objs/torus.obj", 2, CAM_CONFIG::NORMAL);
 
     // Blob test with 8 views
@@ -67,7 +67,7 @@ int main() {
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
 
     // Monkey test
-    OBJRenderTestMR(7, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey2 folder
+    // OBJRenderTestMR(7, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey2 folder
 
     /**
      * Triangle mesh loading + simple minimization against black image

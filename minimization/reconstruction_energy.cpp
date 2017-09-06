@@ -40,7 +40,7 @@ namespace drdemo {
      *
      * @return Final energy
      */
-    Float ReconstructionEnergy::Evaluate() const {
+    Float ReconstructionEnergy::Evaluate(bool output) const {
         // First energy term that contains the sum of the difference between the rendered images and the targets
         Float E_images;
 
@@ -50,6 +50,12 @@ namespace drdemo {
             BoxFilterFilm render(width, height);
             // Render scene for current camera
             renderer->RenderImage(&render, target_scene, *target_cameras[target_index]);
+
+            // If we are at view zero and output is true, output image
+            if (output && target_index == 0) {
+                tonemapper.Process("iterations_" + std::to_string(evalutations) + ".png", render);
+            }
+
             // Compute difference between rendering and target
             BoxFilterFilm difference = render - target_views[target_index];
             // Compute energy of difference
@@ -74,8 +80,8 @@ namespace drdemo {
             }
         }
 
-        // Increase number of evaluations
-        evalutations++;
+        // Increase number of evaluations if we used the ouput
+        if (output) { evalutations++; }
         // Store last computed values for the terms
         image_term = E_images.GetValue();
         normal_term = E_normals.GetValue();

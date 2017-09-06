@@ -48,7 +48,7 @@ namespace drdemo {
 
     public:
         // Tape default constructor
-        explicit Tape(size_t starting_size = 1000);
+        explicit Tape(size_t starting_size = 1024);
 
         // Enable / Disable tape
         // TODO This is not working, use Push / Pop
