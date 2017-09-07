@@ -50,6 +50,8 @@ namespace drdemo {
                 // Print current iteration, function value and gradient norm
                 std::cout << "Iteration: " << iters << std::endl;
                 std::cout << "Function value: " << f_val << std::endl;
+                // Print function information
+                std::cout << f.ToString() << std::endl;
                 std::cout << "Gradient norm: " << grad_norm << std::endl;
                 // Print gradient
                 PrintGradient(gradient);
