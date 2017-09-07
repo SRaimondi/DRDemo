@@ -70,7 +70,7 @@ int main() {
     // OBJRenderTestMR(7, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey2 folder
 
     // New torus test
-    TorusTest(10, 1.5f, 3);
+    TorusTest(10, 1.5f, 3);             // Result in torus2 folder
 
     /**
      * Triangle mesh loading + simple minimization against black image
