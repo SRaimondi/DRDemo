@@ -113,6 +113,9 @@ namespace drdemo {
             gradient[v] = derivatives.Dwrt(out, *diff_variables[v]);
         }
 
+        // Clear derivatives
+        derivatives.Clear();
+
         return gradient;
     }
 

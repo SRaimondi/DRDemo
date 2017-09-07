@@ -3,7 +3,7 @@
 //
 
 #include <scene.hpp>
-#include <sdf_sphere.hpp>
+#include <torus_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -56,7 +56,7 @@ int main() {
     // OBJRenderTestMR(7, "../objs/spheres2.obj", 3, CAM_CONFIG::UP_DOWN);   // See two sphere folder
 
     // Torus test
-    OBJRenderTestMR(7, "../objs/torus.obj", 3, CAM_CONFIG::NORMAL);      // Result in torus folder
+    // OBJRenderTestMR(7, "../objs/torus.obj", 3, CAM_CONFIG::NORMAL);      // Result in torus folder
     // OBJRenderTestMR(10, "../objs/torus.obj", 2, CAM_CONFIG::NORMAL);
 
     // Blob test with 8 views
@@ -68,6 +68,9 @@ int main() {
 
     // Monkey test
     // OBJRenderTestMR(7, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey2 folder
+
+    // New torus test
+    TorusTest(10, 1.5f, 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image

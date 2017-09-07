@@ -34,7 +34,7 @@ namespace drdemo {
          * Compute step legth procedure
          */
         static float
-        ComputeStepSize(ScalarFunctionInterface &f, const Float &f_x, const std::vector<float> &gradient, float c,
+        ComputeStepSize(ScalarFunctionInterface &f, float f_x, const std::vector<float> &gradient, float c,
                         float rho);
 
     public:

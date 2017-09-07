@@ -74,7 +74,7 @@ namespace drdemo {
 
     float
     GradientDescentBT::ComputeStepSize(ScalarFunctionInterface &f,
-                                       const Float &f_x,
+                                       float f_x,
                                        const std::vector<float> &gradient,
                                        float c,
                                        float rho) {
@@ -105,7 +105,7 @@ namespace drdemo {
         default_tape.Pop();
 
         // Iterate to find good step size
-        while (f_eval > f_x.GetValue() + c * alpha * grad_sqrd_norm) {
+        while (f_eval > f_x + c * alpha * grad_sqrd_norm) {
             // Push tape before evaluation
             default_tape.Push();
 
@@ -166,6 +166,9 @@ namespace drdemo {
             gradient = f.ComputeGradient(result);
             grad_norm = GradientNorm(gradient);
 
+            // Pop status from default tape
+            default_tape.Pop();
+
             // Print information if verbose is true
             if (verbose) {
                 // Print current iteration, function value and gradient norm
@@ -180,7 +183,7 @@ namespace drdemo {
 
             // Compute step size
             std::cout << "Computing step size..." << std::endl;
-            alpha = ComputeStepSize(f, result, gradient, c, rho);
+            alpha = ComputeStepSize(f, result.GetValue(), gradient, c, rho);
             std::cout << std::endl;
 
             // Compute updates for the function
@@ -190,9 +193,6 @@ namespace drdemo {
 
             // Update internal state of the function
             f.UpdateStatus(deltas);
-
-            // Pop status from default tape
-            default_tape.Pop();
 
             // Increase number of iterations
             iters++;

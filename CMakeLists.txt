@@ -87,6 +87,6 @@ set(SOURCE_FILES
         tests/sdf_sphere.cpp
         tests/sdf_sphere.hpp
         light/ambient_light.cpp
-        light/ambient_light.hpp)
+        light/ambient_light.hpp tests/torus_test.cpp tests/torus_test.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})
