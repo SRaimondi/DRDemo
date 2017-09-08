@@ -1,9 +1,9 @@
 //
-// Created by Simon on 21.08.2017.
+// Created by Simon on 08.09.2017.
 //
 
-#ifndef DRDEMO_RECONSTRUCTION_ENERGY_HPP
-#define DRDEMO_RECONSTRUCTION_ENERGY_HPP
+#ifndef DRDEMO_RECONSTRUCTION_ENERGY_OPT_HPP
+#define DRDEMO_RECONSTRUCTION_ENERGY_OPT_HPP
 
 #include "clamp_tonemapper.hpp"
 #include "camera.hpp"
@@ -16,10 +16,9 @@
 namespace drdemo {
 
     /**
-     * This file contains the implementation of a class that computes the energy term to minimize
-     * to match our target images from our SDF
+     * This file defines an optimized version of the ReconstructionEnergy class
      */
-    class ReconstructionEnergy : public ScalarFunctionInterface {
+    class ReconstructionEnergyOpt : public ScalarFunctionInterface {
     private:
         // Reference to the Scene to use in the rendering, the scene should only consist of lights and a SDF grid
         Scene &target_scene;
@@ -36,6 +35,8 @@ namespace drdemo {
         std::vector<Float const *> diff_variables;
         // Class to compute derivatives
         mutable Derivatives derivatives;
+        // The gradient is now computed progressively during the computation of the single terms of the energy
+        std::vector<float> gradient;
 
         // Regularization term
         const float lambda;
@@ -52,13 +53,13 @@ namespace drdemo {
 
     public:
         // Constructor
-        ReconstructionEnergy(Scene &scene,                                                  // Target scene
-                             const std::shared_ptr<SignedDistanceGrid> &grid,               // SDF grid in the scene
-                             const std::vector<std::vector<float> > &views,                 // Target views
-                             const std::vector<std::shared_ptr<const CameraInterface> > &c, // Cameras to use
-                             const std::shared_ptr<RendererInterface> &r,                   // Renderer
-                             float lambda,                                                  // Normal regularization parameter
-                             size_t w, size_t h);                                           // Render image size
+        ReconstructionEnergyOpt(Scene &scene,                                                  // Target scene
+                                const std::shared_ptr<SignedDistanceGrid> &grid,               // SDF grid in the scene
+                                const std::vector<std::vector<float> > &views,                 // Target views
+                                const std::vector<std::shared_ptr<const CameraInterface> > &c, // Cameras to use
+                                const std::shared_ptr<RendererInterface> &r,                   // Renderer
+                                float lambda,                                                  // Normal regularization parameter
+                                size_t w, size_t h);                                           // Render image size
 
         // Rebind differentiable variables
         void RebindVars();
@@ -86,4 +87,4 @@ namespace drdemo {
 
 } // drdemo namespace
 
-#endif //DRDEMO_RECONSTRUCTION_ENERGY_HPP
+#endif //DRDEMO_RECONSTRUCTION_ENERGY_OPT_HPP

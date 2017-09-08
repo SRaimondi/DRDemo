@@ -101,15 +101,18 @@ namespace drdemo {
         // Set function to test status
         f.SetStatus(test_status);
 
+        // Disable tape registering since we don't need the derivatives
+        default_tape.Disable();
+
         // Value of the function at current test status
-        default_tape.Push();
+        // default_tape.Push();
         float f_eval = f.Evaluate(false).GetValue();
-        default_tape.Pop();
+        // default_tape.Pop();
 
         // Iterate to find good step size
         while (f_eval > f_x + c * alpha * grad_sqrd_norm) {
             // Push tape before evaluation
-            default_tape.Push();
+            // default_tape.Push();
 
             // Compute status to test
             test_status = ComputeNewStatus(original_status, p_k, alpha);
@@ -119,7 +122,7 @@ namespace drdemo {
             f_eval = f.Evaluate(false).GetValue();
 
             // Pop tape after
-            default_tape.Pop();
+            // default_tape.Pop();
 
             // Update alpha
             alpha *= rho;
@@ -127,6 +130,9 @@ namespace drdemo {
 
         // Reset function to original status
         f.SetStatus(original_status);
+
+        // Renable tape
+        default_tape.Enable();
 
         // Check that step is actually positive
         assert(alpha > 0.f);

@@ -44,20 +44,19 @@ namespace drdemo {
         // List of checkpoints to reset the nodes to a certain point
         std::vector<size_t> clear_indices;
         // Boolean flag to check if the Tape is enabled or not
-        // bool enabled;
+        bool enabled;
 
     public:
         // Tape default constructor
         explicit Tape(size_t starting_size = 1024);
 
         // Enable / Disable tape
-        // TODO This is not working, use Push / Pop
-        // inline void Enable() { enabled = true; }
+        inline void Enable() { enabled = true; }
 
-        // inline void Disable() { enabled = false; }
+        inline void Disable() { enabled = false; }
 
         // Check if the Tape is enabled
-        // inline bool IsEnabled() const { return enabled; }
+        inline bool IsEnabled() const { return enabled; }
 
         // Access TapeNode at given index
         inline TapeNode const &At(size_t index) const {

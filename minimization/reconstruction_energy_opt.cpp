@@ -1,19 +1,19 @@
 //
-// Created by Simon on 21.08.2017.
+// Created by Simon on 08.09.2017.
 //
 
-#include "reconstruction_energy.hpp"
+#include "reconstruction_energy_opt.hpp"
 #include "box_film.hpp"
 
 namespace drdemo {
 
-    ReconstructionEnergy::ReconstructionEnergy(Scene &scene,
-                                               const std::shared_ptr<SignedDistanceGrid> &grid,
-                                               const std::vector<std::vector<float> > &views,
-                                               const std::vector<std::shared_ptr<const CameraInterface> > &c,
-                                               const std::shared_ptr<RendererInterface> &r,
-                                               float lambda,
-                                               size_t w, size_t h)
+    ReconstructionEnergyOpt::ReconstructionEnergyOpt(Scene &scene,
+                                                     const std::shared_ptr<SignedDistanceGrid> &grid,
+                                                     const std::vector<std::vector<float> > &views,
+                                                     const std::vector<std::shared_ptr<const CameraInterface> > &c,
+                                                     const std::shared_ptr<RendererInterface> &r,
+                                                     float lambda,
+                                                     size_t w, size_t h)
             : target_scene(scene), grid(grid), target_views(views), target_cameras(c),
               renderer(r), /* image_terms(new Float[views.size()]),*/ lambda(lambda), width(w), height(h),
               evaluations(0) {
@@ -24,14 +24,14 @@ namespace drdemo {
         this->grid->GetDiffVariables(diff_variables);
     }
 
-    void ReconstructionEnergy::RebindVars() {
+    void ReconstructionEnergyOpt::RebindVars() {
         // Clear variables we need to compute the derivative with respect to
         diff_variables.clear();
         // Rebind
         grid->GetDiffVariables(diff_variables);
     }
 
-    size_t ReconstructionEnergy::InputDim() const {
+    size_t ReconstructionEnergyOpt::InputDim() const {
         return grid->GetNumVars();
     }
 
@@ -41,9 +41,11 @@ namespace drdemo {
      *
      * @return Final energy
      */
-    Float ReconstructionEnergy::Evaluate(bool output) const {
+    Float ReconstructionEnergyOpt::Evaluate(bool output) const {
         // First energy term that contains the sum of the difference between the rendered images and the targets
         Float E_images;
+        // Image energy term computed currently
+        Float E_image_t;
 
         // Loop over all target target_cameras
         for (size_t target_index = 0; target_index < target_cameras.size(); ++target_index) {
@@ -87,50 +89,26 @@ namespace drdemo {
         image_term = E_images.GetValue();
         normal_term = E_normals.GetValue();
 
-
-//        std::cout << "Images energy: " << E_images << std::endl;
-//        std::cout << "Normal energy: " << lambda * E_normals << std::endl;
-
         // Return final energy = E_images + lambda * E_normals
         return E_images + lambda * E_normals;
     }
 
-    std::vector<float> ReconstructionEnergy::ComputeGradient(const Float &out) const {
-        // Clear current derivatives
-        derivatives.Clear();
-        // Compute derivatives for out variable
-        derivatives.ComputeDerivatives(out);
-
-//        // Check if we need to rebind the differentiable variables
-//        if (grid->GetNumVars() != input_dim) {
-//            diff_variables.clear();
-//            grid->GetDiffVariables(diff_variables);
-//            input_dim = grid->GetNumVars();
-//        }
-
-        // Create and compute gradient
-        std::vector<float> gradient(diff_variables.size(), 0.f);
-        for (size_t v = 0; v < diff_variables.size(); ++v) {
-            gradient[v] = derivatives.Dwrt(out, *diff_variables[v]);
-        }
-
-        // Clear derivatives
-        derivatives.Clear();
-
-        return gradient;
+    std::vector<float> ReconstructionEnergyOpt::ComputeGradient(const Float &) const {
+        // Return copy of current gradient
+        return std::vector<float>(gradient);
     }
 
-    void ReconstructionEnergy::UpdateStatus(const std::vector<float> &deltas) {
+    void ReconstructionEnergyOpt::UpdateStatus(const std::vector<float> &deltas) {
         // Here we assume the only thing to be updates is the grid
         grid->UpdateDiffVariables(deltas, 0);
     }
 
-    void ReconstructionEnergy::SetStatus(const std::vector<float> &new_status) {
+    void ReconstructionEnergyOpt::SetStatus(const std::vector<float> &new_status) {
         // Only set the status of the grid
         grid->SetDiffVariables(new_status, 0);
     }
 
-    std::vector<float> ReconstructionEnergy::GetStatus() const {
+    std::vector<float> ReconstructionEnergyOpt::GetStatus() const {
         // Status is just the current value of all the gird values we can differentiate with respect to
         std::vector<float> status(diff_variables.size(), 0.f);
         for (size_t i = 0; i < status.size(); i++) {
@@ -140,7 +118,7 @@ namespace drdemo {
         return status;
     }
 
-    std::string ReconstructionEnergy::ToString() const {
+    std::string ReconstructionEnergyOpt::ToString() const {
         return "Image term: " + std::to_string(image_term) + "\n" + "Normal term: " + std::to_string(normal_term);
     }
 

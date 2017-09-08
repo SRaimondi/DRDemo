@@ -41,7 +41,7 @@ namespace drdemo {
 
         for (int j = static_cast<int>(film.Height()) - 1; j >= 0; j--) {
             for (unsigned int i = 0; i < film.Width(); i++) {
-                Spectrum c = film.At(i, j); // this->operator()(i, j).Clamp(0, 1);
+                const Spectrum &c = film.At(i, j); // this->operator()(i, j).Clamp(0, 1);
                 image.push_back(static_cast<unsigned char>(Clamp(c.r.GetValue() * 255.f, 0.f, 255.f)));
                 image.push_back(static_cast<unsigned char>(Clamp(c.g.GetValue() * 255.f, 0.f, 255.f)));
                 image.push_back(static_cast<unsigned char>(Clamp(c.b.GetValue() * 255.f, 0.f, 255.f)));
