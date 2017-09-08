@@ -252,17 +252,18 @@ namespace drdemo {
         }
 
         // Loop over new grid dimensions, compute point coordinates and use current grid to compute value
+        default_tape.Disable();
         for (int z = 0; z < new_dims[2]; z++) {
             for (int y = 0; y < new_dims[1]; y++) {
                 for (int x = 0; x < new_dims[0]; x++) {
                     // Compute point coordinates
-                    default_tape.Push();
+                    // default_tape.Push();
                     const Vector3F p = Vector3F(bounds.MinPoint().x + x * new_width.x,
                                                 bounds.MinPoint().y + y * new_width.y,
                                                 bounds.MinPoint().z + z * new_width.z);
 
                     const float val = this->ValueAt(p).GetValue();
-                    default_tape.Pop();
+                    // default_tape.Pop();
 
                     const int index = z * new_dims[0] * new_dims[1] + y * new_dims[0] + x;
                     // Compute value
@@ -270,6 +271,7 @@ namespace drdemo {
                 }
             }
         }
+        default_tape.Enable();
 
         // Set grid new values
         for (int i = 0; i < 3; i++) { num_points[i] = new_dims[i]; }

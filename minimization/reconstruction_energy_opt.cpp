@@ -60,6 +60,7 @@ namespace drdemo {
         for (size_t target_index = 0; target_index < target_cameras.size(); ++target_index) {
             // Push where we are before rendering current image
             default_tape.Push();
+
             // Render scene for current camera
             renderer->RenderImage(&render, target_scene, *target_cameras[target_index]);
 

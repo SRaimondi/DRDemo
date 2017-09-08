@@ -75,14 +75,18 @@ namespace drdemo {
 
         // Push current size of nodes, can be used to clear after
         inline void Push() {
-            clear_indices.push_back(nodes.Size());
+            if (enabled) {
+                clear_indices.push_back(nodes.Size());
+            }
         }
 
         // Pop current portion of stack, uses last checkpoint saved
         inline void Pop() {
-            nodes.Cut(clear_indices[clear_indices.size() - 1]);
-            // Delete index
-            clear_indices.pop_back();
+            if (enabled) {
+                nodes.Cut(clear_indices[clear_indices.size() - 1]);
+                // Delete index
+                clear_indices.pop_back();
+            }
         }
 
         // Clear tape starting from a given index
