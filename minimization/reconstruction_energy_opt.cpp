@@ -29,6 +29,8 @@ namespace drdemo {
         diff_variables.clear();
         // Rebind
         grid->GetDiffVariables(diff_variables);
+        // Change gradient size according to new number of variables
+        gradient.resize(diff_variables.size());
     }
 
     size_t ReconstructionEnergyOpt::InputDim() const {
@@ -47,14 +49,16 @@ namespace drdemo {
         // Image energy term computed currently
         Float E_image_t;
 
-        bool gradient_to_zero = false;
+        // bool gradient_to_zero = false;
+        // Clear derivatives
+        derivatives.Clear();
 
         // Film to render the image on
         BoxFilterFilm render(width, height);
         BoxFilterFilm difference(width, height);
 
         // Current evaluated energy term gradient
-        std::vector<float> image_term_grad(diff_variables.size(), 0.f);
+        // std::vector<float> image_term_grad(gradient.size(), 0.f);
 
         // Loop over all target target_cameras
         for (size_t target_index = 0; target_index < target_cameras.size(); ++target_index) {
@@ -77,22 +81,21 @@ namespace drdemo {
             // Check if we need to compute the gradient
             if (default_tape.IsEnabled()) {
                 // Compute gradient
-                if (!gradient_to_zero) {
+                if (target_index == 0) {
                     // Reset gradient
                     for (auto &v : gradient) { v = 0.f; }
-                    gradient_to_zero = true;
                 }
                 // Compute derivatives for current image term
                 derivatives.Clear();
                 derivatives.ComputeDerivatives(E_image_t);
                 // Compute gradient for current term
-                for (size_t i = 0; i < diff_variables.size(); ++i) {
-                    image_term_grad[i] = derivatives.Dwrt(E_image_t, *diff_variables[i]);
+                for (size_t i = 0; i < gradient.size(); ++i) {
+                    gradient[i] += derivatives.Dwrt(E_image_t, *diff_variables[i]);
                 }
                 // Add contribution to final gradient
-                for (size_t i = 0; i < diff_variables.size(); ++i) {
-                    gradient[i] += image_term_grad[i];
-                }
+//                for (size_t i = 0; i < gradient.size(); ++i) {
+//                    gradient[i] += image_term_grad[i];
+//                }
             }
 
             // Sum current rendering difference to total energy
@@ -120,21 +123,18 @@ namespace drdemo {
             derivatives.Clear();
             derivatives.ComputeDerivatives(E_normals);
             // Compute gradient for current term
-            for (size_t i = 0; i < diff_variables.size(); ++i) {
-                image_term_grad[i] = derivatives.Dwrt(E_normals, *diff_variables[i]);
-            }
+//            for (size_t i = 0; i < gradient.size(); ++i) {
+//                image_term_grad[i] = derivatives.Dwrt(E_normals, *diff_variables[i]);
+//            }
             // Add contribution to final gradient
-            for (size_t i = 0; i < diff_variables.size(); ++i) {
-                gradient[i] += image_term_grad[i];
+            for (size_t i = 0; i < gradient.size(); ++i) {
+                gradient[i] += derivatives.Dwrt(E_normals, *diff_variables[i]);
             }
         }
         // We have our gradient, clear derivatives
-        derivatives.Clear();
+        // derivatives.Clear();
         // Pop tape
         default_tape.Pop();
-
-        // Set that gradient is not zero anymore
-        gradient_to_zero = false;
 
         // Increase number of evaluations if we used the ouput
         if (output) { evaluations++; }
@@ -148,7 +148,7 @@ namespace drdemo {
 
     std::vector<float> ReconstructionEnergyOpt::ComputeGradient(const Float &) const {
         // Return copy of current gradient
-        return std::vector<float>(gradient);
+        return gradient;
     }
 
     void ReconstructionEnergyOpt::UpdateStatus(const std::vector<float> &deltas) {
