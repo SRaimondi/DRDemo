@@ -14,6 +14,7 @@
 #include <clamp_tonemapper.hpp>
 #include <reconstruction_energy.hpp>
 #include <gradient_descent.hpp>
+#include <reconstruction_energy_opt.hpp>
 #include "torus_test.hpp"
 
 namespace drdemo {
@@ -100,7 +101,8 @@ namespace drdemo {
         default_tape.Enable();
 
         // Create energy
-        auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
+        // auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
+        auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
 
         // Do first minimisation
         GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);

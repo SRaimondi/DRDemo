@@ -36,7 +36,7 @@ namespace drdemo {
         // Class to compute derivatives
         mutable Derivatives derivatives;
         // The gradient is now computed progressively during the computation of the single terms of the energy
-        std::vector<float> gradient;
+        mutable std::vector<float> gradient;
 
         // Regularization term
         const float lambda;

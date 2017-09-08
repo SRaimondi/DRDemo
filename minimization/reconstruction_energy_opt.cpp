@@ -15,7 +15,7 @@ namespace drdemo {
                                                      float lambda,
                                                      size_t w, size_t h)
             : target_scene(scene), grid(grid), target_views(views), target_cameras(c),
-              renderer(r), /* image_terms(new Float[views.size()]),*/ lambda(lambda), width(w), height(h),
+              renderer(r), gradient(grid->GetNumVars(), 0.f), lambda(lambda), width(w), height(h),
               evaluations(0) {
         // Check that the size of the target render and the target_cameras is the same
         assert(target_views.size() == target_cameras.size());
@@ -47,10 +47,19 @@ namespace drdemo {
         // Image energy term computed currently
         Float E_image_t;
 
+        bool gradient_to_zero = false;
+
+        // Film to render the image on
+        BoxFilterFilm render(width, height);
+        BoxFilterFilm difference(width, height);
+
+        // Current evaluated energy term gradient
+        std::vector<float> image_term_grad(diff_variables.size(), 0.f);
+
         // Loop over all target target_cameras
         for (size_t target_index = 0; target_index < target_cameras.size(); ++target_index) {
-            // Film to render the image on
-            BoxFilterFilm render(width, height);
+            // Push where we are before rendering current image
+            default_tape.Push();
             // Render scene for current camera
             renderer->RenderImage(&render, target_scene, *target_cameras[target_index]);
 
@@ -60,17 +69,40 @@ namespace drdemo {
             }
 
             // Compute difference between rendering and target
-            BoxFilterFilm difference = render - target_views[target_index];
-            // Compute energy of difference
-            Float difference_norm = difference.SquaredNorm();
+            difference = render - target_views[target_index];
+            // Compute single image energy
+            E_image_t = difference.SquaredNorm();
+
+            // Check if we need to compute the gradient
+            if (default_tape.IsEnabled()) {
+                // Compute gradient
+                if (!gradient_to_zero) {
+                    // Reset gradient
+                    for (auto &v : gradient) { v = 0.f; }
+                    gradient_to_zero = true;
+                }
+                // Compute derivatives for current image term
+                derivatives.Clear();
+                derivatives.ComputeDerivatives(E_image_t);
+                // Compute gradient for current term
+                for (size_t i = 0; i < diff_variables.size(); ++i) {
+                    image_term_grad[i] = derivatives.Dwrt(E_image_t, *diff_variables[i]);
+                }
+                // Add contribution to final gradient
+                for (size_t i = 0; i < diff_variables.size(); ++i) {
+                    gradient[i] += image_term_grad[i];
+                }
+            }
 
             // Sum current rendering difference to total energy
-            E_images += difference_norm;
+            E_images += E_image_t;      // FIXME We can not use this value anymore to compute derivateives!!!
+            default_tape.Pop();
         }
 
         // Second energy term that contains the sum of the squared norms of the normals minus 1 (each one)
         Float E_normals;
 
+        default_tape.Push();
         // Loop over all internal points of the grid, compute the normal and sum up
         for (int z = 0; z < grid->Size(2); z++) {
             for (int y = 0; y < grid->Size(1); y++) {
@@ -82,6 +114,26 @@ namespace drdemo {
                 }
             }
         }
+        if (default_tape.IsEnabled()) {
+            // Add final contribution of normal term to gradient
+            derivatives.Clear();
+            derivatives.ComputeDerivatives(E_normals);
+            // Compute gradient for current term
+            for (size_t i = 0; i < diff_variables.size(); ++i) {
+                image_term_grad[i] = derivatives.Dwrt(E_normals, *diff_variables[i]);
+            }
+            // Add contribution to final gradient
+            for (size_t i = 0; i < diff_variables.size(); ++i) {
+                gradient[i] += image_term_grad[i];
+            }
+        }
+        // We have our gradient, clear derivatives
+        derivatives.Clear();
+        // Pop tape
+        default_tape.Pop();
+
+        // Set that gradient is not zero anymore
+        gradient_to_zero = false;
 
         // Increase number of evaluations if we used the ouput
         if (output) { evaluations++; }

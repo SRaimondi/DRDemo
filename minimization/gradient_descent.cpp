@@ -186,7 +186,7 @@ namespace drdemo {
                 std::cout << f.ToString() << std::endl;
                 std::cout << "Gradient norm: " << grad_norm << std::endl;
                 // Print gradient
-                // PrintGradient(gradient);         // FIXME Removed for debug
+                PrintGradient(gradient);         // FIXME Removed for debug
             }
 
             // Compute step size
