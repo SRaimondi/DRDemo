@@ -131,7 +131,7 @@ namespace drdemo {
         // Reset function to original status
         f.SetStatus(original_status);
 
-        // Renable tape
+        // Re-enable tape
         default_tape.Enable();
 
         // Check that step is actually positive

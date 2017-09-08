@@ -68,27 +68,25 @@ namespace drdemo {
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
 
-        default_tape.Push();            // 1
+        // Disable tape
+        default_tape.Disable();
 
         BoxFilterFilm target(WIDTH, HEIGHT);
         ClampTonemapper tonemapper;
 
         // Create target image
-        default_tape.Push();            // 2
         for (int i = 0; i < cameras.size(); i++) {
             render->RenderImage(&target, scene, *cameras[i]);
             tonemapper.Process("target_" + std::to_string(i) + ".png", target);
         }
-        default_tape.Pop();             // 1
 
         // Raw target views
         std::vector<std::vector<float> > raw_views;
-        default_tape.Push();        // 2
+        // default_tape.Push();        // 2
         for (auto const &camera : cameras) {
             render->RenderImage(&target, scene, *camera);
             raw_views.push_back(target.Raw());
         }
-        default_tape.Pop();         // 1
 
         // Remove mesh and add SDF
         scene.ClearShapes();
@@ -99,7 +97,7 @@ namespace drdemo {
             tonemapper.Process("start_" + std::to_string(i) + ".png", target);
         }
 
-        default_tape.Pop();         // 0
+        default_tape.Enable();
 
         // Create energy
         auto energy = ReconstructionEnergy(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
