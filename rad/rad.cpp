@@ -34,7 +34,7 @@ namespace drdemo {
             nodes.Append(TapeNode(0.f, index, 0.f, index));
             return index;
         } else {
-            return 0;
+            return NOT_REGISTERED;
         }
     }
 
@@ -44,7 +44,7 @@ namespace drdemo {
             nodes.Append(TapeNode(w, p, 0.f, index));
             return index;
         } else {
-            return 0;
+            return NOT_REGISTERED;
         }
     }
 
@@ -54,7 +54,7 @@ namespace drdemo {
             nodes.Append(TapeNode(w1, p1, w2, p2));
             return index;
         } else {
-            return 0;
+            return NOT_REGISTERED;
         }
     }
 

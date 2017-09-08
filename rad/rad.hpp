@@ -33,6 +33,9 @@ namespace drdemo {
         TapeNode(float w1, size_t p1, float w2, size_t p2) noexcept;
     };
 
+    // Define constant that is returned as index from the tape if the node was not registered
+    const size_t NOT_REGISTERED = std::numeric_limits<size_t>::max();
+
     /**
      * Define the Tape class which holds the computation progress and allows then to compute the derivatives
      */
@@ -72,13 +75,11 @@ namespace drdemo {
 
         // Push current size of nodes, can be used to clear after
         inline void Push() {
-            // clear_indices.push_back(nodes.size());
             clear_indices.push_back(nodes.Size());
         }
 
         // Pop current portion of stack, uses last checkpoint saved
         inline void Pop() {
-            // nodes.erase(nodes.begin() + clear_indices[clear_indices.size() - 1], nodes.end());
             nodes.Cut(clear_indices[clear_indices.size() - 1]);
             // Delete index
             clear_indices.pop_back();

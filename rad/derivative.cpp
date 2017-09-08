@@ -32,6 +32,10 @@ namespace drdemo {
             TapeNode const &node = default_tape.At(rev_index);
 
             // Add children contribution
+            if (node.parent_i[0] == NOT_REGISTERED || node.parent_i[1] == NOT_REGISTERED) {
+                std::cerr << "Warning! Trying to compute derivative that involves unregistered nodes!" << std::endl;
+                exit(EXIT_FAILURE);
+            }
             derivs[node.parent_i[0]] += node.weights[0] * derivs[rev_index];
             derivs[node.parent_i[1]] += node.weights[1] * derivs[rev_index];
         }
