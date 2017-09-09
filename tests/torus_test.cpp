@@ -21,8 +21,8 @@ namespace drdemo {
 
     void TorusTest(int start_resolution, float res_multiplier, int ref_steps) {
         // Target render size
-        const size_t WIDTH = 300;
-        const size_t HEIGHT = 300;
+        const size_t WIDTH = 512;
+        const size_t HEIGHT = 512;
 
         // Maximum gradient descent iterations
         const size_t MAX_ITERS = 200;
