@@ -128,7 +128,8 @@ namespace drdemo {
 //            }
             // Add contribution to final gradient
             for (size_t i = 0; i < gradient.size(); ++i) {
-                gradient[i] += derivatives.Dwrt(E_normals, *diff_variables[i]);
+                // Lambda * gradient !!!
+                gradient[i] += lambda * derivatives.Dwrt(E_normals, *diff_variables[i]);
             }
         }
         // We have our gradient, clear derivatives
