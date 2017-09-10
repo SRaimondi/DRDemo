@@ -16,6 +16,11 @@ namespace drdemo {
         bounds[1] = Max(bounds[1], b.bounds[1]);
     }
 
+    void BBOX::Expand(float s) {
+        bounds[0] *= s;
+        bounds[1] *= s;
+    }
+
     float BBOX::Distance(const Vector3f &p) const {
 //        // Compute extent
 //        const Vector3f extent = Extent();

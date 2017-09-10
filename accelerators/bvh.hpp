@@ -57,7 +57,9 @@ namespace drdemo {
 
         bool IntersectP(Ray const &ray) const;
 
-        // BBOX BBox() const override;
+        inline BBOX BBox() const {
+            return flat_tree[0].bbox;
+        }
 
         // Vector3F Centroid() const override;
 

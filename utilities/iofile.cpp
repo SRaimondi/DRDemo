@@ -32,7 +32,7 @@ namespace drdemo {
 
         // Close file
         file.close();
-        std::cout << "Done reading file!" << std::endl;
+        std::cout << "Done reading file!" << std::endl << std::endl;
 
         return true;
     }

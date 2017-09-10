@@ -275,11 +275,12 @@ namespace drdemo {
     }
 
     BBOX TriangleMesh::BBox() const {
-        return BBOX(); // TODO
+        // Return BBOX from BVH acceleration structure
+        return bvh.BBox();
     }
 
     Vector3f TriangleMesh::Centroid() const {
-        return drdemo::Vector3f(); // TODO
+        return drdemo::Vector3f(0.f, 0.f, 0.f);
     }
 
     std::string TriangleMesh::ToString() const {

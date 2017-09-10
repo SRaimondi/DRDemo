@@ -44,6 +44,9 @@ namespace drdemo {
 
         void ExpandTo(const BBOX &b);
 
+        // Expand by a given factor
+        void Expand(float s);
+
         // Check if a point is inside
         inline bool Inside(const Vector3f &p) const {
             return p.x >= bounds[0].x && p.x <= bounds[1].x &&

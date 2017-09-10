@@ -112,7 +112,7 @@ namespace drdemo {
         }
 
         // Print tree data
-        std::cout << ToString() << std::endl;
+        std::cout << ToString() << std::endl << std::endl;
     }
 
     BVH::BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size)
