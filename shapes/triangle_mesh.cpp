@@ -24,32 +24,32 @@ namespace drdemo {
 
     bool Triangle::Intersect(Ray const &ray, Interaction *const interaction) const {
         // Get vertices from mesh
-        Vector3F const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
-        Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
-        Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
+        Vector3f const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
+        Vector3f const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
+        Vector3f const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
         // Compute e1 and e2
-        Vector3F const e1 = v1 - v0;
-        Vector3F const e2 = v2 - v0;
+        Vector3f const e1 = v1 - v0;
+        Vector3f const e2 = v2 - v0;
 
         // Compute variables for triangle intersection
-        Vector3F s1 = Cross(ray.d, e2);
-        Float divisor = Dot(s1, e1);
+        Vector3f s1 = Cross(Tofloat(ray.d), e2);
+        float divisor = Dot(s1, e1);
         if (divisor == 0.f) { return false; }
-        Float inv_divisor = 1.f / divisor;
+        float inv_divisor = 1.f / divisor;
 
         // Compute first barycentric coordinate
-        Vector3F s = ray.o - v0;
-        Float b1 = Dot(s, s1) * inv_divisor;
+        Vector3f s = Tofloat(ray.o) - v0;
+        float b1 = Dot(s, s1) * inv_divisor;
         if (b1 < 0.f || b1 > 1.f) { return false; }
 
         // Compute second barycentric coordinate
-        Vector3F s2 = Cross(s, e1);
-        Float b2 = Dot(ray.d, s2) * inv_divisor;
+        Vector3f s2 = Cross(s, e1);
+        float b2 = Dot(Tofloat(ray.d), s2) * inv_divisor;
         if (b2 < 0.f || b1 + b2 > 1.f) { return false; }
 
         // Compute t of the intersection
-        Float t = Dot(e2, s2) * inv_divisor;
+        float t = Dot(e2, s2) * inv_divisor;
         // Check we are inside ray boundaries
         if (t < ray.t_min || t > ray.t_max) { return false; }
 
@@ -60,11 +60,11 @@ namespace drdemo {
         interaction->p = ray(t);
 
         if (mesh.normals.empty()) {
-            interaction->n = Normalize(Cross(e1, e2));
+            interaction->n = ToFloat(Normalize(Cross(e1, e2)));
         } else {
-            interaction->n = Normalize((1.f - b1 - b2) * mesh.normals[mesh.triangles[triangle_index].n[0]] +
+            interaction->n = ToFloat(Normalize((1.f - b1 - b2) * mesh.normals[mesh.triangles[triangle_index].n[0]] +
                                        b1 * mesh.normals[mesh.triangles[triangle_index].n[1]] +
-                                       b2 * mesh.normals[mesh.triangles[triangle_index].n[2]]);
+                                               b2 * mesh.normals[mesh.triangles[triangle_index].n[2]]));
         }
         interaction->t = t;
         interaction->wo = Normalize(-ray.d);
@@ -74,120 +74,120 @@ namespace drdemo {
 
     bool Triangle::IntersectP(Ray const &ray) const {
         // Get vertices from mesh
-        Vector3F const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
-        Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
-        Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
+        Vector3f const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
+        Vector3f const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
+        Vector3f const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
         // Compute e1 and e2
-        Vector3F const e1 = v1 - v0;
-        Vector3F const e2 = v2 - v0;
+        Vector3f const e1 = v1 - v0;
+        Vector3f const e2 = v2 - v0;
 
         // Compute variables for triangle intersection
-        Vector3F s1 = Cross(ray.d, e2);
-        Float divisor = Dot(s1, e1);
+        Vector3f s1 = Cross(Tofloat(ray.d), e2);
+        float divisor = Dot(s1, e1);
         if (divisor == 0.f) { return false; }
-        Float inv_divisor = 1.f / divisor;
+        float inv_divisor = 1.f / divisor;
 
         // Compute first barycentric coordinate
-        Vector3F s = ray.o - v0;
-        Float b1 = Dot(s, s1) * inv_divisor;
+        Vector3f s = Tofloat(ray.o) - v0;
+        float b1 = Dot(s, s1) * inv_divisor;
         if (b1 < 0.f || b1 > 1.f) { return false; }
 
         // Compute second barycentric coordinate
-        Vector3F s2 = Cross(s, e1);
-        Float b2 = Dot(ray.d, s2) * inv_divisor;
+        Vector3f s2 = Cross(s, e1);
+        float b2 = Dot(Tofloat(ray.d), s2) * inv_divisor;
         if (b2 < 0.f || b1 + b2 > 1.f) { return false; }
 
         // Compute t of the intersection
-        Float t = Dot(e2, s2) * inv_divisor;
+        float t = Dot(e2, s2) * inv_divisor;
         // Check we are inside ray boundaries
         return (t > ray.t_min && t < ray.t_max);
     }
 
     BBOX Triangle::BBox() const {
         // Get vertices from mesh
-        Vector3F const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
-        Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
-        Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
+        Vector3f const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
+        Vector3f const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
+        Vector3f const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
-        BBOX bbox(Tofloat(v0), Tofloat(v1));
-        bbox.ExpandTo(Tofloat(v2));
+        BBOX bbox(v0, v1);
+        bbox.ExpandTo(v2);
 
         return bbox;
     }
 
     Vector3f Triangle::Centroid() const {
         // Get vertices from mesh
-        Vector3F const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
-        Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
-        Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
+        Vector3f const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
+        Vector3f const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
+        Vector3f const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
-        return (1.f / 3.f) * (Tofloat(v0) + Tofloat(v1) + Tofloat(v2));
+        return (1.f / 3.f) * (v0 + v1 + v2);
     }
 
     std::string Triangle::ToString() const {
         // Get vertices from mesh
-        Vector3F const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
-        Vector3F const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
-        Vector3F const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
+        Vector3f const &v0 = mesh.vertices[mesh.triangles[triangle_index].v[0]];
+        Vector3f const &v1 = mesh.vertices[mesh.triangles[triangle_index].v[1]];
+        Vector3f const &v2 = mesh.vertices[mesh.triangles[triangle_index].v[2]];
 
         return "Vertices: \n(" +
-               std::to_string(v0.x.GetValue()) + ", " +
-               std::to_string(v0.y.GetValue()) + ", " +
-               std::to_string(v0.z.GetValue()) + ")\n" +
+               std::to_string(v0.x) + ", " +
+               std::to_string(v0.y) + ", " +
+               std::to_string(v0.z) + ")\n" +
                "(" +
-               std::to_string(v1.x.GetValue()) + ", " +
-               std::to_string(v1.y.GetValue()) + ", " +
-               std::to_string(v1.z.GetValue()) + ")\n" +
+               std::to_string(v1.x) + ", " +
+               std::to_string(v1.y) + ", " +
+               std::to_string(v1.z) + ")\n" +
                "(" +
-               std::to_string(v2.x.GetValue()) + ", " +
-               std::to_string(v2.y.GetValue()) + ", " +
-               std::to_string(v2.z.GetValue()) + ")\n";
+               std::to_string(v2.x) + ", " +
+               std::to_string(v2.y) + ", " +
+               std::to_string(v2.z) + ")\n";
 
     }
 
-    void Triangle::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME
-        // Loop over all three vertices and get variables
-        for (unsigned i = 0; i < 3; ++i) {
-            // Get reference to vertex
-            Vector3F const &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
-            // Push pointers to variables
-            vars.push_back(&(v.x));
-            vars.push_back(&(v.y));
-            vars.push_back(&(v.z));
-        }
-    }
-
-    size_t Triangle::GetNumVars() const noexcept { // FIXME This is wrong!!!
-        return 3 * 3; // 3 Floats per 3 vertex
-    }
-
-    void
-    Triangle::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) { // FIXME This is wrong!!!
-        for (unsigned i = 0; i < 3; ++i) {
-            // Get reference to vertex
-            Vector3F &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
-            // Update vertex values
-            v.x.SetValue(v.x.GetValue() + delta[starting_index + 3 * i]);
-            v.y.SetValue(v.y.GetValue() + delta[starting_index + 3 * i + 1]);
-            v.z.SetValue(v.z.GetValue() + delta[starting_index + 3 * i + 2]);
-        }
-    }
-
-    void Triangle::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
-        for (unsigned i = 0; i < 3; ++i) {
-            // Get reference to vertex
-            Vector3F &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
-            // Update vertex values
-            v.x.SetValue(vals[starting_index + 3 * i]);
-            v.y.SetValue(vals[starting_index + 3 * i + 1]);
-            v.z.SetValue(vals[starting_index + 3 * i + 2]);
-        }
-    }
+//    void Triangle::GetDiffVariables(std::vector<Float const *> &vars) const { // FIXME
+//        // Loop over all three vertices and get variables
+//        for (unsigned i = 0; i < 3; ++i) {
+//            // Get reference to vertex
+//            Vector3F const &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
+//            // Push pointers to variables
+//            vars.push_back(&(v.x));
+//            vars.push_back(&(v.y));
+//            vars.push_back(&(v.z));
+//        }
+//    }
+//
+//    size_t Triangle::GetNumVars() const noexcept { // FIXME This is wrong!!!
+//        return 3 * 3; // 3 Floats per 3 vertex
+//    }
+//
+//    void
+//    Triangle::UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) { // FIXME This is wrong!!!
+//        for (unsigned i = 0; i < 3; ++i) {
+//            // Get reference to vertex
+//            Vector3F &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
+//            // Update vertex values
+//            v.x.SetValue(v.x.GetValue() + delta[starting_index + 3 * i]);
+//            v.y.SetValue(v.y.GetValue() + delta[starting_index + 3 * i + 1]);
+//            v.z.SetValue(v.z.GetValue() + delta[starting_index + 3 * i + 2]);
+//        }
+//    }
+//
+//    void Triangle::SetDiffVariables(std::vector<float> const &vals, size_t starting_index) {
+//        for (unsigned i = 0; i < 3; ++i) {
+//            // Get reference to vertex
+//            Vector3F &v = mesh.vertices[mesh.triangles[triangle_index].v[i]];
+//            // Update vertex values
+//            v.x.SetValue(vals[starting_index + 3 * i]);
+//            v.y.SetValue(vals[starting_index + 3 * i + 1]);
+//            v.z.SetValue(vals[starting_index + 3 * i + 2]);
+//        }
+//    }
 
     void TriangleMesh::CreateTriangles() {
         for (size_t t = 0; t < triangles.size(); ++t) {
-            shapes.push_back(std::make_shared<Triangle>(*this, t));
+            shapes.push_back(std::make_shared<const Triangle>(*this, t));
         }
     }
 
@@ -206,7 +206,7 @@ namespace drdemo {
                     // Read vertex data
                     float x, y, z;
                     sscanf(line_it.c_str(), "v %f %f %f", &x, &y, &z);
-                    vertices.push_back(Vector3F(x, y, z));
+                    vertices.push_back(Vector3f(x, y, z));
                 } /* else if (line_it.compare(0, 3, "vt ") == 0) {
                     // Read uv data
                     float u, v;
@@ -217,7 +217,7 @@ namespace drdemo {
                     // Read normal data
                     float x, y, z;
                     sscanf(line_it.c_str(), "vn %f %f %f", &x, &y, &z);
-                    normals.push_back(Normalize(Vector3F(x, y, z)));
+                    normals.push_back(Normalize(Vector3f(x, y, z)));
                 } else if (line_it.compare(0, 1, "f") == 0) {
                     // Read face data
                     uint32_t v0, v1, v2;
@@ -286,44 +286,44 @@ namespace drdemo {
     std::string TriangleMesh::ToString() const {
         return std::string(); // TODO
     }
-
-    void TriangleMesh::GetDiffVariables(std::vector<Float const *> &vars) const {
-        // Add pointer to all components of each vertex
-        for (auto const &v : vertices) {
-            vars.push_back(&(v.x));
-            vars.push_back(&(v.y));
-            vars.push_back(&(v.z));
-        }
-    }
-
-    size_t TriangleMesh::GetNumVars() const noexcept {
-        return vertices.size() * 3;
-    }
-
-    void TriangleMesh::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
-        size_t used_vars = 0;
-        for (auto &v : vertices) {
-            // Update vertex values
-            v.x.SetValue(v.x.GetValue() + delta[starting_index + used_vars++]);
-            v.y.SetValue(v.y.GetValue() + delta[starting_index + used_vars++]);
-            v.z.SetValue(v.z.GetValue() + delta[starting_index + used_vars++]);
-        }
-
-        // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment
-        bvh.Rebuild();
-    }
-
-    void TriangleMesh::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {
-        size_t used_vars = 0;
-        for (auto &v : vertices) {
-            // Update vertex values
-            v.x.SetValue(vals[starting_index + used_vars++]);
-            v.y.SetValue(vals[starting_index + used_vars++]);
-            v.z.SetValue(vals[starting_index + used_vars++]);
-        }
-
-        // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment
-        bvh.Rebuild();
-    }
+//
+//    void TriangleMesh::GetDiffVariables(std::vector<Float const *> &vars) const {
+//        // Add pointer to all components of each vertex
+//        for (auto const &v : vertices) {
+//            vars.push_back(&(v.x));
+//            vars.push_back(&(v.y));
+//            vars.push_back(&(v.z));
+//        }
+//    }
+//
+//    size_t TriangleMesh::GetNumVars() const noexcept {
+//        return vertices.size() * 3;
+//    }
+//
+//    void TriangleMesh::UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) {
+//        size_t used_vars = 0;
+//        for (auto &v : vertices) {
+//            // Update vertex values
+//            v.x.SetValue(v.x.GetValue() + delta[starting_index + used_vars++]);
+//            v.y.SetValue(v.y.GetValue() + delta[starting_index + used_vars++]);
+//            v.z.SetValue(v.z.GetValue() + delta[starting_index + used_vars++]);
+//        }
+//
+//        // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment
+//        bvh.Rebuild();
+//    }
+//
+//    void TriangleMesh::SetDiffVariables(const std::vector<float> &vals, size_t starting_index) {
+//        size_t used_vars = 0;
+//        for (auto &v : vertices) {
+//            // Update vertex values
+//            v.x.SetValue(vals[starting_index + used_vars++]);
+//            v.y.SetValue(vals[starting_index + used_vars++]);
+//            v.z.SetValue(vals[starting_index + used_vars++]);
+//        }
+//
+//        // Rebuild BVH acceleration structure, not a good solution but it's the best at the moment
+//        bvh.Rebuild();
+//    }
 
 } // drdemo namespace

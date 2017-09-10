@@ -35,12 +35,12 @@ namespace drdemo {
         uint32_t num_leafs;
         uint32_t leaf_size;
         // Shapes in the BVH
-        std::vector<std::shared_ptr<Shape> > &shapes;
+        std::vector<std::shared_ptr<const Shape> > &shapes;
         // Flat tree data
         std::vector<BVHFlatNode> flat_tree;
 
     public:
-        explicit BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size = 4);
+        explicit BVH(std::vector<std::shared_ptr<const Shape> > &s, uint32_t leaf_size = 4);
 
         // Build the tree
         void Build();

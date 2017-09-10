@@ -115,7 +115,7 @@ namespace drdemo {
         std::cout << ToString() << std::endl << std::endl;
     }
 
-    BVH::BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size)
+    BVH::BVH(std::vector<std::shared_ptr<const Shape> > &s, uint32_t leaf_size)
             : num_nodes(0), num_leafs(0), leaf_size(leaf_size), shapes(s) {}
 
     void BVH::Rebuild() {

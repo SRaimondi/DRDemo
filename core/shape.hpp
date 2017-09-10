@@ -13,8 +13,9 @@ namespace drdemo {
 
     /**
      * Define base Shape class, all other shapes must inherit from it
+     * 10.9.2017 Removed that all shapes are differentiable
      */
-    class Shape : public DiffObjectInterface {
+    class Shape /* : public DiffObjectInterface */ {
     public:
         // Compute intersection between a Ray and the shape
         virtual bool Intersect(Ray const &ray, Interaction *interaction) const = 0;

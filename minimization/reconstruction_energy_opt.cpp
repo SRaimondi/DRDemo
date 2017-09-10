@@ -163,7 +163,7 @@ namespace drdemo {
     }
 
     std::vector<float> ReconstructionEnergyOpt::GetStatus() const {
-        // Status is just the current value of all the gird values we can differentiate with respect to
+        // Status is just the current value of all the grid values we can differentiate with respect to
         std::vector<float> status(diff_variables.size(), 0.f);
         for (size_t i = 0; i < status.size(); i++) {
             status[i] = diff_variables[i]->GetValue();

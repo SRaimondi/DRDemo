@@ -22,7 +22,7 @@ namespace drdemo {
      * The grid is centered at the origin for simplicity
      * The storage order is along x, y, z.
      */
-    class SignedDistanceGrid : public Shape {
+    class SignedDistanceGrid : public Shape, public DiffObjectInterface {
     private:
         // Number of points for each axis (number of voxels is the value for a given axis minus 1)
         int num_points[3];

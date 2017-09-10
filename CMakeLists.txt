@@ -76,8 +76,8 @@ set(SOURCE_FILES
         core/lodepng.hpp
         minimization/scalar_function.hpp
         minimization/scalar_function.cpp
-        minimization/multi_view_energy.cpp
-        minimization/multi_view_energy.hpp
+        # minimization/multi_view_energy.cpp
+        # minimization/multi_view_energy.hpp
         minimization/gradient_descent.cpp
         minimization/gradient_descent.hpp
         minimization/reconstruction_energy.cpp
@@ -92,6 +92,6 @@ set(SOURCE_FILES
         tests/torus_test.hpp
         minimization/reconstruction_energy_opt.cpp
         minimization/reconstruction_energy_opt.hpp
-        tests/test_common.cpp tests/test_common.hpp)
+        tests/test_common.cpp tests/test_common.hpp tests/bunny_test.cpp tests/bunny_test.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

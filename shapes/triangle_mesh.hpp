@@ -38,6 +38,7 @@ namespace drdemo {
 
     /**
      * Triangle class
+     * 10.9.2017: Refactored to not use differentiable variables
      */
     class Triangle : public Shape {
     private:
@@ -60,14 +61,14 @@ namespace drdemo {
 
         std::string ToString() const override;
 
-        // Differentiable object methods
-        void GetDiffVariables(std::vector<Float const *> &vars) const override;
-
-        size_t GetNumVars() const noexcept override;
-
-        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
-
-        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
+//        // Differentiable object methods
+//        void GetDiffVariables(std::vector<Float const *> &vars) const override;
+//
+//        size_t GetNumVars() const noexcept override;
+//
+//        void UpdateDiffVariables(std::vector<float> const &delta, size_t starting_index) override;
+//
+//        void SetDiffVariables(std::vector<float> const &vals, size_t starting_index) override;
     };
 
     /**
@@ -82,13 +83,17 @@ namespace drdemo {
 
         // Loaded triangles
         std::vector<TriangleIndices> triangles;
+
         // Loaded vertices
-        std::vector<Vector3F> vertices;
+        // std::vector<Vector3F> vertices;
+        std::vector<Vector3f> vertices;
+
         // Loaded normals
-        std::vector<Vector3F> normals;
+        // std::vector<Vector3F> normals;
+        std::vector<Vector3f> normals;
 
         // List of triangles
-        std::vector<std::shared_ptr<Shape> > shapes;
+        std::vector<std::shared_ptr<const Shape> > shapes;
 
         // Intersection acceleration structure
         BVH bvh;
@@ -115,14 +120,14 @@ namespace drdemo {
 
         std::string ToString() const override;
 
-        // Differentiable object methods
-        void GetDiffVariables(std::vector<Float const *> &vars) const override;
-
-        size_t GetNumVars() const noexcept override;
-
-        void UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) override;
-
-        void SetDiffVariables(const std::vector<float> &vals, size_t starting_index) override;
+//        // Differentiable object methods
+//        void GetDiffVariables(std::vector<Float const *> &vars) const override;
+//
+//        size_t GetNumVars() const noexcept override;
+//
+//        void UpdateDiffVariables(const std::vector<float> &delta, size_t starting_index) override;
+//
+//        void SetDiffVariables(const std::vector<float> &vals, size_t starting_index) override;
     };
 
 } // drdemo namespace

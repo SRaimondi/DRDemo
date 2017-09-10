@@ -61,18 +61,6 @@ namespace drdemo {
                     std::make_shared<const PinholeCamera>(Vector3F(p.x, p.y, p.z), Vector3F(), Vector3F(0.f, 1.f, 0.f),
                                                           60.f, WIDTH, HEIGHT));
         }
-//        cameras.push_back(
-//                std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-//                                                      60.f, WIDTH, HEIGHT));
-//        cameras.push_back(
-//                std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-//                                                      60.f, WIDTH, HEIGHT));
-//        cameras.push_back(
-//                std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, -5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-//                                                      60.f, WIDTH, HEIGHT));
-//        cameras.push_back(
-//                std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-//                                                      60.f, WIDTH, HEIGHT));
 
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
