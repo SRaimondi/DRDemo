@@ -40,7 +40,7 @@ namespace drdemo {
         std::vector<BVHFlatNode> flat_tree;
 
     public:
-        BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size = 4);
+        explicit BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size = 4);
 
         // Build the tree
         void Build();
@@ -51,7 +51,7 @@ namespace drdemo {
         // Shape methods
         // bool Intersect(Ray const &ray, Interaction *const interaction) const override;
 
-        bool Intersect(Ray const &ray, Interaction *const interaction) const;
+        bool Intersect(Ray const &ray, Interaction *interaction) const;
 
         // bool IntersectP(Ray const &ray) const override;
 

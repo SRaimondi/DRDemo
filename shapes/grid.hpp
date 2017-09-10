@@ -158,21 +158,21 @@ namespace drdemo {
     };
 
 
-    /**
-     * Reinitialization equation utilities
-     */
-
-    // Compute squared norm of the gradient using forward finite difference method
-    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z);
-
-    // Compute sign grid
-    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid);
-
-    // Compute right part of PDF
-    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z);
-
-    // Reinitialize SDF
-    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
+//    /**
+//     * Reinitialization equation utilities
+//     */
+//
+//    // Compute squared norm of the gradient using forward finite difference method
+//    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z);
+//
+//    // Compute sign grid
+//    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid);
+//
+//    // Compute right part of PDF
+//    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z);
+//
+//    // Reinitialize SDF
+//    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
 
 } // drdemo namespace
 

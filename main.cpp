@@ -4,6 +4,7 @@
 
 #include <scene.hpp>
 #include <torus_test.hpp>
+#include <test_common.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -31,6 +32,8 @@ int main() {
 
     // Set namespace used
     using namespace drdemo;
+
+    std::vector<Vector3f> points = LoadViewPoints("../camera_points/normal_camera.txt");
 
     // Geometric sphere test
     // GeometricSphereTest();

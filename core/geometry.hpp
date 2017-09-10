@@ -198,11 +198,14 @@ namespace drdemo {
     public:
         // Origin
         Vector3F o;
+
         // Direction, NOT forced to be normalized
         Vector3F d;
+
         // Minimum and maximum parameter of the ray
         mutable Float t_min;
         mutable Float t_max;
+
         // Ray direction sign
         int sign[3];
 
