@@ -27,12 +27,12 @@ namespace drdemo {
         // Loop over all lines and add them
         while (!file.eof()) {
             file.getline(buffer, 1024);
-            lines.push_back(std::string(buffer));
+            lines.emplace_back(buffer);
         }
 
         // Close file
         file.close();
-        std::cout << "Done reading file!" << std::endl;
+        std::cout << "Done reading file!" << std::endl << std::endl;
 
         return true;
     }

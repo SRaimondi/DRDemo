@@ -151,7 +151,7 @@ namespace drdemo {
     // Normalize vector
     template<typename T>
     inline Vector3<T> Normalize(Vector3<T> const &v) {
-        T length = Length(v);
+        const T length = Length(v);
         assert(length != 0.f);
         return v / length;
     }
@@ -183,6 +183,11 @@ namespace drdemo {
         return Vector3<float>(v.x.GetValue(), v.y.GetValue(), v.z.GetValue());
     }
 
+    // Convert float vector to Float vector
+    inline Vector3<Float> ToFloat(Vector3<float> const &v) {
+        return Vector3<Float>(v.x, v.y, v.z);
+    }
+
     // Print vector
     template<typename T>
     std::ostream &operator<<(std::ostream &os, Vector3<T> const &v) {
@@ -198,11 +203,14 @@ namespace drdemo {
     public:
         // Origin
         Vector3F o;
+
         // Direction, NOT forced to be normalized
         Vector3F d;
+
         // Minimum and maximum parameter of the ray
         mutable Float t_min;
         mutable Float t_max;
+
         // Ray direction sign
         int sign[3];
 

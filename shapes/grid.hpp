@@ -22,7 +22,7 @@ namespace drdemo {
      * The grid is centered at the origin for simplicity
      * The storage order is along x, y, z.
      */
-    class SignedDistanceGrid : public Shape {
+    class SignedDistanceGrid : public Shape, public DiffObjectInterface {
     private:
         // Number of points for each axis (number of voxels is the value for a given axis minus 1)
         int num_points[3];
@@ -158,21 +158,21 @@ namespace drdemo {
     };
 
 
-    /**
-     * Reinitialization equation utilities
-     */
-
-    // Compute squared norm of the gradient using forward finite difference method
-    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z);
-
-    // Compute sign grid
-    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid);
-
-    // Compute right part of PDF
-    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z);
-
-    // Reinitialize SDF
-    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
+//    /**
+//     * Reinitialization equation utilities
+//     */
+//
+//    // Compute squared norm of the gradient using forward finite difference method
+//    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z);
+//
+//    // Compute sign grid
+//    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid);
+//
+//    // Compute right part of PDF
+//    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z);
+//
+//    // Reinitialize SDF
+//    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band);
 
 } // drdemo namespace
 

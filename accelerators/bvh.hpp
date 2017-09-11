@@ -35,12 +35,12 @@ namespace drdemo {
         uint32_t num_leafs;
         uint32_t leaf_size;
         // Shapes in the BVH
-        std::vector<std::shared_ptr<Shape> > &shapes;
+        std::vector<std::shared_ptr<const Shape> > &shapes;
         // Flat tree data
         std::vector<BVHFlatNode> flat_tree;
 
     public:
-        BVH(std::vector<std::shared_ptr<Shape> > &s, uint32_t leaf_size = 4);
+        explicit BVH(std::vector<std::shared_ptr<const Shape> > &s, uint32_t leaf_size = 4);
 
         // Build the tree
         void Build();
@@ -51,13 +51,15 @@ namespace drdemo {
         // Shape methods
         // bool Intersect(Ray const &ray, Interaction *const interaction) const override;
 
-        bool Intersect(Ray const &ray, Interaction *const interaction) const;
+        bool Intersect(Ray const &ray, Interaction *interaction) const;
 
         // bool IntersectP(Ray const &ray) const override;
 
         bool IntersectP(Ray const &ray) const;
 
-        // BBOX BBox() const override;
+        inline BBOX BBox() const {
+            return flat_tree[0].bbox;
+        }
 
         // Vector3F Centroid() const override;
 

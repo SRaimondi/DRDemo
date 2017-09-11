@@ -3,7 +3,8 @@
 //
 
 #include <scene.hpp>
-#include <torus_test.hpp>
+#include <test_common.hpp>
+#include <bunny_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -31,6 +32,8 @@ int main() {
 
     // Set namespace used
     using namespace drdemo;
+
+    std::vector<Vector3f> points = LoadViewPoints("../camera_points/normal_camera.txt");
 
     // Geometric sphere test
     // GeometricSphereTest();
@@ -69,8 +72,13 @@ int main() {
     // Monkey test
     // OBJRenderTestMR(7, "../objs/monkey.obj", 3, CAM_CONFIG::ALL);     // Result in monkey2 folder
 
+
+
     // New torus test
-    TorusTest(10, 1.5f, 4);             // Result in torus2 folder
+    // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
+
+    // Bunny test
+    BunnyTest(10, 1.5f, 6);
 
     /**
      * Triangle mesh loading + simple minimization against black image

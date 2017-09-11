@@ -128,7 +128,8 @@ namespace drdemo {
 //            }
             // Add contribution to final gradient
             for (size_t i = 0; i < gradient.size(); ++i) {
-                gradient[i] += derivatives.Dwrt(E_normals, *diff_variables[i]);
+                // Lambda * gradient !!!
+                gradient[i] += lambda * derivatives.Dwrt(E_normals, *diff_variables[i]);
             }
         }
         // We have our gradient, clear derivatives
@@ -162,7 +163,7 @@ namespace drdemo {
     }
 
     std::vector<float> ReconstructionEnergyOpt::GetStatus() const {
-        // Status is just the current value of all the gird values we can differentiate with respect to
+        // Status is just the current value of all the grid values we can differentiate with respect to
         std::vector<float> status(diff_variables.size(), 0.f);
         for (size_t i = 0; i < status.size(); i++) {
             status[i] = diff_variables[i]->GetValue();

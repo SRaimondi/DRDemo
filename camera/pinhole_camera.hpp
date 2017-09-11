@@ -17,8 +17,10 @@ namespace drdemo {
     private:
         // Position
         Vector3F eye_world;
+
         // Local base vectors
         Vector3F u, v, w;
+
         // Field of view
         float bottom, top, left, right;
         // Film size

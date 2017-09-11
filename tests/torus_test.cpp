@@ -16,6 +16,7 @@
 #include <gradient_descent.hpp>
 #include <reconstruction_energy_opt.hpp>
 #include "torus_test.hpp"
+#include "test_common.hpp"
 
 namespace drdemo {
 
@@ -53,18 +54,13 @@ namespace drdemo {
 
         // Create vector of target cameras
         std::vector<std::shared_ptr<const CameraInterface> > cameras;
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, 5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(0.f, 0.f, -5.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
-        cameras.push_back(
-                std::make_shared<const PinholeCamera>(Vector3F(-5.f, 0.f, 0.f), Vector3F(), Vector3F(0.f, 1.f, 0.f),
-                                                      60.f, WIDTH, HEIGHT));
+        // Load viewpoints from file
+        std::vector<Vector3f> cameras_viewpoints = LoadViewPoints("../camera_points/normal_camera.txt");
+        for (auto const &p : cameras_viewpoints) {
+            cameras.push_back(
+                    std::make_shared<const PinholeCamera>(Vector3F(p.x, p.y, p.z), Vector3F(), Vector3F(0.f, 1.f, 0.f),
+                                                          60.f, WIDTH, HEIGHT));
+        }
 
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());

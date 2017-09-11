@@ -12,7 +12,6 @@ namespace drdemo {
     // Define interface for Scalar functions to be used in the minimization algorithms
     class ScalarFunctionInterface {
     public:
-
         // Get input dimension
         virtual size_t InputDim() const = 0;
 

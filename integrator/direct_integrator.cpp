@@ -15,9 +15,9 @@ namespace drdemo {
         Interaction interaction;
         if (!scene.Intersect(ray, &interaction)) { return L; }
 
-            // TODO Testing if we get better result when lights come from the camera
-            const Float n_dot_l = Abs(Dot(interaction.n, -camera.LookDir()));
-            L = Spectrum(n_dot_l, n_dot_l, n_dot_l);
+        // TODO Testing if we get better result when lights come from the camera
+        const Float n_dot_l = Abs(Dot(interaction.n, -camera.LookDir()));
+        L = Spectrum(n_dot_l, n_dot_l, n_dot_l);
 
         // Compute shading at hit point
             // for (auto const &light : scene.GetLights()) {

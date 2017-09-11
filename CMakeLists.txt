@@ -44,8 +44,8 @@ set(SOURCE_FILES
         core/tonemapper.hpp
         tonemapper/clamp_tonemapper.cpp
         tonemapper/clamp_tonemapper.hpp
-        shapes/sphere.cpp
-        shapes/sphere.hpp
+        # shapes/sphere.cpp
+        # shapes/sphere.hpp
         core/common.hpp
         core/renderer.hpp
         camera/pinhole_camera.cpp
@@ -53,13 +53,13 @@ set(SOURCE_FILES
         core/integrator.hpp
         renderer/simple_renderer.cpp
         renderer/simple_renderer.hpp
-        light/point_light.cpp
-        light/point_light.hpp
+        # light/point_light.cpp
+        # light/point_light.hpp
         integrator/direct_integrator.cpp
         integrator/direct_integrator.hpp
         rad/diff_object.hpp
-        light/directional_light.cpp
-        light/directional_light.hpp
+        # light/directional_light.cpp
+        # light/directional_light.hpp
         utilities/vector.hpp
         utilities/tape_storage.hpp
         core/bbox.hpp
@@ -76,17 +76,22 @@ set(SOURCE_FILES
         core/lodepng.hpp
         minimization/scalar_function.hpp
         minimization/scalar_function.cpp
-        minimization/multi_view_energy.cpp
-        minimization/multi_view_energy.hpp
+        # minimization/multi_view_energy.cpp
+        # minimization/multi_view_energy.hpp
         minimization/gradient_descent.cpp
         minimization/gradient_descent.hpp
         minimization/reconstruction_energy.cpp
         minimization/reconstruction_energy.hpp
-        tests/geom_sphere.cpp
-        tests/geom_sphere.hpp
-        tests/sdf_sphere.cpp
-        tests/sdf_sphere.hpp
-        light/ambient_light.cpp
-        light/ambient_light.hpp tests/torus_test.cpp tests/torus_test.hpp minimization/reconstruction_energy_opt.cpp minimization/reconstruction_energy_opt.hpp)
+        # tests/geom_sphere.cpp
+        # tests/geom_sphere.hpp
+        # tests/sdf_sphere.cpp
+        # tests/sdf_sphere.hpp
+        # light/ambient_light.cpp
+        # light/ambient_light.hpp
+        tests/torus_test.cpp
+        tests/torus_test.hpp
+        minimization/reconstruction_energy_opt.cpp
+        minimization/reconstruction_energy_opt.hpp
+        tests/test_common.cpp tests/test_common.hpp tests/bunny_test.cpp tests/bunny_test.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -400,121 +400,121 @@ namespace drdemo {
             data[i].SetValue(vals[starting_index + used_vars++]);
         }
     }
-
-    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z) {
-        // Compute derivatives using finite difference
-        const float grad_x = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().x;
-        const float grad_y = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().y;
-        const float grad_z = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().z;
-
-        return grad_x * grad_x + grad_y * grad_y + grad_z * grad_z;
-    }
-
-    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid) {
-        for (int z = 0; z < grid.Size(2); z++) {
-            for (int y = 0; y < grid.Size(1); y++) {
-                for (int x = 0; x < grid.Size(0); x++) {
-                    // Get SDF value
-                    const float sdf_v = grid(x, y, z).GetValue();
-                    // Compute gradient squared norm
-                    const float grad_2 = GradNorm2(grid, x, y, z);
-                    // Update sign
-                    sign_grid[grid.LinearIndex(x, y, z)] = sdf_v /
-                                                           std::sqrt(sdf_v * sdf_v + grad_2 * EPS * EPS);
-                }
-            }
-        }
-    }
-
-    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z) {
-        // Compute gradient norm term using Godunov method
-        const float dphi_dx_plus = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().x;
-        const float dphi_dx_minus = (grid(x, y, z).GetValue() - grid(x - 1, y, z).GetValue()) * grid.InvVoxelSize().x;
-
-        const float dphi_dy_plus = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().y;
-        const float dphi_dy_minus = (grid(x, y, z).GetValue() - grid(x, y - 1, z).GetValue()) * grid.InvVoxelSize().y;
-
-        const float dphi_dz_plus = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().z;
-        const float dphi_dz_minus = (grid(x, y, z).GetValue() - grid(x, y, z - 1).GetValue()) * grid.InvVoxelSize().z;
-
-        // Check sign and compute gradient norm
-        float grad_x_sq, grad_y_sq, grad_z_sq;
-
-        if (sign_grid[grid.LinearIndex(x, y, z)] > 0.f) {
-            grad_x_sq = std::max(PositiveSQ(dphi_dx_minus), NegativeSQ(dphi_dx_plus));
-            grad_y_sq = std::max(PositiveSQ(dphi_dy_minus), NegativeSQ(dphi_dy_plus));
-            grad_z_sq = std::max(PositiveSQ(dphi_dz_minus), NegativeSQ(dphi_dz_plus));
-        } else {
-            grad_x_sq = std::max(PositiveSQ(dphi_dx_plus), NegativeSQ(dphi_dx_minus));
-            grad_y_sq = std::max(PositiveSQ(dphi_dy_plus), NegativeSQ(dphi_dy_minus));
-            grad_z_sq = std::max(PositiveSQ(dphi_dz_plus), NegativeSQ(dphi_dz_minus));
-        }
-
-        const float grad_norm = std::sqrt(grad_x_sq + grad_y_sq + grad_z_sq);
-
-        return sign_grid[grid.LinearIndex(x, y, z)] * (1.f - grad_norm);
-    }
-
-    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band) {
-        std::cout << "Reinitializing SDF..." << std::endl;
-        // Allocate space for storing the sign grid
-        auto sign_grid = new float[grid.GetNumVars()];
-
-        // Compute initial sign grid
-        ComputeSignGrid(grid, sign_grid);
-
-        // Allocate space to store dphi_dt
-        auto sdf_dt = new float[grid.GetNumVars()];
-        float max_dt = tolerance + 1.f;
-        size_t iters = 0;
-
-        // Construction loop
-        while (iters < max_iters && max_dt > tolerance) {
-            max_dt = 0.f;
-
-            // Loop over all grid and compute the right term of our PDE
-            for (int z = 0; z < grid.Size(2); z++) {
-                for (int y = 0; y < grid.Size(1); y++) {
-                    for (int x = 0; x < grid.Size(0); x++) {
-                        const int linear_index = grid.LinearIndex(x, y, z);
-                        // Check if value is inside the band
-                        if (std::abs(grid(x, y, z).GetValue()) >= band) {
-                            sdf_dt[linear_index] = 0.f;
-                        } else {
-                            // Compute right part of PDE
-                            sdf_dt[linear_index] = RightTermReinitializePDE(grid, sign_grid, x, y, z);
-                            // Check for new max_dt
-                            if (std::abs(sdf_dt[linear_index]) > max_dt) {
-                                max_dt = std::abs(sdf_dt[linear_index]);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Update our SDF
-            for (int z = 0; z < grid.Size(2); z++) {
-                for (int y = 0; y < grid.Size(1); y++) {
-                    for (int x = 0; x < grid.Size(0); x++) {
-                        grid(x, y, z).SetValue(grid(x, y, z).GetValue() + dt * sdf_dt[grid.LinearIndex(x, y, z)]);
-                    }
-                }
-            }
-
-            // Update sign grid
-            ComputeSignGrid(grid, sign_grid);
-//            if (iters != 0 && iters % 100 == 0) {
-//                std::cout << iters << " iterations..." << std::endl;
+//
+//    float GradNorm2(const SignedDistanceGrid &grid, int x, int y, int z) {
+//        // Compute derivatives using finite difference
+//        const float grad_x = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().x;
+//        const float grad_y = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().y;
+//        const float grad_z = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().z;
+//
+//        return grad_x * grad_x + grad_y * grad_y + grad_z * grad_z;
+//    }
+//
+//    void ComputeSignGrid(const SignedDistanceGrid &grid, float *sign_grid) {
+//        for (int z = 0; z < grid.Size(2); z++) {
+//            for (int y = 0; y < grid.Size(1); y++) {
+//                for (int x = 0; x < grid.Size(0); x++) {
+//                    // Get SDF value
+//                    const float sdf_v = grid(x, y, z).GetValue();
+//                    // Compute gradient squared norm
+//                    const float grad_2 = GradNorm2(grid, x, y, z);
+//                    // Update sign
+//                    sign_grid[grid.LinearIndex(x, y, z)] = sdf_v /
+//                                                           std::sqrt(sdf_v * sdf_v + grad_2 * EPS * EPS);
+//                }
 //            }
-            iters++;
-        }
-
-        std::cout << "Reinitialised SDF in " << iters << " iterations." << std::endl;
-        std::cout << "Max dphi_dt: " << max_dt << std::endl;
-
-        // Free sign grid and sdf_dt
-        delete[] sign_grid;
-        delete[] sdf_dt;
-    }
+//        }
+//    }
+//
+//    float RightTermReinitializePDE(const SignedDistanceGrid &grid, const float *sign_grid, int x, int y, int z) {
+//        // Compute gradient norm term using Godunov method
+//        const float dphi_dx_plus = (grid(x + 1, y, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().x;
+//        const float dphi_dx_minus = (grid(x, y, z).GetValue() - grid(x - 1, y, z).GetValue()) * grid.InvVoxelSize().x;
+//
+//        const float dphi_dy_plus = (grid(x, y + 1, z).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().y;
+//        const float dphi_dy_minus = (grid(x, y, z).GetValue() - grid(x, y - 1, z).GetValue()) * grid.InvVoxelSize().y;
+//
+//        const float dphi_dz_plus = (grid(x, y, z + 1).GetValue() - grid(x, y, z).GetValue()) * grid.InvVoxelSize().z;
+//        const float dphi_dz_minus = (grid(x, y, z).GetValue() - grid(x, y, z - 1).GetValue()) * grid.InvVoxelSize().z;
+//
+//        // Check sign and compute gradient norm
+//        float grad_x_sq, grad_y_sq, grad_z_sq;
+//
+//        if (sign_grid[grid.LinearIndex(x, y, z)] > 0.f) {
+//            grad_x_sq = std::max(PositiveSQ(dphi_dx_minus), NegativeSQ(dphi_dx_plus));
+//            grad_y_sq = std::max(PositiveSQ(dphi_dy_minus), NegativeSQ(dphi_dy_plus));
+//            grad_z_sq = std::max(PositiveSQ(dphi_dz_minus), NegativeSQ(dphi_dz_plus));
+//        } else {
+//            grad_x_sq = std::max(PositiveSQ(dphi_dx_plus), NegativeSQ(dphi_dx_minus));
+//            grad_y_sq = std::max(PositiveSQ(dphi_dy_plus), NegativeSQ(dphi_dy_minus));
+//            grad_z_sq = std::max(PositiveSQ(dphi_dz_plus), NegativeSQ(dphi_dz_minus));
+//        }
+//
+//        const float grad_norm = std::sqrt(grad_x_sq + grad_y_sq + grad_z_sq);
+//
+//        return sign_grid[grid.LinearIndex(x, y, z)] * (1.f - grad_norm);
+//    }
+//
+//    void ReinitializeSDF(SignedDistanceGrid &grid, float dt, size_t max_iters, float tolerance, float band) {
+//        std::cout << "Reinitializing SDF..." << std::endl;
+//        // Allocate space for storing the sign grid
+//        auto sign_grid = new float[grid.GetNumVars()];
+//
+//        // Compute initial sign grid
+//        ComputeSignGrid(grid, sign_grid);
+//
+//        // Allocate space to store dphi_dt
+//        auto sdf_dt = new float[grid.GetNumVars()];
+//        float max_dt = tolerance + 1.f;
+//        size_t iters = 0;
+//
+//        // Construction loop
+//        while (iters < max_iters && max_dt > tolerance) {
+//            max_dt = 0.f;
+//
+//            // Loop over all grid and compute the right term of our PDE
+//            for (int z = 0; z < grid.Size(2); z++) {
+//                for (int y = 0; y < grid.Size(1); y++) {
+//                    for (int x = 0; x < grid.Size(0); x++) {
+//                        const int linear_index = grid.LinearIndex(x, y, z);
+//                        // Check if value is inside the band
+//                        if (std::abs(grid(x, y, z).GetValue()) >= band) {
+//                            sdf_dt[linear_index] = 0.f;
+//                        } else {
+//                            // Compute right part of PDE
+//                            sdf_dt[linear_index] = RightTermReinitializePDE(grid, sign_grid, x, y, z);
+//                            // Check for new max_dt
+//                            if (std::abs(sdf_dt[linear_index]) > max_dt) {
+//                                max_dt = std::abs(sdf_dt[linear_index]);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // Update our SDF
+//            for (int z = 0; z < grid.Size(2); z++) {
+//                for (int y = 0; y < grid.Size(1); y++) {
+//                    for (int x = 0; x < grid.Size(0); x++) {
+//                        grid(x, y, z).SetValue(grid(x, y, z).GetValue() + dt * sdf_dt[grid.LinearIndex(x, y, z)]);
+//                    }
+//                }
+//            }
+//
+//            // Update sign grid
+//            ComputeSignGrid(grid, sign_grid);
+////            if (iters != 0 && iters % 100 == 0) {
+////                std::cout << iters << " iterations..." << std::endl;
+////            }
+//            iters++;
+//        }
+//
+//        std::cout << "Reinitialised SDF in " << iters << " iterations." << std::endl;
+//        std::cout << "Max dphi_dt: " << max_dt << std::endl;
+//
+//        // Free sign grid and sdf_dt
+//        delete[] sign_grid;
+//        delete[] sdf_dt;
+//    }
 
 } // drdemo namespace
