@@ -3,8 +3,7 @@
 //
 
 #include <scene.hpp>
-#include <test_common.hpp>
-#include <bunny_test.hpp>
+#include <dragon_render.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -32,8 +31,6 @@ int main() {
 
     // Set namespace used
     using namespace drdemo;
-
-    std::vector<Vector3f> points = LoadViewPoints("../camera_points/normal_camera.txt");
 
     // Geometric sphere test
     // GeometricSphereTest();
@@ -78,7 +75,10 @@ int main() {
     // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
 
     // Bunny test
-    BunnyTest(10, 1.5f, 6);
+    // BunnyTest(10, 1.5f, 6);
+
+    // Render pearl dragon images
+    RenderDragonImages("../camera_points/dragon_positions.txt", 512, 512);
 
     /**
      * Triangle mesh loading + simple minimization against black image
