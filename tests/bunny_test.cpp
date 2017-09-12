@@ -110,9 +110,9 @@ namespace drdemo {
         for (int step = 0; step < ref_steps; step++) {
             std::cout << "Starting refinement step " << std::to_string(step + 1) << " of " << std::to_string(ref_steps)
                       << std::endl;
-            std::cout << "Grid resolution: " << new_dims[0] << "x" << new_dims[1] << "x" << new_dims[2] << std::endl;
             // Compute new grid resolution
             for (int i = 0; i < 3; i++) { new_dims[i] = (int) (grid->Size(i) * res_multiplier); }
+            std::cout << "Grid resolution: " << new_dims[0] << "x" << new_dims[1] << "x" << new_dims[2] << std::endl;
             // Refine grid
             grid->Refine(new_dims);
             // Rebind variables
