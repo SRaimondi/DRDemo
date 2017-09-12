@@ -28,10 +28,10 @@ namespace drdemo {
         // Create target cameras
         std::vector<std::shared_ptr<const CameraInterface> > cameras;
         // Load viewpoints file
-        std::vector<Vector3f> cameras_viewpoints = LoadViewPoints(viewpoints_file);
+        std::vector<Vector3f> cameras_viewpoints = LoadViewPoints(viewpoints_file, "%f %f %f", 430, 479);
         for (auto const &p : cameras_viewpoints) {
             cameras.push_back(
-                    std::make_shared<const PinholeCamera>(Vector3F(p.x, p.y, p.z), Vector3F(0.f, 0.5f, 0.f),
+                    std::make_shared<const PinholeCamera>(Vector3F(p.x, p.y, p.z), Vector3F(0.f, 0.f, 0.f),
                                                           Vector3F(0.f, 1.f, 0.f),
                                                           60.f, w, h));
         }

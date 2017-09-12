@@ -78,7 +78,7 @@ int main() {
     // BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
-    RenderDragonImages("../camera_points/dragon_positions.txt", 512, 512);
+    RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered.xyz", 512, 512);
 
     /**
      * Triangle mesh loading + simple minimization against black image

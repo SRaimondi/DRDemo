@@ -56,7 +56,7 @@ namespace drdemo {
         // Create vector of target cameras
         std::vector<std::shared_ptr<const CameraInterface> > cameras;
         // Load viewpoints from file
-        std::vector<Vector3f> cameras_viewpoints = LoadViewPoints("../camera_points/up_hemisphere.txt");
+        std::vector<Vector3f> cameras_viewpoints = LoadViewPoints("../camera_points/up_hemisphere.txt", "%f,%f,%f");
         for (auto const &p : cameras_viewpoints) {
             cameras.push_back(
                     std::make_shared<const PinholeCamera>(Vector3F(p.x, p.y, p.z), Vector3F(), Vector3F(0.f, 1.f, 0.f),
