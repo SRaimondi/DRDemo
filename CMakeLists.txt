@@ -92,6 +92,6 @@ set(SOURCE_FILES
         tests/torus_test.hpp
         minimization/reconstruction_energy_opt.cpp
         minimization/reconstruction_energy_opt.hpp
-        tests/test_common.cpp tests/test_common.hpp tests/bunny_test.cpp tests/bunny_test.hpp tests/dragon_render.cpp tests/dragon_render.hpp)
+        tests/test_common.cpp tests/test_common.hpp tests/bunny_test.cpp tests/bunny_test.hpp tests/dragon_render.cpp tests/dragon_render.hpp tests/armadillo_render.cpp tests/armadillo_render.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -3,7 +3,7 @@
 //
 
 #include <scene.hpp>
-#include <dragon_render.hpp>
+#include <armadillo_render.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -78,7 +78,10 @@ int main() {
     // BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
-    RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered.xyz", 512, 512);
+    // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
+
+    // Render armadillo images
+    RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     /**
      * Triangle mesh loading + simple minimization against black image

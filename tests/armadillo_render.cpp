@@ -2,6 +2,7 @@
 // Created by Simon on 12.09.2017.
 //
 
+#include "armadillo_render.hpp"
 #include <triangle_mesh.hpp>
 #include <scene.hpp>
 #include <camera.hpp>
@@ -10,17 +11,16 @@
 #include <direct_integrator.hpp>
 #include <simple_renderer.hpp>
 #include <pinhole_camera.hpp>
-#include "dragon_render.hpp"
 #include "test_common.hpp"
 
 namespace drdemo {
 
-    void RenderDragonImages(const std::string &viewpoints_file, size_t w, size_t h) {
+    void RenderArmadilloImages(const std::string &viewpoints_file, size_t w, size_t h) {
         // Disable tape
         default_tape.Disable();
 
         // Load dragon mesh
-        auto mesh = std::make_shared<TriangleMesh>("../objs/dragon.obj");
+        auto mesh = std::make_shared<TriangleMesh>("../objs/armadillo.obj");
         // Create scene and add mesh
         Scene scene;
         scene.AddShape(mesh);
@@ -46,7 +46,7 @@ namespace drdemo {
         // Render target image
         for (int i = 0; i < cameras.size(); ++i) {
             render->RenderImage(&target, scene, *cameras[i]);
-            tonemapper.Process("dragon_" + std::to_string(i) + ".png", target);
+            tonemapper.Process("armadillo_" + std::to_string(i) + ".png", target);
         }
 
         // Re-enable tape
