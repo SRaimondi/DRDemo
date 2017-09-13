@@ -2,6 +2,7 @@
 // Created by Simon on 19.06.2017.
 //
 
+#include <iofile.hpp>
 #include "grid.hpp"
 
 namespace drdemo {
@@ -233,6 +234,69 @@ namespace drdemo {
         // Copy values
         for (int i = 0; i < total_points; ++i) {
             data[i] = raw_data[i];
+        }
+    }
+
+    SignedDistanceGrid::SignedDistanceGrid(const std::string &sdf_file) {
+        // Start by trying to reading the file
+        std::vector<std::string> sdf_file_lines;
+        if (ReadFile(sdf_file, sdf_file_lines)) {
+            // No check on the format, we expect the file to be correct
+            int n_x, n_y, n_z;
+            // Get grid dimension from first line
+            if (sscanf(sdf_file_lines[0].c_str(), "%d %d %d", &n_x, &n_y, &n_z) == 3) {
+                // Set grid dimensions
+                num_points[0] = n_x;
+                num_points[1] = n_y;
+                num_points[2] = n_z;
+                // Compute total number of points
+                total_points = n_x * n_y * n_z;
+                // Allocate memory for grid
+                data = new Float[total_points];
+            } else {
+                std::cerr << "Error in first line of .sdf file" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+
+            // Get grid size from third line
+            float voxel_dim;
+            if (sscanf(sdf_file_lines[2].c_str(), "%f", &voxel_dim) == 1) {
+                // Set width and inv_width
+                for (int i = 0; i < 3; i++) {
+                    width[i] = voxel_dim;
+                    inv_width[i] = 1.f / voxel_dim;
+                }
+            } else {
+                std::cerr << "Error getting grid dimension" << std::endl;
+                delete[] data;
+                exit(EXIT_FAILURE);
+            }
+
+            // Get BBOX minimum point from second line
+            float bbox_x, bbox_y, bbox_z;
+            if (sscanf(sdf_file_lines[1].c_str(), "%f %f %f", &bbox_x, &bbox_y, &bbox_z) == 3) {
+                const Vector3f bbox_min(bbox_x, bbox_y, bbox_z);
+                const Vector3f bbox_dim(voxel_dim * num_points[0], voxel_dim * num_points[1],
+                                        voxel_dim * num_points[2]);
+                bounds = BBOX(bbox_min, bbox_min + bbox_dim);
+            } else {
+                std::cerr << "Error reading bbox minimum point" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+
+            // Read all the data and set the values
+            float sdf_val;
+            for (int i = 3; i < sdf_file_lines.size() - 1; ++i) {       // Minus 1 since last line is empty
+                if (sscanf(sdf_file_lines[i].c_str(), "%f", &sdf_val) == 1) {
+                    data[i - 3] = sdf_val;
+                } else {
+                    std::cerr << "Error reading sdf value" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+        } else {
+            std::cerr << "Error trying to open SDF file!" << std::endl;
+            exit(EXIT_FAILURE);
         }
     }
 

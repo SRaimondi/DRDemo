@@ -5,6 +5,8 @@
 #include <scene.hpp>
 #include <armadillo_render.hpp>
 #include <bunny_test.hpp>
+#include <grid.hpp>
+#include <sdf_loading_render_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -82,8 +84,13 @@ int main() {
     // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     // Render armadillo images
-    RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
-    BunnyTest(10, 1.5f, 5);
+    // RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
+
+    // Bunny test in bunny_400_400_8 folder
+    // BunnyTest(10, 1.5f, 5);
+
+    // Test SDF loading + rendering
+    LoadAndTestSDF("/home/simon/Documents/Thesis/SDFGen/bin/dragon_mvs_output.sdf", 512, 512);
 
     /**
      * Triangle mesh loading + simple minimization against black image

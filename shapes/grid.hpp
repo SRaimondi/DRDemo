@@ -80,6 +80,10 @@ namespace drdemo {
         // Construct grid from values
         SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b, float const *raw_data);
 
+        // Construct grid from file, input file from https://github.com/christopherbatty/SDFGen
+        explicit SignedDistanceGrid(const std::string &sdf_file);
+
+        // Destructor
         ~SignedDistanceGrid();
 
         // Access Grid point at given indices

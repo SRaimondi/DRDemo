@@ -63,7 +63,7 @@ namespace drdemo {
             interaction->n = ToFloat(Normalize(Cross(e1, e2)));
         } else {
             interaction->n = ToFloat(Normalize((1.f - b1 - b2) * mesh.normals[mesh.triangles[triangle_index].n[0]] +
-                                       b1 * mesh.normals[mesh.triangles[triangle_index].n[1]] +
+                                               b1 * mesh.normals[mesh.triangles[triangle_index].n[1]] +
                                                b2 * mesh.normals[mesh.triangles[triangle_index].n[2]]));
         }
         interaction->t = t;

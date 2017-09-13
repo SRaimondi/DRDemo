@@ -20,14 +20,14 @@ namespace drdemo {
         L = Spectrum(n_dot_l, n_dot_l, n_dot_l);
 
         // Compute shading at hit point
-            // for (auto const &light : scene.GetLights()) {
-            //     if (light->IsEnabled()) {
-            // Vector3F wi;
-            // Float pdf;
-            // const Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
-            // L += Li * Abs(Dot(interaction.n, wi)) / pdf;
-            //     }
-            // }
+        // for (auto const &light : scene.GetLights()) {
+        //     if (light->IsEnabled()) {
+        // Vector3F wi;
+        // Float pdf;
+        // const Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
+        // L += Li * Abs(Dot(interaction.n, wi)) / pdf;
+        //     }
+        // }
 
         return L;
     }
