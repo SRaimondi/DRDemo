@@ -3,7 +3,7 @@
 //
 
 #include <scene.hpp>
-#include <test_common.hpp>
+#include <armadillo_render.hpp>
 #include <bunny_test.hpp>
 
 #define WIDTH   512
@@ -32,8 +32,6 @@ int main() {
 
     // Set namespace used
     using namespace drdemo;
-
-    std::vector<Vector3f> points = LoadViewPoints("../camera_points/normal_camera.txt");
 
     // Geometric sphere test
     // GeometricSphereTest();
@@ -78,6 +76,13 @@ int main() {
     // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
 
     // Bunny test
+    // BunnyTest(10, 1.5f, 6);
+
+    // Render pearl dragon images
+    // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
+
+    // Render armadillo images
+    RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
     BunnyTest(10, 1.5f, 5);
 
     /**
