@@ -23,8 +23,8 @@ namespace drdemo {
 
     void BunnyTest(int start_resolution, float res_multiplier, int ref_steps) {
         // Target render size
-        const size_t WIDTH = 512;
-        const size_t HEIGHT = 512;
+        const size_t WIDTH = 400;
+        const size_t HEIGHT = 400;
 
         // Maximum gradient descent iterations
         const size_t MAX_ITERS = 200;
@@ -103,7 +103,7 @@ namespace drdemo {
         auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
 
         // Do first minimisation
-        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.6f, 10e-10f, true);
 
         // Start refinement
         int new_dims[3];
@@ -118,7 +118,7 @@ namespace drdemo {
             // Rebind variables
             energy.RebindVars();
             // Minimise energy again
-            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.7f, 10e-10f, true);
         }
 
         // Render final SDF status

@@ -78,7 +78,7 @@ int main() {
     // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
 
     // Bunny test
-    BunnyTest(10, 1.5f, 6);
+    BunnyTest(10, 1.5f, 5);
 
     /**
      * Triangle mesh loading + simple minimization against black image
