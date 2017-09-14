@@ -7,6 +7,7 @@
 #include <bunny_test.hpp>
 #include <grid.hpp>
 #include <sdf_loading_render_test.hpp>
+#include <dragon_full_pipeline_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -90,7 +91,10 @@ int main() {
     // BunnyTest(10, 1.5f, 5);
 
     // Test SDF loading + rendering
-    LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
+    // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
+
+    // Full pipeline test
+    FullPipelineTestDragon(512, 512);
 
     /**
      * Triangle mesh loading + simple minimization against black image
