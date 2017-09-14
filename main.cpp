@@ -90,7 +90,7 @@ int main() {
     // BunnyTest(10, 1.5f, 5);
 
     // Test SDF loading + rendering
-    LoadAndTestSDF("/home/simon/Documents/Thesis/SDFGen/bin/dragon_mvs_output.sdf", 512, 512);
+    LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
 
     /**
      * Triangle mesh loading + simple minimization against black image
