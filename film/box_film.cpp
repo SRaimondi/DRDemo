@@ -133,7 +133,7 @@ namespace drdemo {
                 loaded_image.AddSample(Spectrum(static_cast<float>(image[raw_index]) / 255.f,
                                                 static_cast<float>(image[raw_index + 1]) / 255.f,
                                                 static_cast<float>(image[raw_index + 2]) / 255.f),
-                                       i, height - 1 - j, 0.5f, 0.5f);
+                                       i, j, 0.5f, 0.5f);
             }
         }
 

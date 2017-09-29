@@ -24,7 +24,7 @@ namespace drdemo {
     Ray PinholeCamera::GenerateRay(size_t i, size_t j, float s_x, float s_y) const {
         // Compute point on view plane
         float view_plane_x = left + (right - left) * (i + s_x) / static_cast<float>(width);
-        float view_plane_y = bottom + (top - bottom) * (j + s_y) / static_cast<float>(height);
+        float view_plane_y = top - (top - bottom) * (j + s_y) / static_cast<float>(height);
         Vector3F s = view_plane_x * u + view_plane_y * v - w;
 
         return Ray(eye_world, Normalize(s));

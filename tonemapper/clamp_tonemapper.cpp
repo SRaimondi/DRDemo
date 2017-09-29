@@ -39,8 +39,19 @@ namespace drdemo {
         std::vector<unsigned char> image;
         image.reserve(film.Width() * film.Height() * 4);
 
-        for (int j = static_cast<int>(film.Height()) - 1; j >= 0; j--) {
-            for (unsigned int i = 0; i < film.Width(); i++) {
+//        for (int j = static_cast<int>(film.Height()) - 1; j >= 0; j--) {
+//            for (unsigned int i = 0; i < film.Width(); i++) {
+//                const Spectrum &c = film.At(i, j); // this->operator()(i, j).Clamp(0, 1);
+//                image.push_back(static_cast<unsigned char>(Clamp(c.r.GetValue() * 255.f, 0.f, 255.f)));
+//                image.push_back(static_cast<unsigned char>(Clamp(c.g.GetValue() * 255.f, 0.f, 255.f)));
+//                image.push_back(static_cast<unsigned char>(Clamp(c.b.GetValue() * 255.f, 0.f, 255.f)));
+//                // Alpha
+//                image.push_back(static_cast<unsigned char>(255.f));
+//            }
+//        }
+
+        for (unsigned int j = 0; j < film.Height(); ++j) {
+            for (unsigned int i = 0; i < film.Width(); ++i) {
                 const Spectrum &c = film.At(i, j); // this->operator()(i, j).Clamp(0, 1);
                 image.push_back(static_cast<unsigned char>(Clamp(c.r.GetValue() * 255.f, 0.f, 255.f)));
                 image.push_back(static_cast<unsigned char>(Clamp(c.g.GetValue() * 255.f, 0.f, 255.f)));
