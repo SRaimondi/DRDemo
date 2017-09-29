@@ -19,7 +19,7 @@ namespace drdemo {
     public:
         BoxFilterFilm(size_t w, size_t h);
 
-        BoxFilterFilm &operator=(BoxFilterFilm const &other);
+        BoxFilterFilm &operator=(const BoxFilterFilm &other);
 
         bool AddSample(Spectrum const &s, size_t i, size_t j, float s_x, float s_y) override;
 
@@ -36,6 +36,9 @@ namespace drdemo {
         std::vector<float> Raw() const override;
 
         void Abs() override;
+
+        // Create BoxFilterFilm from given input .png
+        static BoxFilterFilm FromPNG(const std::string &file_name);
     };
 
 } // drdemo namespace

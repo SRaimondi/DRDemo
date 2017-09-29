@@ -3,11 +3,8 @@
 //
 
 #include <scene.hpp>
-#include <armadillo_render.hpp>
-#include <bunny_test.hpp>
-#include <grid.hpp>
-#include <sdf_loading_render_test.hpp>
-#include <dragon_full_pipeline_test.hpp>
+#include <clamp_tonemapper.hpp>
+#include <box_film.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -94,7 +91,27 @@ int main() {
     // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
 
     // Full pipeline test
-    FullPipelineTestDragon(512, 512);
+    // FullPipelineTestDragon(512, 512);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Test loading image from file
+     */
+    ClampTonemapper tonemapper;
+    BoxFilterFilm film = BoxFilterFilm::FromPNG("../dinoSparseRing/flipped/dinoSR0016.png");
+    tonemapper.Process("load_test.png", film);
 
     /**
      * Triangle mesh loading + simple minimization against black image

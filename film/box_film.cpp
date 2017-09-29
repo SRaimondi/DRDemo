@@ -3,6 +3,7 @@
 //
 
 #include <cstdint>
+#include <lodepng.hpp>
 #include "box_film.hpp"
 
 namespace drdemo {
@@ -11,7 +12,7 @@ namespace drdemo {
     // DON'T USE THE CONSTRUCTOR OR THE SAME SPECTRUM GETS COPIED
             : Film(w, h), raster(width * height/* , Spectrum() */) /*, num_samples(width * height) */ {}
 
-    BoxFilterFilm &BoxFilterFilm::operator=(BoxFilterFilm const &other) {
+    BoxFilterFilm &BoxFilterFilm::operator=(const BoxFilterFilm &other) {
         if (this != &other) {
             raster = other.raster;
             // num_samples = other.num_samples;
@@ -109,6 +110,34 @@ namespace drdemo {
                 raster[j * width + i] = drdemo::Abs(raster[j * width + i]);
             }
         }
+    }
+
+    BoxFilterFilm BoxFilterFilm::FromPNG(const std::string &file_name) {
+        // Load image values
+        std::vector<unsigned char> image;
+        unsigned width, height;
+
+        // Decode
+        const unsigned error = lodepng::decode(image, width, height, file_name);
+        // Check if there is an error
+        if (error) {
+            std::cerr << "Error while reading image: " << file_name << " to create BoxFilterFilm!" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        BoxFilterFilm loaded_image(width, height);
+        // Fill data
+        for (int j = 0; j < height; ++j) {
+            for (int i = 0; i < width; ++i) {
+                const size_t raw_index = 4 * (j * width + i);
+                loaded_image.AddSample(Spectrum(static_cast<float>(image[raw_index]) / 255.f,
+                                                static_cast<float>(image[raw_index + 1]) / 255.f,
+                                                static_cast<float>(image[raw_index + 2]) / 255.f),
+                                       i, height - 1 - j, 0.5f, 0.5f);
+            }
+        }
+
+        return loaded_image;
     }
 
 } // drdemo namespace
