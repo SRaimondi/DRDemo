@@ -14,6 +14,8 @@
 #include <direct_integrator.hpp>
 #include <simple_renderer.hpp>
 #include <clamp_tonemapper.hpp>
+#include <reconstruction_energy_opt.hpp>
+#include <gradient_descent.hpp>
 #include "dino_test.hpp"
 
 namespace drdemo {
@@ -36,6 +38,7 @@ namespace drdemo {
             file_name += std::to_string(i) + ".png";
             // Load file
             BoxFilterFilm loaded_image = BoxFilterFilm::FromPNG(file_name);
+            // Initialize image size once
             if (i == 1) {
                 width = loaded_image.Width();
                 height = loaded_image.Height();
@@ -106,8 +109,38 @@ namespace drdemo {
             render->RenderImage(&target, scene, *cameras[i]);
             tonemapper.Process("start_" + std::to_string(i) + ".png", target);
         }
+
         // Enable tape again
         default_tape.Enable();
+
+        // Create energy
+        auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, width, height);
+
+        // Do first minimisation
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-9f, true);
+
+        // Start refinement
+        int new_dims[3];
+        for (int step = 0; step < ref_steps; step++) {
+            std::cout << "Starting refinement step " << std::to_string(step + 1) << " of " << std::to_string(ref_steps)
+                      << std::endl;
+            // Compute new grid resolution
+            for (int i = 0; i < 3; i++) { new_dims[i] = (int) (grid->Size(i) * res_multiplier); }
+            std::cout << "Grid resolution: " << new_dims[0] << "x" << new_dims[1] << "x" << new_dims[2] << std::endl;
+            // Refine grid
+            grid->Refine(new_dims);
+            // Rebind variables
+            energy.RebindVars();
+            // Minimise energy again
+            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-9f, true);
+        }
+
+        // Render final SDF status
+        for (int i = 0; i < cameras.size(); i++) {
+            render->RenderImage(&target, scene, *cameras[i]);
+            tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
+        }
+
     }
 
 } // drdemo namespace
