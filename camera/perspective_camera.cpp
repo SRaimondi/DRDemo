@@ -40,8 +40,8 @@ namespace drdemo {
         // Compute view direction
         Vector3F view_dir;
         view_dir.x = p_w[0] - c_w[0];
-        view_dir.x = p_w[1] - c_w[1];
-        view_dir.x = p_w[2] - c_w[2];
+        view_dir.y = p_w[1] - c_w[1];
+        view_dir.z = p_w[2] - c_w[2];
 
         return Ray(Vector3F(c_w[0], c_w[1], c_w[2]), Normalize(view_dir));
     }

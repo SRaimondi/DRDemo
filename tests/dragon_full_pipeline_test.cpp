@@ -45,7 +45,6 @@ namespace drdemo {
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
 
-
         // Disable tape
         default_tape.Disable();
 

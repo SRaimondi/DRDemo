@@ -3,7 +3,7 @@
 //
 
 #include <scene.hpp>
-#include <dragon_render.hpp>
+#include <dino_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -78,7 +78,7 @@ int main() {
     // BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
-    RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
+    // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     // Render armadillo images
     // RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
@@ -94,23 +94,17 @@ int main() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Test loading image from file
      */
 //    ClampTonemapper tonemapper;
-//    BoxFilterFilm film = BoxFilterFilm::FromPNG("../dinoSparseRing/flipped/dinoSR0016.png");
+//    BoxFilterFilm film = BoxFilterFilm::FromPNG("../dinoSparseRing/dinoSR0016.png");
 //    tonemapper.Process("load_test.png", film);
+
+    /**
+     * Dino Sparse Ring test
+     */
+    DinoTest(50, 1.2f, 2);
 
     /**
      * Triangle mesh loading + simple minimization against black image
