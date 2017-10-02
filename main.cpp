@@ -3,8 +3,7 @@
 //
 
 #include <scene.hpp>
-#include <clamp_tonemapper.hpp>
-#include <box_film.hpp>
+#include <dragon_render.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -79,7 +78,7 @@ int main() {
     // BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
-    // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
+    RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     // Render armadillo images
     // RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
@@ -109,9 +108,9 @@ int main() {
     /**
      * Test loading image from file
      */
-    ClampTonemapper tonemapper;
-    BoxFilterFilm film = BoxFilterFilm::FromPNG("../dinoSparseRing/flipped/dinoSR0016.png");
-    tonemapper.Process("load_test.png", film);
+//    ClampTonemapper tonemapper;
+//    BoxFilterFilm film = BoxFilterFilm::FromPNG("../dinoSparseRing/flipped/dinoSR0016.png");
+//    tonemapper.Process("load_test.png", film);
 
     /**
      * Triangle mesh loading + simple minimization against black image

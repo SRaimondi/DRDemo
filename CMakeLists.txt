@@ -102,6 +102,6 @@ set(SOURCE_FILES
         tests/sdf_loading_render_test.cpp
         tests/sdf_loading_render_test.hpp
         tests/dragon_full_pipeline_test.cpp
-        tests/dragon_full_pipeline_test.hpp)
+        tests/dragon_full_pipeline_test.hpp camera/perspective_camera.cpp camera/perspective_camera.cpp camera/perspective_camera.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})
