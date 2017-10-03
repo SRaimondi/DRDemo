@@ -117,7 +117,7 @@ namespace drdemo {
         auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, width, height);
 
         // Do first minimisation
-        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-9f, true);
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
 
         // Start refinement
         int new_dims[3];
@@ -132,15 +132,16 @@ namespace drdemo {
             // Rebind variables
             energy.RebindVars();
             // Minimise energy again
-            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-9f, true);
+            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
         }
 
+        default_tape.Disable();
         // Render final SDF status
         for (int i = 0; i < cameras.size(); i++) {
             render->RenderImage(&target, scene, *cameras[i]);
             tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
         }
-
+        default_tape.Enable();
     }
 
 } // drdemo namespace
