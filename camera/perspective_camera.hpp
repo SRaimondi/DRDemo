@@ -14,21 +14,25 @@ namespace drdemo {
      */
     class PerspectiveCamera : public CameraInterface {
     private:
-        // Projection camera pseudoinverse
-        float p_i[12];
+//        // Projection camera pseudoinverse
+//        float p_i[12];
+
+        // Inverse matrix inv(R) * inv(K)
+        float inv_m[9];
         // Camera center
-        float c_w[3];
+        Vector3f c_w;
+        // float c_w[3];
         // Image high and width
         const size_t width, height;
         // Look direction
         Vector3f look_dir;
 
         // Transform 2D point on image plane to 3D points and normalize
-        void MapImagePoint(const float *p_image, float *out_p) const;
+        Vector3f MapImagePoint(const Vector3f &image_p) const;
 
     public:
         // c is a pointer to the pseudo-inverse matrix data in row major order
-        PerspectiveCamera(float *p, float *c, size_t width, size_t height);
+        PerspectiveCamera(float *p, const float *c, size_t width, size_t height);
 
         Ray GenerateRay(size_t i, size_t j, float s_x, float s_y) const override;
 

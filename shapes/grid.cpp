@@ -363,19 +363,16 @@ namespace drdemo {
                 // Fill interaction
                 interaction->p = ray(depth);
 
-                // Estimate normal with finite difference
-                // interaction->n = EstimateNormal(interaction->p);
+                // Estimate normal
                 interaction->n = NormalAt(interaction->p);
-                // interaction->n = NormalAt(ray(depth));
-//                if (Length(interaction->n).GetValue() - 1.f > 0.001f) {
-//                    std::cout << "Normal length: " << Length(interaction->n).GetValue() << std::endl;
-//                }
 
                 // Interaction parameter
                 interaction->t = depth;
 
                 // Outgoing direction
                 interaction->wo = -Normalize(ray.d);
+                // Set albedo to 1
+                interaction->albedo = Spectrum(1.f);
 
                 return true;
             }

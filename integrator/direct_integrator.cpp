@@ -17,7 +17,8 @@ namespace drdemo {
 
         // TODO Testing if we get better result when lights come from the camera
         const Float n_dot_l = Abs(Dot(interaction.n, -camera.LookDir()));
-        L = Spectrum(n_dot_l, n_dot_l, n_dot_l);
+        // Take albedo into account
+        L = n_dot_l * interaction.albedo;
 
         // Compute shading at hit point
         // for (auto const &light : scene.GetLights()) {

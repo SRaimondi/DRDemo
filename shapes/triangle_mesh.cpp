@@ -68,6 +68,8 @@ namespace drdemo {
         }
         interaction->t = t;
         interaction->wo = Normalize(-ray.d);
+        // FIXME For the moment we fix the albedo of triangle mesh to be 1
+        interaction->albedo = Spectrum(1.f);
 
         return true;
     }

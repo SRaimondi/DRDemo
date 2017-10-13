@@ -6,6 +6,7 @@
 #define DRDEMO_INTERACTION_HPP
 
 #include "geometry.hpp"
+#include "spectrum.hpp"
 
 namespace drdemo {
 
@@ -24,6 +25,8 @@ namespace drdemo {
         Float t;
         // Outgoing direction, in world space
         Vector3F wo;
+        // Albedo value
+        Spectrum albedo;
     };
 
 } // drdemo namespace
