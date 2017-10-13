@@ -104,7 +104,7 @@ int main() {
     /**
      * Dino Sparse Ring test
      */
-    DinoTest(10, 1.5f, 4);
+    DinoTest(1.1f, 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image

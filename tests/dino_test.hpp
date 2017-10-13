@@ -10,7 +10,7 @@ namespace drdemo {
     /**
      * Test dino data-set using 8 views
      */
-    void DinoTest(int start_resolution, float res_multiplier, int ref_steps);
+    void DinoTest(float res_multiplier, int ref_steps);
 
 } // drdemo namespace
 

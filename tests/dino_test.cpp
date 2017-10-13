@@ -8,7 +8,6 @@
 #include <memory>
 #include <camera.hpp>
 #include <perspective_camera.hpp>
-#include <bbox.hpp>
 #include <grid.hpp>
 #include <scene.hpp>
 #include <direct_integrator.hpp>
@@ -16,13 +15,11 @@
 #include <clamp_tonemapper.hpp>
 #include <reconstruction_energy_opt.hpp>
 #include <gradient_descent.hpp>
-#include <pinhole_camera.hpp>
-#include <triangle_mesh.hpp>
 #include "dino_test.hpp"
 
 namespace drdemo {
 
-    void DinoTest(int start_resolution, float res_multiplier, int ref_steps) {
+    void DinoTest(float res_multiplier, int ref_steps) {
         // Maximum gradient descent iterations
         const size_t MAX_ITERS = 250;
 
@@ -59,7 +56,7 @@ namespace drdemo {
             // float p_inv[12];
             float m_inv[9];
             float c_w[3];
-            for (int i = 0; i < 1; ++i) {
+            for (int i = 0; i < 8; ++i) {
 //                if (sscanf(p_inv_file[2 * i].c_str(),
 //                           "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
 //                           &p_inv[0], &p_inv[1], &p_inv[2],
@@ -138,34 +135,34 @@ namespace drdemo {
         default_tape.Enable();
 
         // Create energy
-//        auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, width, height);
-//
-//        // Do first minimisation
-//        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
-//
-//        // Start refinement
-//        int new_dims[3];
-//        for (int step = 0; step < ref_steps; step++) {
-//            std::cout << "Starting refinement step " << std::to_string(step + 1) << " of " << std::to_string(ref_steps)
-//                      << std::endl;
-//            // Compute new grid resolution
-//            for (int i = 0; i < 3; i++) { new_dims[i] = (int) (grid->Size(i) * res_multiplier); }
-//            std::cout << "Grid resolution: " << new_dims[0] << "x" << new_dims[1] << "x" << new_dims[2] << std::endl;
-//            // Refine grid
-//            grid->Refine(new_dims);
-//            // Rebind variables
-//            energy.RebindVars();
-//            // Minimise energy again
-//            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
-//        }
-//
-//        default_tape.Disable();
-//        // Render final SDF status
-//        for (int i = 0; i < cameras.size(); i++) {
-//            render->RenderImage(&target, scene, *cameras[i]);
-//            tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
-//        }
-//        default_tape.Enable();
+        auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, width, height);
+
+        // Do first minimisation
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+
+        // Start refinement
+        int new_dims[3];
+        for (int step = 0; step < ref_steps; step++) {
+            std::cout << "Starting refinement step " << std::to_string(step + 1) << " of " << std::to_string(ref_steps)
+                      << std::endl;
+            // Compute new grid resolution
+            for (int i = 0; i < 3; i++) { new_dims[i] = (int) (grid->Size(i) * res_multiplier); }
+            std::cout << "Grid resolution: " << new_dims[0] << "x" << new_dims[1] << "x" << new_dims[2] << std::endl;
+            // Refine grid
+            grid->Refine(new_dims);
+            // Rebind variables
+            energy.RebindVars();
+            // Minimise energy again
+            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+        }
+
+        default_tape.Disable();
+        // Render final SDF status
+        for (int i = 0; i < cameras.size(); i++) {
+            render->RenderImage(&target, scene, *cameras[i]);
+            tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
+        }
+        default_tape.Enable();
     }
 
 } // drdemo namespace
