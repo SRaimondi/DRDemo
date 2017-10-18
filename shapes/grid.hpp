@@ -8,18 +8,12 @@
 #include "shape.hpp"
 #include <memory>
 
-// Define some constants used in the ray marching process
-#define MAX_STEPS 1000
-#define MIN_DIST 0.001f
-#define MAX_DIST 100.f
-
 namespace drdemo {
 
     /**
      * This file defines an implementation of a signed distance filed mesh representation using a 3D grid
      * We store the value of the signed distance function at each vertex
      *
-     * The grid is centered at the origin for simplicity
      * The storage order is along x, y, z.
      */
     class SignedDistanceGrid : public Shape, public DiffObjectInterface {
@@ -67,7 +61,7 @@ namespace drdemo {
         // The indices start from the corner with the smallest (x,y,z) coordinates and then follow the order of the grid
         void PointsIndicesFromVoxel(int x, int y, int z, int *indices) const;
 
-        // Compute normal at given point inside the SDF using trilinear interpolation
+        // Compute normal at given point inside the SDF using tri-linear interpolation
         Vector3F NormalAt(const Vector3F &p) const;
 
         // Estimate SDF normal at given point

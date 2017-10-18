@@ -10,6 +10,11 @@ namespace drdemo {
     // Small tolerance value used in the ray tracing part
 #define EPS 10e-3f
 
+    // Define some constants used in the ray marching process
+#define MAX_STEPS 1000
+#define MIN_DIST 0.001f
+#define MAX_DIST 100.f
+
     template<typename T>
     T Clamp(T val, T min, T max) {
         return (val < min ? min : (val > max ? max : val));
