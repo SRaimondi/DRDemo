@@ -126,19 +126,6 @@ namespace drdemo {
     Vector3F SignedDistanceGrid::NormalAtPoint(int x, int y, int z /* , bool bd */) const {
         Float dx, dy, dz;
 
-        // The normal computation uses central difference, we assume that the normal is never computed at the boundaries of the grid
-//        const Float dx = (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x - 1, y, z)]) * inv_width.x / 2.f;
-//        const Float dy = (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y - 1, z)]) * inv_width.y / 2.f;
-//        const Float dz = (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z - 1)]) * inv_width.z / 2.f;
-//
-//        // In a SDF, the normal might be degenerated. In that case, we simply choose it pointing in the x direction
-//        const float norm2 = dx.GetValue() * dx.GetValue() + dy.GetValue() * dy.GetValue() + dz.GetValue() * dz.GetValue();
-//        if (norm2 < 1e-5f) { return Vector3F(1.f, 0.f, 0.f); }
-//
-//        return Vector3F(dx, dy, dz);
-
-        // Check if we are at the boundaries, use backward difference method if we are at the boundaries
-
         // Compute x derivative
         if (x == num_points[0] - 1) {
             // Use backward second order to compute derivative
@@ -181,22 +168,8 @@ namespace drdemo {
             dz = (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z - 1)]) * inv_width.z / 2.f;
         }
 
-//        return Vector3F(
-//                (data[LinearIndex(x + 1, y, z)] - data[LinearIndex(x, y, z)]) * inv_width.x,
-//                (data[LinearIndex(x, y + 1, z)] - data[LinearIndex(x, y, z)]) * inv_width.y,
-//                (data[LinearIndex(x, y, z + 1)] - data[LinearIndex(x, y, z)]) * inv_width.z
-//        );
-
         return Vector3F(dx, dy, dz);
     }
-
-//    Vector3F SignedDistanceGrid::EstimateNormal(const Vector3F &p, float eps) const {
-//        return Normalize(
-//                Vector3F(ValueAt(p + Vector3F(eps, 0.f, 0.f)) - ValueAt(p - Vector3F(eps, 0.f, 0.f)),
-//                         ValueAt(p + Vector3F(0.f, eps, 0.f)) - ValueAt(p - Vector3F(0.f, eps, 0.f)),
-//                         ValueAt(p + Vector3F(0.f, 0.f, eps)) - ValueAt(p - Vector3F(0.f, 0.f, eps)))
-//        );
-//    }
 
     SignedDistanceGrid::SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b)
             : data(new Float[n_x * n_y * n_z]) {
@@ -213,6 +186,8 @@ namespace drdemo {
             width[axis] = extent[axis] / static_cast<float>(num_points[axis] - 1);
             inv_width[axis] = (width[axis] == 0.f) ? 0.f : 1.f / width[axis];
         }
+        // Compute minimum distance tolerance, must be smaller than cell size
+        min_dist = std::min(MIN_DIST, std::min(std::min(width.x, width.y), width.z) / 2.f);
     }
 
     SignedDistanceGrid::SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b,
@@ -235,6 +210,8 @@ namespace drdemo {
         for (int i = 0; i < total_points; ++i) {
             data[i] = raw_data[i];
         }
+        // Compute minimum distance tolerance, must be smaller than cell size
+        min_dist = std::min(MIN_DIST, std::min(std::min(width.x, width.y), width.z) / 2.f);
     }
 
     SignedDistanceGrid::SignedDistanceGrid(const std::string &sdf_file) {
@@ -298,6 +275,8 @@ namespace drdemo {
             std::cerr << "Error trying to open SDF file!" << std::endl;
             exit(EXIT_FAILURE);
         }
+        // Compute minimum distance tolerance, must be smaller than cell size
+        min_dist = std::min(MIN_DIST, std::min(std::min(width.x, width.y), width.z) / 2.f);
     }
 
     SignedDistanceGrid::~SignedDistanceGrid() {
@@ -342,6 +321,9 @@ namespace drdemo {
         width = new_width;
         inv_width = new_inv_width;
         total_points = new_dims[0] * new_dims[1] * new_dims[2];
+        // Update min_dist value
+        // Compute minimum distance tolerance, must be smaller than cell size
+        min_dist = std::min(MIN_DIST, std::min(std::min(width.x, width.y), width.z) / 2.f);
 
         // Free old memory
         delete[] data;
@@ -359,7 +341,7 @@ namespace drdemo {
             // Compute distance from surface
             const Float distance = ValueAt(ray(depth));
             // Check if we are close enough to the surface
-            if (distance < MIN_DIST) {
+            if (distance < min_dist) {
                 // Fill interaction
                 interaction->p = ray(depth);
 
@@ -394,7 +376,7 @@ namespace drdemo {
             // Compute distance from surface
             const Float distance = ValueAt(ray(depth));
             // Check if we are close enough to the surface
-            if (distance < MIN_DIST) { return true; }
+            if (distance < min_dist) { return true; }
             // Increase distance
             depth += distance;
             // Check for end

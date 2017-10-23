@@ -12,7 +12,7 @@ namespace drdemo {
 
     // Define some constants used in the ray marching process
 #define MAX_STEPS 1000
-#define MIN_DIST 0.001f
+#define MIN_DIST 0.0002f
 #define MAX_DIST 100.f
 
     template<typename T>

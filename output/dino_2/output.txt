@@ -1,4 +1,4 @@
-home/simon/CLionProjects/DRDemo/cmake-build-release/DRDemo
+ home/simon/CLionProjects/DRDemo/cmake-build-release/DRDemo
 Reading file: ../dinoSparseRing/dinoSR_inv_mat.txt
 Done reading file!
 

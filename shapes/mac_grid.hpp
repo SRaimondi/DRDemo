@@ -41,9 +41,18 @@ namespace drdemo {
             return Clamp(index, 0, dims[axis] - 1);
         }
 
+        // Compute normal at given point
+        Vector3F NormalAt(const Vector3F &p) const;
+
+        // Compute normal given indices
+        Vector3F NormalAt(int i, int j, int k) const;
+
     public:
         // Create and empty grid
         MACGrid(int nx, int ny, int nz, const BBOX &b);
+
+        // Construct grid from file, input file from https://github.com/christopherbatty/SDFGen
+        explicit MACGrid(const std::string &sdf_file);
 
         // Destructor
         ~MACGrid();
@@ -59,6 +68,8 @@ namespace drdemo {
 
         // Compute SDF value at given point
         Float SDFAt(const Vector3F &p) const;
+
+        // Compute normal at given point
 
         // Compute coordinates of points at given indices
         inline Vector3f PointAt(int i, int j, int k) const {

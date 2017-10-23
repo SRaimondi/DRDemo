@@ -27,8 +27,9 @@ namespace drdemo {
         // Size of the voxels and inverse of width
         Vector3f width, inv_width;
         // Signed distance values, stored at each voxel intersection in x, y, z order
-        // std::unique_ptr<Float[]> data;
         Float *data;
+        // Rendering minimum distance tollerance
+        float min_dist;
 
         // Private utility methods
         inline int OffsetPoint(int x, int y, int z) const {
@@ -64,9 +65,6 @@ namespace drdemo {
         // Compute normal at given point inside the SDF using tri-linear interpolation
         Vector3F NormalAt(const Vector3F &p) const;
 
-        // Estimate SDF normal at given point
-//        Vector3F EstimateNormal(const Vector3F &p, float eps = EPS) const;
-
     public:
         // Default constructor, initialises an empty grid
         SignedDistanceGrid(int n_x, int n_y, int n_z, BBOX const &b);
@@ -94,7 +92,7 @@ namespace drdemo {
         Float ValueAt(const Vector3F &p) const;
 
         // Compute the normal at a given grid point, last argument is to use backward difference
-        Vector3F NormalAtPoint(int x, int y, int z /* , bool bd = false */) const;
+        Vector3F NormalAtPoint(int x, int y, int z) const;
 
         // Access size of the voxels
         inline Vector3f const &VoxelSize() const { return width; }
