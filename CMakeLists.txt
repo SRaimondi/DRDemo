@@ -84,8 +84,8 @@ set(SOURCE_FILES
         minimization/reconstruction_energy.hpp
         # tests/geom_sphere.cpp
         # tests/geom_sphere.hpp
-        # tests/sdf_sphere.cpp
-        # tests/sdf_sphere.hpp
+        tests/sdf_sphere.cpp
+        tests/sdf_sphere.hpp
         # light/ambient_light.cpp
         # light/ambient_light.hpp
         tests/torus_test.cpp

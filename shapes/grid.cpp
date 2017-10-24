@@ -346,7 +346,7 @@ namespace drdemo {
                 interaction->p = ray(depth);
 
                 // Estimate normal
-                interaction->n = NormalAt(interaction->p);
+                interaction->n = Normalize(NormalAt(interaction->p));
 
                 // Interaction parameter
                 interaction->t = depth;

@@ -109,7 +109,8 @@ namespace drdemo {
 //        }
 
         // Load starting SDF from file
-        auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight.sdf");
+        // auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight.sdf");
+        auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight_low.sdf");
         // auto new_grid = std::make_shared<MACGrid>("../sdfs/dino_watertight.sdf");
 
         // Load .obj of dino

@@ -104,7 +104,8 @@ int main() {
     /**
      * Dino Sparse Ring test
      */
-    DinoTest(1.1f, 3);
+    // DinoTest(1.1f, 3);   // With "../sdfs/dino_watertight.sdf"
+    DinoTest(1.5f, 4);      // With "../sdfs/dino_watertight_low.sdf"
 
     /**
      * Triangle mesh loading + simple minimization against black image
