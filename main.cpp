@@ -54,7 +54,7 @@ int main() {
     // OBJRenderTestMR(5, "../objs/sphere1_2.obj", 2, CAM_CONFIG::NORMAL);
 
     // Two sphere test
-    OBJRenderTestMR(7, "../objs/spheres2.obj", 3, CAM_CONFIG::UP_DOWN);   // See two sphere folder
+    // OBJRenderTestMR(7, "../objs/spheres2.obj", 3, CAM_CONFIG::UP_DOWN);   // See two sphere folder
 
     // Torus test
     // OBJRenderTestMR(7, "../objs/torus.obj", 3, CAM_CONFIG::NORMAL);      // Result in torus folder
@@ -105,8 +105,8 @@ int main() {
     /**
      * Dino Sparse Ring test
      */
-    // DinoTest(1.1f, 3);   // With "../sdfs/dino_watertight.sdf"
-    // DinoTest(1.5f, 4);      // With "../sdfs/dino_watertight_low.sdf"
+    DinoTest(1.1f, 3);   // With "../sdfs/dino_watertight.sdf"
+    // DinoTest(1.2f, 4);      // With "../sdfs/dino_watertight_low.sdf"
 
     /**
      * Triangle mesh loading + simple minimization against black image

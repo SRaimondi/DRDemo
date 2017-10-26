@@ -354,7 +354,7 @@ namespace drdemo {
                 // Outgoing direction
                 interaction->wo = -Normalize(ray.d);
                 // Set albedo to 1
-                interaction->albedo = Spectrum(1.f);
+                interaction->albedo = Spectrum(0.611f, 0.6f, 0.55f); // FIXME Hardcoded for the moment
 
                 return true;
             }

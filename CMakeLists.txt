@@ -86,8 +86,8 @@ set(SOURCE_FILES
         # tests/geom_sphere.hpp
         tests/sdf_sphere.cpp
         tests/sdf_sphere.hpp
-        # light/ambient_light.cpp
-        # light/ambient_light.hpp
+        light/ambient_light.cpp
+        light/ambient_light.hpp
         tests/torus_test.cpp
         tests/torus_test.hpp
         minimization/reconstruction_energy_opt.cpp
@@ -102,6 +102,15 @@ set(SOURCE_FILES
         tests/sdf_loading_render_test.cpp
         tests/sdf_loading_render_test.hpp
         tests/dragon_full_pipeline_test.cpp
-        tests/dragon_full_pipeline_test.hpp camera/perspective_camera.cpp camera/perspective_camera.cpp camera/perspective_camera.hpp tests/dino_test.cpp tests/dino_test.hpp shapes/mac_grid.cpp shapes/mac_grid.hpp)
+        tests/dragon_full_pipeline_test.hpp
+        camera/perspective_camera.cpp
+        camera/perspective_camera.cpp
+        camera/perspective_camera.hpp
+        tests/dino_test.cpp
+        tests/dino_test.hpp
+        shapes/mac_grid.cpp
+        shapes/mac_grid.hpp
+        minimization/reconstruction_energy_light.cpp
+        minimization/reconstruction_energy_light.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -1,41 +1,44 @@
 //
-// Created by Simon on 08.09.2017.
+// Created by simon on 25.10.17.
 //
 
-#include "reconstruction_energy_opt.hpp"
+#include "reconstruction_energy_light.hpp"
 #include "box_film.hpp"
 
 namespace drdemo {
 
-    ReconstructionEnergyOpt::ReconstructionEnergyOpt(Scene &scene,
-                                                     const std::shared_ptr<SignedDistanceGrid> &grid,
-            // const std::shared_ptr<AmbientLight> &light,
-                                                     const std::vector<std::vector<float> > &views,
-                                                     const std::vector<std::shared_ptr<const CameraInterface> > &c,
-                                                     const std::shared_ptr<RendererInterface> &r,
-                                                     float lambda,
-                                                     size_t w, size_t h)
-            : target_scene(scene), grid(grid), /* light(light), */ target_views(views), target_cameras(c),
-              renderer(r), gradient(grid->GetNumVars(), 0.f), lambda(lambda), width(w), height(h),
+    ReconstructionEnergyLight::ReconstructionEnergyLight(Scene &scene,
+                                                         const std::shared_ptr<SignedDistanceGrid> &grid,
+                                                         const std::shared_ptr<AmbientLight> &light,
+                                                         const std::vector<std::vector<float> > &views,
+                                                         const std::vector<std::shared_ptr<const CameraInterface> > &c,
+                                                         const std::shared_ptr<RendererInterface> &r,
+                                                         float lambda,
+                                                         size_t w, size_t h)
+            : target_scene(scene), grid(grid), light(light), target_views(views), target_cameras(c),
+              renderer(r), gradient(grid->GetNumVars() + light->GetNumVars(), 0.f), lambda(lambda), width(w), height(h),
               evaluations(0) {
         // Check that the size of the target render and the target_cameras is the same
         assert(target_views.size() == target_cameras.size());
 
         // Get pointer to all the differentiable variables of the grid
+        // The gradient stores first the SDF values and after the light parameters
         this->grid->GetDiffVariables(diff_variables);
+        this->light->GetDiffVariables(diff_variables);
     }
 
-    void ReconstructionEnergyOpt::RebindVars() {
+    void ReconstructionEnergyLight::RebindVars() {
         // Clear variables we need to compute the derivative with respect to
         diff_variables.clear();
         // Rebind
         grid->GetDiffVariables(diff_variables);
+        light->GetDiffVariables(diff_variables);
         // Change gradient size according to new number of variables
         gradient.resize(diff_variables.size());
     }
 
-    size_t ReconstructionEnergyOpt::InputDim() const {
-        return grid->GetNumVars();
+    size_t ReconstructionEnergyLight::InputDim() const {
+        return grid->GetNumVars() + light->GetNumVars();
     }
 
     /**
@@ -44,22 +47,18 @@ namespace drdemo {
      *
      * @return Final energy
      */
-    Float ReconstructionEnergyOpt::Evaluate(bool output) const {
+    Float ReconstructionEnergyLight::Evaluate(bool output) const {
         // First energy term that contains the sum of the difference between the rendered images and the targets
         Float E_images;
         // Image energy term computed currently
         Float E_image_t;
 
-        // bool gradient_to_zero = false;
         // Clear derivatives
         derivatives.Clear();
 
         // Film to render the image on
         BoxFilterFilm render(width, height);
         BoxFilterFilm difference(width, height);
-
-        // Current evaluated energy term gradient
-        // std::vector<float> image_term_grad(gradient.size(), 0.f);
 
         // Loop over all target target_cameras
         for (size_t target_index = 0; target_index < target_cameras.size(); ++target_index) {
@@ -93,10 +92,6 @@ namespace drdemo {
                 for (size_t i = 0; i < gradient.size(); ++i) {
                     gradient[i] += derivatives.Dwrt(E_image_t, *diff_variables[i]);
                 }
-                // Add contribution to final gradient
-//                for (size_t i = 0; i < gradient.size(); ++i) {
-//                    gradient[i] += image_term_grad[i];
-//                }
             }
 
             // Sum current rendering difference to total energy
@@ -123,18 +118,13 @@ namespace drdemo {
             // Add final contribution of normal term to gradient
             derivatives.Clear();
             derivatives.ComputeDerivatives(E_normals);
-            // Compute gradient for current term
-//            for (size_t i = 0; i < gradient.size(); ++i) {
-//                image_term_grad[i] = derivatives.Dwrt(E_normals, *diff_variables[i]);
-//            }
-            // Add contribution to final gradient
-            for (size_t i = 0; i < gradient.size(); ++i) {
+
+            // Add contribution to final gradient (-3 because the contribution of the light intensity is null here)
+            for (size_t i = 0; i < gradient.size() - 3; ++i) {
                 // Lambda * gradient !!!
                 gradient[i] += lambda * derivatives.Dwrt(E_normals, *diff_variables[i]);
             }
         }
-        // We have our gradient, clear derivatives
-        // derivatives.Clear();
         // Pop tape
         default_tape.Pop();
 
@@ -148,22 +138,24 @@ namespace drdemo {
         return E_images + lambda * E_normals;
     }
 
-    std::vector<float> ReconstructionEnergyOpt::ComputeGradient(const Float &) const {
+    std::vector<float> ReconstructionEnergyLight::ComputeGradient(const Float &) const {
         // Return copy of current gradient
         return gradient;
     }
 
-    void ReconstructionEnergyOpt::UpdateStatus(const std::vector<float> &deltas) {
+    void ReconstructionEnergyLight::UpdateStatus(const std::vector<float> &deltas) {
         // Here we assume the only thing to be updates is the grid
         grid->UpdateDiffVariables(deltas, 0);
+        light->UpdateDiffVariables(deltas, grid->GetNumVars());
     }
 
-    void ReconstructionEnergyOpt::SetStatus(const std::vector<float> &new_status) {
+    void ReconstructionEnergyLight::SetStatus(const std::vector<float> &new_status) {
         // Only set the status of the grid
         grid->SetDiffVariables(new_status, 0);
+        light->SetDiffVariables(new_status, grid->GetNumVars());
     }
 
-    std::vector<float> ReconstructionEnergyOpt::GetStatus() const {
+    std::vector<float> ReconstructionEnergyLight::GetStatus() const {
         // Status is just the current value of all the grid values we can differentiate with respect to
         std::vector<float> status(diff_variables.size(), 0.f);
         for (size_t i = 0; i < status.size(); i++) {
@@ -173,8 +165,12 @@ namespace drdemo {
         return status;
     }
 
-    std::string ReconstructionEnergyOpt::ToString() const {
-        return "Image term: " + std::to_string(image_term) + "\n" + "Normal term: " + std::to_string(normal_term);
+    std::string ReconstructionEnergyLight::ToString() const {
+        return "Image term: " + std::to_string(image_term) + "\n" +
+               "Normal term: " + std::to_string(normal_term) + "\n" +
+               "Light color: [" + std::to_string(light->intensity.r.GetValue()) + ", " +
+               std::to_string(light->intensity.g.GetValue()) + ", " +
+               std::to_string(light->intensity.b.GetValue()) + "]";
     }
 
 } // drdemo namespace

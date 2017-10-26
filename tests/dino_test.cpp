@@ -17,6 +17,8 @@
 #include <gradient_descent.hpp>
 #include <triangle_mesh.hpp>
 #include <mac_grid.hpp>
+#include <ambient_light.hpp>
+#include <reconstruction_energy_light.hpp>
 #include "dino_test.hpp"
 
 namespace drdemo {
@@ -109,8 +111,8 @@ namespace drdemo {
 //        }
 
         // Load starting SDF from file
-        // auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight.sdf");
-        auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight_low.sdf");
+        auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight.sdf");
+        // auto grid = std::make_shared<SignedDistanceGrid>("../sdfs/dino_watertight_low.sdf");
         // auto new_grid = std::make_shared<MACGrid>("../sdfs/dino_watertight.sdf");
 
         // Load .obj of dino
@@ -121,6 +123,10 @@ namespace drdemo {
         // scene.AddShape(new_grid);
         scene.AddShape(grid);
         // scene.AddShape(mesh);
+
+        // Create and add ambient light
+        auto light = std::make_shared<AmbientLight>(Spectrum(1.f, 1.f, 1.f));
+        scene.AddLight(light);
 
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
@@ -140,10 +146,11 @@ namespace drdemo {
         default_tape.Enable();
 
         // Create energy
-        auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, width, height);
+        // auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, width, height);
+        auto energy = ReconstructionEnergyLight(scene, grid, light, raw_views, cameras, render, 1.f, width, height);
 
         // Do first minimisation
-        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+        GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-15f, true);
 
         // Start refinement
         int new_dims[3];
@@ -158,7 +165,7 @@ namespace drdemo {
             // Rebind variables
             energy.RebindVars();
             // Minimise energy again
-            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
+            GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-15f, true);
         }
 
         default_tape.Disable();

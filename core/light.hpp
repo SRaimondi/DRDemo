@@ -19,17 +19,17 @@ namespace drdemo {
         bool is_enabled{true};
 
     public:
-        // Check if light is enabled
-        inline bool IsEnabled() const { return is_enabled; }
-
-        // Enable / disable light
-        inline void Enable() { is_enabled = true; }
-
-        inline void Disable() { is_enabled = false; }
+//        // Check if light is enabled
+//        inline bool IsEnabled() const { return is_enabled; }
+//
+//        // Enable / disable light
+//        inline void Enable() { is_enabled = true; }
+//
+//        inline void Disable() { is_enabled = false; }
 
         // Sample incoming light at a given Interaction, returns incoming radiance and fills sampling parameters
         virtual Spectrum
-        SampleLi(Interaction const &interaction, float u0, float u1, Vector3F *wi, Float *pdf) const = 0;
+        SampleLi(const Interaction &interaction, float u0, float u1, Vector3F *wi, Float *pdf) const = 0;
     };
 
 } // drdemo namespace

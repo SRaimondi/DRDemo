@@ -14,24 +14,24 @@ namespace drdemo {
         lights.push_back(light);
     }
 
-    void Scene::EnableLights() {
-        for (auto &l : lights) {
-            l->Enable();
-        }
-    }
-
-    void Scene::DisableLights() {
-        for (auto &l : lights) {
-            l->Disable();
-        }
-    }
-
-    void Scene::EnableLight(size_t index) {
-        // First disable all lights
-        DisableLights();
-        // Enable light at given index with bounds check
-        lights.at(index)->Enable();
-    }
+//    void Scene::EnableLights() {
+//        for (auto &l : lights) {
+//            l->Enable();
+//        }
+//    }
+//
+//    void Scene::DisableLights() {
+//        for (auto &l : lights) {
+//            l->Disable();
+//        }
+//    }
+//
+//    void Scene::EnableLight(size_t index) {
+//        // First disable all lights
+//        DisableLights();
+//        // Enable light at given index with bounds check
+//        lights.at(index)->Enable();
+//    }
 
     bool Scene::Intersect(Ray const &ray, Interaction *const interaction) const {
         // Hit flag

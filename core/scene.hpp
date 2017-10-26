@@ -43,12 +43,12 @@ namespace drdemo {
         void ClearLights() { lights.clear(); }
 
         // Enable / disable all lights
-        void EnableLights();
+        // void EnableLights();
 
-        void DisableLights();
+        // void DisableLights();
 
         // Enable only light at given index
-        void EnableLight(size_t index);
+        // void EnableLight(size_t index);
 
         // Intersect Ray with Scene
         bool Intersect(Ray const &ray, Interaction *interaction) const;
