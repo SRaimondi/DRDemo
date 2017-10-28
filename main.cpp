@@ -5,6 +5,7 @@
 #include <scene.hpp>
 #include <dino_test.hpp>
 #include <sdf_sphere.hpp>
+#include <bunny_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -76,7 +77,7 @@ int main() {
     // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
 
     // Bunny test
-    // BunnyTest(10, 1.5f, 6);
+    BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
     // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
@@ -105,7 +106,7 @@ int main() {
     /**
      * Dino Sparse Ring test
      */
-    DinoTest(1.1f, 3);   // With "../sdfs/dino_watertight.sdf"
+    // DinoTest(1.1f, 3);   // With "../sdfs/dino_watertight.sdf"
     // DinoTest(1.2f, 4);      // With "../sdfs/dino_watertight_low.sdf"
 
     /**
