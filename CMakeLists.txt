@@ -111,6 +111,6 @@ set(SOURCE_FILES
         shapes/mac_grid.cpp
         shapes/mac_grid.hpp
         minimization/reconstruction_energy_light.cpp
-        minimization/reconstruction_energy_light.hpp)
+        minimization/reconstruction_energy_light.hpp light/SH_light.cpp light/SH_light.hpp)
 
 add_executable(DRDemo ${SOURCE_FILES})

@@ -16,7 +16,10 @@ namespace drdemo {
     class LightInterface {
     protected:
         // Bool flag to tell if the light is enabled or not
-        bool is_enabled{true};
+        // bool is_enabled{true};
+
+        // Number of samples for the light
+        int num_samples;
 
     public:
 //        // Check if light is enabled
@@ -26,6 +29,12 @@ namespace drdemo {
 //        inline void Enable() { is_enabled = true; }
 //
 //        inline void Disable() { is_enabled = false; }
+
+        explicit LightInterface(int ns = 1)
+                : num_samples(ns) {}
+
+        // Get num,ber of samples
+        inline int NumSamples() const { return num_samples; }
 
         // Sample incoming light at a given Interaction, returns incoming radiance and fills sampling parameters
         virtual Spectrum

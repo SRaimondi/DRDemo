@@ -16,17 +16,24 @@ namespace drdemo {
         if (!scene.Intersect(ray, &interaction)) { return L; }
 
         // TODO Testing if we get better result when lights comes from the camera
-        const Float n_dot_l = Abs(Dot(interaction.n, -camera.LookDir()));
         if (scene.GetLights().empty()) {
             // No lights, only take albedo into account
+            const Float n_dot_l = Abs(Dot(interaction.n, -camera.LookDir()));
             L = n_dot_l * interaction.albedo;
         } else {
-            // Take albedo and light color into account, we suppose here that we are only dealing with the ambient color light
-            // TODO This should be general for all lights!!!!
-            Vector3F wi;
-            Float pdf;
-            const Spectrum Li = scene.GetLights()[0]->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
-            L = n_dot_l * interaction.albedo * Li / pdf;
+            for (const auto &light : scene.GetLights()) {
+                for (int s = 0; s < light->NumSamples(); ++s) {
+                    Vector3F wi;
+                    Float pdf;
+                    const Spectrum Li = scene.GetLights()[0]->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
+                    const Float n_dot_l = Dot(interaction.n, wi);
+                    if (!Li.IsBlack() && pdf != 0.f && n_dot_l > 0.f) {
+                        L += n_dot_l * interaction.albedo * Li / pdf;
+                    }
+                }
+                // Scale given the
+                L = L / (float) light->NumSamples();
+            }
         }
 
         // Compute shading at hit point
