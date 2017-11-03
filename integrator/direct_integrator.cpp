@@ -18,7 +18,7 @@ namespace drdemo {
         // TODO Testing if we get better result when lights comes from the camera
         if (scene.GetLights().empty()) {
             // No lights, only take albedo into account
-            const Float n_dot_l = Abs(Dot(interaction.n, -camera.LookDir()));
+            const Float n_dot_l = Clamp(Dot(interaction.n, -camera.LookDir()), Float(0.f), Float(1.f));
             L = n_dot_l * interaction.albedo;
         } else {
             for (const auto &light : scene.GetLights()) {
@@ -26,12 +26,12 @@ namespace drdemo {
                     Vector3F wi;
                     Float pdf;
                     const Spectrum Li = scene.GetLights()[0]->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
-                    const Float n_dot_l = Dot(interaction.n, wi);
+                    const Float n_dot_l = Clamp(Dot(interaction.n, wi), Float(0.f), Float(1.f));
                     if (!Li.IsBlack() && pdf != 0.f && n_dot_l > 0.f) {
                         L += n_dot_l * interaction.albedo * Li / pdf;
                     }
                 }
-                // Scale given the
+                // Scale given the number of samples
                 L = L / (float) light->NumSamples();
             }
         }

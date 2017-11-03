@@ -6,6 +6,7 @@
 #include <dino_test.hpp>
 #include <sdf_sphere.hpp>
 #include <bunny_test.hpp>
+#include <SH_light.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -76,8 +77,35 @@ int main() {
     // New torus test
     // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
 
+    // SH test
+    auto sh_light = std::make_shared<SHLight>(4, 100);
+
+    SphericalFunction func = [](float theta, float) { return std::cos(theta); };
+
+    SphericalFunction paper_func = [](float theta, float phi) {
+        return std::max(0.f, 5.f * std::cos(theta) - 4.f) +
+               std::max(0.f, -4.f * std::sin(theta - (float) M_PI) * std::cos(phi - 2.5f) - 3.f);
+    };
+
+    sh_light->Initialise(func);
+
+    // Evaluate function and see check results
+    float error = 0.f;
+    for (const auto &sample : sh_light->samples) {
+        float sh_value = 0.f;
+        for (int i = 0; i < sh_light->num_coeff; ++i) {
+            sh_value += sh_light->coefficients[i].GetValue() * sample.coeff[i];
+        }
+        // Evaluate real function
+        float real_value = func(sample.sph.x, sample.sph.y);
+
+        error += std::abs(sh_value - real_value);
+    }
+
+    std::cout << "Error: " << error << std::endl;
+
     // Bunny test
-    BunnyTest(10, 1.5f, 6);
+    // BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
     // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);

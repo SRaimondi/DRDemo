@@ -7,17 +7,21 @@
 
 namespace drdemo {
 
-    // First 25 factorial
-    // TODO might need more
+    // First 33 factorial
     static const float factorial_data[] = {
             1.f, 2.f, 6.f, 24.f, 120.f, 720.f, 5040.f, 40320.f, 362880.f, 3628800.f, 39916800.f, 479001600.f,
             6227020800.f, 87178291200.f, 1307674368000.f, 20922789888000.f, 355687428096000.f, 6402373705728000.f,
             121645100408832000.f, 2432902008176640000.f, 51090942171709440000.f, 1124000727777607680000.f,
-            25852016738884976640000.f, 620448401733239439360000.f, 15511210043330985984000000.f
+            25852016738884976640000.f, 620448401733239439360000.f, 15511210043330985984000000.f,
+            403291461126605635584000000.f, 10888869450418352160768000000.f, 304888344611713860501504000000.f,
+            8841761993739701954543616000000.f, 265252859812191058636308480000000.f,
+            8222838654177922817725562880000000.f, 263130836933693530167218012160000000.f,
+            8683317618811886495518194401280000000.f
     };
 
     static inline float factorial(int index) {
-        return factorial_data[index - 1];
+        assert(index >= 0 && index < 33);
+        return factorial_data[index];
     }
 
     SHSample::SHSample(size_t num_coeff)
@@ -51,7 +55,6 @@ namespace drdemo {
 
     float SHLight::K(int l, int m) const {
         float temp = ((2.f * l + 1.f) * factorial(l - m)) / (4.f * (float) M_PI * factorial(l + m));
-
         return std::sqrt(temp);
     }
 
@@ -71,7 +74,9 @@ namespace drdemo {
 
     SHLight::SHLight(int num_bands, int sqrt_num_samples)
             : LightInterface(sqrt_num_samples * sqrt_num_samples),
-              samples(sqrt_num_samples * sqrt_num_samples), num_bands(num_bands), used_samples(0) {
+              samples(num_samples),
+              num_bands(num_bands), num_coeff(num_bands * num_bands), coefficients(new Float[num_coeff]),
+              used_samples(0) {
         // Array index
         int i = 0;
         // Random number generator
@@ -91,7 +96,7 @@ namespace drdemo {
                 samples[i].dir = Vector3f(std::sin(theta) * std::cos(phi), std::cos(theta),
                                           std::sin(theta) * std::sin(phi));
                 // Reserve space
-                samples[i].coeff.reserve(num_bands * num_bands);
+                samples[i].coeff.reserve(num_coeff);
                 // Pre-compute SH coefficients for this sample
                 for (int l = 0; l < num_bands; ++l) {
                     for (int m = -l; m <= l; ++m) {
@@ -110,7 +115,24 @@ namespace drdemo {
     }
 
     void SHLight::Initialise(const SphericalFunction &func) {
+        // Compute the base coefficients of our SH representation given the spherical function
+        const float weight = 4.f * (float) M_PI;
+        // Loop over all of our samples
+        for (const auto &sample : samples) {
+            // Evaluate our coefficients
+            for (int n = 0; n < num_coeff; ++n) {
+                coefficients[n] += func(sample.sph.x, sample.sph.y) * sample.coeff[n];
+            }
+        }
+        // Divide the result by weight and number of samples
+        const float factor = weight / (float) num_samples;
+        for (int i = 0; i < num_coeff; ++i) {
+            coefficients[i] = coefficients[i] * factor;
+        }
 
+//        for (int i = 0; i < num_coeff; ++i) {
+//            std::cout << coefficients[i].GetValue() << std::endl;
+//        }
     }
 
 } // drdemo namespace

@@ -6,6 +6,7 @@
 #define DRDEMO_SH_LIGHT_HPP
 
 #include <functional>
+#include <bits/unique_ptr.h>
 #include "light.hpp"
 
 namespace drdemo {
@@ -26,15 +27,20 @@ namespace drdemo {
         explicit SHSample(size_t num_coeff);
     };
 
-    // Spherical function typedef
+    // Spherical function type, first argument is theta angle, second one is phi
     using SphericalFunction = std::function<float(float, float)>;
 
     class SHLight : public LightInterface {
-    private:
+        // private:
+    public:             // FIXME All public for debugging!!!!
         // Vector of samples
         std::vector<SHSample> samples;
         // Number of bands
         int num_bands;
+        // Number of coefficients
+        int num_coeff;
+        // Computed coefficients
+        std::unique_ptr<Float[]> coefficients;
         // Used number of sample
         int used_samples;
 
