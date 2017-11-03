@@ -54,7 +54,7 @@ namespace drdemo {
     }
 
     float SHLight::K(int l, int m) const {
-        float temp = ((2.f * l + 1.f) * factorial(l - m)) / (4.f * (float) M_PI * factorial(l + m));
+        float temp = ((2.f * l + 1.f) * factorial(l - m)) / (4.f * PI * factorial(l + m));
         return std::sqrt(temp);
     }
 
@@ -90,7 +90,7 @@ namespace drdemo {
                 float y = (b + dist(generator)) * one_over_n;
                 // Compute theta and phi
                 float theta = 2.f * std::acos(std::sqrt(1.f - x));
-                float phi = 2.f * (float) M_PI * y;
+                float phi = 2.f * PI * y;
                 samples[i].sph = Vector3f(theta, phi, 1.f);
                 // Convert to spherical coordinates
                 samples[i].dir = Vector3f(std::sin(theta) * std::cos(phi), std::cos(theta),
@@ -138,23 +138,21 @@ namespace drdemo {
 
     void SHLight::Initialise(const SphericalFunction &func) {
         // Compute the base coefficients of our SH representation given the spherical function
-        const float weight = 4.f * (float) M_PI;
+        const float weight = 4.f * PI;
         // Loop over all of our samples
         for (const auto &sample : samples) {
             // Evaluate our coefficients
             for (int n = 0; n < num_coeff; ++n) {
-                coefficients[n] += func(sample.sph.x, sample.sph.y) * sample.coeff[n];
+                // We can just set the value here, no need to keep track of the derivatives
+                coefficients[n].SetValue(
+                        coefficients[n].GetValue() + func(sample.sph.x, sample.sph.y) * sample.coeff[n]);
             }
         }
         // Divide the result by weight and number of samples
         const float factor = weight / (float) num_samples;
         for (int i = 0; i < num_coeff; ++i) {
-            coefficients[i] = coefficients[i] * factor;
+            coefficients[i].SetValue(coefficients[i].GetValue() * factor);
         }
-
-//        for (int i = 0; i < num_coeff; ++i) {
-//            std::cout << coefficients[i].GetValue() << std::endl;
-//        }
     }
 
 } // drdemo namespace

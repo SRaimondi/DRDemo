@@ -15,6 +15,8 @@ namespace drdemo {
 #define MIN_DIST 0.0002f
 #define MAX_DIST 100.f
 
+#define PI 3.14159265358979323846f
+
     template<typename T>
     T Clamp(T val, T min, T max) {
         return (val < min ? min : (val > max ? max : val));
@@ -32,7 +34,7 @@ namespace drdemo {
 
     // Convert degree to radians
     template<typename T>
-    inline T DegToRad(T const &deg) { return (deg * (M_PI / 180.f)); }
+    inline T DegToRad(T const &deg) { return (deg * (PI / 180.f)); }
 
     // Return squared number if positive, else return zero
     template<typename T>
