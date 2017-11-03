@@ -31,8 +31,8 @@ namespace drdemo {
     using SphericalFunction = std::function<float(float, float)>;
 
     class SHLight : public LightInterface {
-        // private:
-    public:             // FIXME All public for debugging!!!!
+    private:
+        // public:             // FIXME All public for debugging!!!!
         // Vector of samples
         std::vector<SHSample> samples;
         // Number of bands

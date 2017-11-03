@@ -14,6 +14,7 @@
 #include <box_film.hpp>
 #include <clamp_tonemapper.hpp>
 #include <reconstruction_energy.hpp>
+#include <SH_light.hpp>
 #include "test_common.hpp"
 
 
@@ -60,6 +61,12 @@ namespace drdemo {
                     std::make_shared<const PinholeCamera>(Vector3F(p.x, p.y, p.z), Vector3F(), Vector3F(0.f, 1.f, 0.f),
                                                           60.f, WIDTH, HEIGHT));
         }
+
+        // Add SH light
+        auto sh_light = std::make_shared<SHLight>(4, 10);
+        SphericalFunction func = [](float theta, float) { return 5.f * std::cos(theta); };
+        sh_light->Initialise(func);
+        scene.AddLight(sh_light);
 
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());

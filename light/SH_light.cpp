@@ -110,8 +110,30 @@ namespace drdemo {
         }
     }
 
-    Spectrum SHLight::SampleLi(const Interaction &interaction, float u0, float u1, Vector3F *wi, Float *pdf) const {
-        return Spectrum();
+    Spectrum SHLight::SampleLi(const Interaction &interaction, float, float, Vector3F *wi, Float *pdf) const {
+        // Set pdf to 1
+        *pdf = 1.f;
+        // Set light direction as normal, we do the dot scaling directly here
+        *wi = interaction.n;
+        Float sh_value;
+        // Loop over all samples
+        for (const auto &sample : samples) {
+            const Float n_dot_l = interaction.n.x * sample.dir.x +
+                                  interaction.n.y * sample.dir.y +
+                                  interaction.n.z * sample.dir.z;
+            // Check if we are in the same hemisphere
+            if (n_dot_l > 0.f) {
+                for (int i = 0; i < num_coeff; ++i) {
+                    sh_value += n_dot_l * coefficients[i] * sample.coeff[i];
+                }
+            }
+        }
+
+        // Scale value by number of samples
+        sh_value = sh_value / (float) num_samples;
+
+        // Return light contribution
+        return {sh_value, sh_value, sh_value};
     }
 
     void SHLight::Initialise(const SphericalFunction &func) {

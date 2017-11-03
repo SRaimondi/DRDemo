@@ -22,17 +22,17 @@ namespace drdemo {
             L = n_dot_l * interaction.albedo;
         } else {
             for (const auto &light : scene.GetLights()) {
-                for (int s = 0; s < light->NumSamples(); ++s) {
+                // for (int s = 0; s < light->NumSamples(); ++s) {
                     Vector3F wi;
                     Float pdf;
-                    const Spectrum Li = scene.GetLights()[0]->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
+                const Spectrum Li = light->SampleLi(interaction, 0.f, 0.f, &wi, &pdf);
                     const Float n_dot_l = Clamp(Dot(interaction.n, wi), Float(0.f), Float(1.f));
                     if (!Li.IsBlack() && pdf != 0.f && n_dot_l > 0.f) {
                         L += n_dot_l * interaction.albedo * Li / pdf;
                     }
-                }
+                // }
                 // Scale given the number of samples
-                L = L / (float) light->NumSamples();
+                // L = L / (float) light->NumSamples();
             }
         }
 

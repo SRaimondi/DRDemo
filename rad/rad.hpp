@@ -156,6 +156,7 @@ namespace drdemo {
             return Float(default_tape.PushSingleNode(1.f, node_index), value + v);
         }
 
+        // Operators on self
         Float &operator+=(Float const &v) {
             *this = *this + v;
             return *this;
@@ -166,10 +167,10 @@ namespace drdemo {
             return *this;
         }
 
-        Float &operator++() {
-            value += 1.f;
-            return *this;
-        }
+//        Float &operator++() {
+//            value += 1.f;
+//            return *this;
+//        }
 
         // Subtraction
         Float operator-(Float const &v) const {
@@ -185,10 +186,10 @@ namespace drdemo {
             return *this;
         }
 
-        Float &operator--() {
-            value -= 1.f;
-            return *this;
-        }
+//        Float &operator--() {
+//            value -= 1.f;
+//            return *this;
+//        }
 
         // Multiplication
         Float operator*(Float const &v) const {
