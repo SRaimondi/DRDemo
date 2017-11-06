@@ -42,7 +42,7 @@ namespace drdemo {
         // Computed coefficients
         std::unique_ptr<Float[]> coefficients;
         // Used number of sample
-        int used_samples;
+        mutable int used_samples;
 
         // Evaluate P function
         float P(int l, int m, float x) const;

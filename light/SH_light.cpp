@@ -111,28 +111,46 @@ namespace drdemo {
     }
 
     Spectrum SHLight::SampleLi(const Interaction &interaction, float, float, Vector3F *wi, Float *pdf) const {
-        // Set pdf to 1
-        *pdf = 1.f;
-        // Set light direction as normal, we do the dot scaling directly here
-        *wi = interaction.n;
-        Float sh_value;
-        // Loop over all samples
-        for (const auto &sample : samples) {
-            const Float n_dot_l = interaction.n.x * sample.dir.x +
-                                  interaction.n.y * sample.dir.y +
-                                  interaction.n.z * sample.dir.z;
-            // Check if we are in the same hemisphere
-            if (n_dot_l > 0.f) {
-                for (int i = 0; i < num_coeff; ++i) {
-                    sh_value += n_dot_l * coefficients[i] * sample.coeff[i];
-                }
-            }
+//        // Set pdf to 1
+//        *pdf = 1.f;
+//        // Set light direction as normal, we do the dot scaling directly here
+//        *wi = interaction.n;
+//        Float sh_value;
+//        // Loop over all samples
+//        for (const auto &sample : samples) {
+//            const Float n_dot_l = interaction.n.x * sample.dir.x +
+//                                  interaction.n.y * sample.dir.y +
+//                                  interaction.n.z * sample.dir.z;
+//            // Check if we are in the same hemisphere
+//            if (n_dot_l > 0.f) {
+//                for (int i = 0; i < num_coeff; ++i) {
+//                    sh_value += n_dot_l * coefficients[i] * sample.coeff[i];
+//                }
+//            }
+//        }
+//
+//        // Scale value by number of samples
+//        sh_value = sh_value / (float) num_samples;
+//
+//        // Return light contribution
+//        return {sh_value, sh_value, sh_value};
+
+        // New method, only return one sample
+        *pdf = 1.f; // (4.f * PI);
+        // Get current sample
+        const auto &sample = samples[used_samples];
+        // Set light direction
+        wi->x = sample.dir.x;
+        wi->y = sample.dir.y;
+        wi->z = sample.dir.z;
+        // Compute SH value
+        Float sh_value = coefficients[0] * sample.coeff[0];
+        for (int i = 1; i < num_coeff; ++i) {
+            sh_value += coefficients[i] * sample.coeff[i];
         }
+        // Increase number of used samples
+        used_samples = (used_samples == num_samples - 1) ? 0 : (used_samples + 1);
 
-        // Scale value by number of samples
-        sh_value = sh_value / (float) num_samples;
-
-        // Return light contribution
         return {sh_value, sh_value, sh_value};
     }
 

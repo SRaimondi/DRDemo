@@ -639,10 +639,14 @@ namespace drdemo {
             GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-8f, true);
         }
 
+        default_tape.Disable();
+
         for (int i = 0; i < cameras.size(); i++) {
             render->RenderImage(&target, scene, *cameras[i]);
             tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
         }
+
+        default_tape.Enable();
     }
 
 } // drdemo namespace
