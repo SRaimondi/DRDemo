@@ -66,6 +66,8 @@ int main() {
     // OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL); // Result in the blob folder
     // OBJRenderTestMR(10, "../objs/blob.obj", 3, CAM_CONFIG::ALL);    // Result in the blob2 folder
 
+    // OBJRenderTestMR(7, "../objs/blob.obj", 4, CAM_CONFIG::ALL);    // Testing new code
+
     // Cube test
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
 
@@ -105,7 +107,7 @@ int main() {
 //    std::cout << "Error: " << error << std::endl;
 
     // Bunny test
-    BunnyTest(10, 1.5f, 6);
+    // BunnyTest(10, 1.5f, 6);
 
     // Render pearl dragon images
     // RenderDragonImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
@@ -136,6 +138,11 @@ int main() {
      */
     // DinoTest(1.1f, 3);   // With "../sdfs/dino_watertight.sdf"
     // DinoTest(1.2f, 4);      // With "../sdfs/dino_watertight_low.sdf"
+
+    /**
+     * Test bunny rendering using SH and smooth start
+     */
+    BunnyTestSmooth(1.3f, 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image

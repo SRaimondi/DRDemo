@@ -16,6 +16,7 @@
 #include <gradient_descent.hpp>
 #include <triangle_mesh.hpp>
 #include <reconstruction_energy_opt.hpp>
+#include <SH_light.hpp>
 #include "sdf_sphere.hpp"
 
 namespace drdemo {
@@ -580,17 +581,22 @@ namespace drdemo {
             std::cerr << "No valid camera configuration!" << std::endl;
         }
 
+        // Add SH light
+        auto sh_light = std::make_shared<SHLight>(4, 10);
+        SphericalFunction func = [](float theta, float) { return 5.f * std::abs(std::cos(theta)); };
+        sh_light->Initialise(func);
+        // scene.AddLight(sh_light);
+
         /**
          * Create renderer class with a simple direct illumination integrator
          */
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
 
         // Push status of tape before rendering target image
-        default_tape.Push();
+        default_tape.Disable();
 
         // Render target images
         BoxFilterFilm target(WIDTH, HEIGHT);
-
         ClampTonemapper tonemapper;
 
         // Create target image
@@ -600,13 +606,11 @@ namespace drdemo {
         }
 
         std::vector<std::vector<float> > raw_views;
-        default_tape.Push();
         // Render views
         for (auto const &camera : cameras) {
             render->RenderImage(&target, scene, *camera);
             raw_views.push_back(target.Raw());
         }
-        default_tape.Pop();
 
         // Use SDF
         scene.ClearShapes();
@@ -618,7 +622,7 @@ namespace drdemo {
         }
 
         // Remove from tape rendering variables
-        default_tape.Pop();
+        default_tape.Enable();
 
         // Test with new energy
         auto energy = ReconstructionEnergyOpt(scene, grid, raw_views, cameras, render, 1.f, WIDTH, HEIGHT);
@@ -631,6 +635,7 @@ namespace drdemo {
         for (int step = 0; step < ref_steps; step++) {
             // Compute new grid resolution, 2 * current
             for (int i = 0; i < 3; i++) { new_dims[i] = grid->Size(i) * 2; }
+            std::cout << "Grid resolution: " << new_dims[0] << "x" << new_dims[1] << "x" << new_dims[2] << std::endl;
             // Refine grid
             grid->Refine(new_dims);
             // Rebind variables

@@ -12,6 +12,11 @@ namespace drdemo {
      */
     void BunnyTest(int start_resolution, float res_multiplier, int ref_steps);
 
+    /**
+     * Bunny test starting from smooth approximation
+     */
+    void BunnyTestSmooth(float res_multiplier, int ref_steps);
+
 } // drdemo namespace
 
 #endif //DRDEMO_BUNNY_TEST_HPP
