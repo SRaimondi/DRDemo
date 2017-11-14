@@ -12,7 +12,7 @@ namespace drdemo {
     /**
      * This test uses the full pipeline (MVS produced result on the dragon model and our refinement method)
      */
-    void FullPipelineTestDragon(size_t w, size_t h);
+    void FullPipelineTestDragon(int ref_steps, float ref_mult);
 
 } // drdemo namespace
 

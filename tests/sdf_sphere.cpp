@@ -652,6 +652,9 @@ namespace drdemo {
         }
 
         default_tape.Enable();
+
+        // Save sdf to file
+        grid->ToFile("output.sdf");
     }
 
 } // drdemo namespace

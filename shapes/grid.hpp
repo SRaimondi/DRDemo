@@ -132,6 +132,9 @@ namespace drdemo {
         // Refine grid to new higher resolution resolution
         void Refine(int const *new_dims);
 
+        // Write grid to file, same format as the constructor one
+        void ToFile(const std::string &file_name) const;
+
         // Shape methods
         bool Intersect(Ray const &ray, Interaction *interaction) const override;
 

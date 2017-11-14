@@ -3,6 +3,7 @@
 //
 
 #include <iofile.hpp>
+#include <fstream>
 #include "grid.hpp"
 
 namespace drdemo {
@@ -329,6 +330,23 @@ namespace drdemo {
         delete[] data;
         // Set pointer to new data
         data = new_data;
+    }
+
+    void SignedDistanceGrid::ToFile(const std::string &file_name) const {
+        // Open file for output
+        std::ofstream outfile(file_name);
+        // Write gird dimensions
+        outfile << num_points[0] << " " << num_points[1] << " " << num_points[2] << std::endl;
+        // Write bbox min
+        outfile << bounds.MinPoint().x << " " << bounds.MinPoint().y << " " << bounds.MinPoint().z << std::endl;
+        // Write size of the grid elements
+        outfile << width.x << " " << width.y << " " << width.z << std::endl;
+        // Write all the sdf data
+        for (int i = 0; i < total_points; ++i) {
+            outfile << data[i].GetValue() << std::endl;
+        }
+        // Close file
+        outfile.close();
     }
 
     bool SignedDistanceGrid::Intersect(Ray const &ray, Interaction *const interaction) const {

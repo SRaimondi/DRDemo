@@ -22,8 +22,8 @@ namespace drdemo {
 
     void TorusTest(int start_resolution, float res_multiplier, int ref_steps) {
         // Target render size
-        const size_t WIDTH = 512;
-        const size_t HEIGHT = 512;
+        const size_t WIDTH = 256;
+        const size_t HEIGHT = 256;
 
         // Maximum gradient descent iterations
         const size_t MAX_ITERS = 200;
@@ -119,11 +119,18 @@ namespace drdemo {
             GradientDescentBT::Minimize(energy, MAX_ITERS, 10.f, 0.5f, 0.8f, 10e-10f, true);
         }
 
+        default_tape.Disable();
+
         // Render final SDF status
         for (int i = 0; i < cameras.size(); i++) {
             render->RenderImage(&target, scene, *cameras[i]);
             tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
         }
+
+        default_tape.Enable();
+
+        // Write SDF to file
+        grid->ToFile("output.sdf");
     }
 
 } // drdemo namespace

@@ -7,6 +7,8 @@
 #include <sdf_sphere.hpp>
 #include <bunny_test.hpp>
 #include <SH_light.hpp>
+#include <torus_test.hpp>
+#include <dragon_full_pipeline_test.hpp>
 
 #define WIDTH   512
 #define HEIGHT  512
@@ -66,7 +68,7 @@ int main() {
     // OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL); // Result in the blob folder
     // OBJRenderTestMR(10, "../objs/blob.obj", 3, CAM_CONFIG::ALL);    // Result in the blob2 folder
 
-    // OBJRenderTestMR(7, "../objs/blob.obj", 4, CAM_CONFIG::ALL);    // Testing new code
+    // OBJRenderTestMR(10, "../objs/blob.obj", 4, CAM_CONFIG::ALL);    // Testing new code
 
     // Cube test
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
@@ -77,7 +79,7 @@ int main() {
 
 
     // New torus test
-    // TorusTest(10, 1.5f, 4);             // Result in torus2 folder
+    // TorusTest(7, 1.5f, 5);             // Result in torus2 folder
 
 //    // SH test
 //    auto sh_light = std::make_shared<SHLight>(4, 100);
@@ -122,7 +124,7 @@ int main() {
     // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
 
     // Full pipeline test
-    // FullPipelineTestDragon(512, 512);
+    FullPipelineTestDragon(4, 1.1f);            // Final output test for thesis
 
 
 
@@ -142,7 +144,7 @@ int main() {
     /**
      * Test bunny rendering using SH and smooth start
      */
-    BunnyTestSmooth(1.3f, 3);
+    // BunnyTestSmooth(1.3f, 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image
