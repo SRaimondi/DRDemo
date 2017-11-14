@@ -68,7 +68,7 @@ int main() {
     // OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL); // Result in the blob folder
     // OBJRenderTestMR(10, "../objs/blob.obj", 3, CAM_CONFIG::ALL);    // Result in the blob2 folder
 
-    // OBJRenderTestMR(10, "../objs/blob.obj", 4, CAM_CONFIG::ALL);    // Testing new code
+    // OBJRenderTestMR(10, "../objs/blob.obj", 1, CAM_CONFIG::ALL);    // Testing new code
 
     // Cube test
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
@@ -79,7 +79,7 @@ int main() {
 
 
     // New torus test
-    // TorusTest(7, 1.5f, 5);             // Result in torus2 folder
+    TorusTest(7, 1.5f, 5);             // Result in torus2 folder
 
 //    // SH test
 //    auto sh_light = std::make_shared<SHLight>(4, 100);
@@ -124,7 +124,7 @@ int main() {
     // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
 
     // Full pipeline test
-    FullPipelineTestDragon(4, 1.1f);            // Final output test for thesis
+    // FullPipelineTestDragon(4, 1.1f);            // Final output test for thesis
 
 
 
