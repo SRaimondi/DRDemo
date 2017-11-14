@@ -68,7 +68,7 @@ namespace drdemo {
         auto sh_light = std::make_shared<SHLight>(4, 10);
         SphericalFunction func = [](float theta, float) { return 5.f * std::max(std::cos(0.9f * theta), 0.f); };
         sh_light->Initialise(func);
-        scene.AddLight(sh_light);
+        // scene.AddLight(sh_light);
 
         // Create renderer class with direct illumination integrator
         auto render = std::make_shared<SimpleRenderer>(std::make_shared<DirectIntegrator>());
