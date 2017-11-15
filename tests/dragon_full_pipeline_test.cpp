@@ -105,7 +105,7 @@ namespace drdemo {
 
         for (int i = 0; i < cameras.size(); i++) {
             render->RenderImage(&target, scene, *cameras[i]);
-            tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
+            tonemapper.Process("final_" + std::to_string(i) + ".png", target);
         }
 
         default_tape.Enable();
