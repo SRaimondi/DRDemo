@@ -68,7 +68,7 @@ int main() {
     // OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL); // Result in the blob folder
     // OBJRenderTestMR(10, "../objs/blob.obj", 3, CAM_CONFIG::ALL);    // Result in the blob2 folder
 
-    OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL);    // Testing new code
+    // OBJRenderTestMR(10, "../objs/blob.obj", 2, CAM_CONFIG::ALL);    // Testing new code
 
     // Cube test
     // OBJRenderTestMR(7, "../objs/cube_s.obj", 2, CAM_CONFIG::ALL);   // Result in cube folder
@@ -118,7 +118,7 @@ int main() {
     // RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     // Bunny test in bunny_400_400_8 folder
-    // BunnyTest(10, 1.5f, 5);
+    BunnyTest(10, 1.5f, 5);
 
     // Test SDF loading + rendering
     // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
