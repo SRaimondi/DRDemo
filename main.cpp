@@ -118,7 +118,7 @@ int main() {
     // RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     // Bunny test in bunny_400_400_8 folder
-    BunnyTest(10, 1.5f, 5);
+    BunnyTest(10, 1.5f, 6);
 
     // Test SDF loading + rendering
     // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);

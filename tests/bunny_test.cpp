@@ -24,8 +24,8 @@ namespace drdemo {
 
     void BunnyTest(int start_resolution, float res_multiplier, int ref_steps) {
         // Target render size
-        const size_t WIDTH = 400;
-        const size_t HEIGHT = 400;
+        const size_t WIDTH = 256;
+        const size_t HEIGHT = 256;
 
         // Maximum gradient descent iterations
         const size_t MAX_ITERS = 200;
@@ -137,6 +137,8 @@ namespace drdemo {
         }
 
         default_tape.Enable();
+
+        grid->ToFile("output.sdf");
     }
 
     void BunnyTestSmooth(float res_multiplier, int ref_steps) {
@@ -236,10 +238,12 @@ namespace drdemo {
         // Render final SDF status
         for (int i = 0; i < cameras.size(); i++) {
             render->RenderImage(&target, scene, *cameras[i]);
-            tonemapper.Process("final_ " + std::to_string(i) + ".png", target);
+            tonemapper.Process("final_" + std::to_string(i) + ".png", target);
         }
 
         default_tape.Enable();
+
+        grid->ToFile("output.sdf");
     }
 
 } // drdemo namespace
