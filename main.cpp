@@ -118,7 +118,7 @@ int main() {
     // RenderArmadilloImages("../camera_points/sphere_view_points_1k_perspective_700_wlop_ordered_rotated.xyz", 512, 512);
 
     // Bunny test in bunny_400_400_8 folder
-    BunnyTest(10, 1.5f, 6);
+    // BunnyTest(10, 1.5f, 6);
 
     // Test SDF loading + rendering
     // LoadAndTestSDF("../sdfs/dragon_mvs_output.sdf", 512, 512);
@@ -144,7 +144,8 @@ int main() {
     /**
      * Test bunny rendering using SH and smooth start
      */
-    // BunnyTestSmooth(1.3f, 3);
+    // BunnyTestSmooth(1.4f, 3);        // Result in output_final/bunny_sh_1_4_3
+    BunnyTestSmooth(1.3f, 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image
