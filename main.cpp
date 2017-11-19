@@ -144,8 +144,8 @@ int main() {
     /**
      * Test bunny rendering using SH and smooth start
      */
-    // BunnyTestSmooth(1.4f, 3);        // Result in output_final/bunny_sh_1_4_3
-    BunnyTestSmooth(1.3f, 3);
+    BunnyTestSmooth(1.4f, 3);        // Result in output_final/bunny_sh_1_4_3
+    // BunnyTestSmooth(1.3f, 3);
 
     /**
      * Triangle mesh loading + simple minimization against black image
